@@ -52,7 +52,7 @@ prisma/*.db-journal
 .DS_Store
 Thumbs.db
 
-# Logs
+# Logs (except deployment-logs which we commit for debugging)
 logs
 *.log
 npm-debug.log*
@@ -60,6 +60,11 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
+
+# Allow deployment logs to be committed
+!deployment-logs/
+!deployment-logs/*.log
+!deployment-logs/*.txt
 
 # Server credentials (never commit!)
 *credentials*.txt
