@@ -2,6 +2,9 @@ import { ContactCard } from '@/components/contact-card'
 import { ContactForm } from '@/components/contact-form'
 import { getUserProfile } from '@/lib/profile'
 
+// Force this page to be dynamic (not statically generated)
+export const dynamic = 'force-dynamic'
+
 export default function MePage() {
   const profile = getUserProfile()
 
