@@ -2,6 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  // Disable static optimization - run as dynamic server
+  output: 'standalone',
   images: {
     remotePatterns: [
       {
