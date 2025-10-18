@@ -1,0 +1,545 @@
+# Contact Exchange App - Cursor Rules
+
+## Project Context
+You are building a professional contact exchange application called "Contact Exchange Pro" deployed at contacts.ideanetworks.com. This app enables seamless business card swapping via QR codes at conferences with automated multi-channel follow-ups.
+
+## Tech Stack
+- **Framework**: Next.js 14+ (App Router)
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Database**: PostgreSQL
+- **State**: React Context + Zustand for complex state
+- **Authentication**: NextAuth.js
+- **Deployment**: Docker container behind Nginx Proxy Manager
+
+## Code Style & Standards
+
+### TypeScript
+- Use strict TypeScript with no implicit any
+- Define interfaces for all data structures
+- Use type guards for runtime validation
+- Prefer interfaces over types for object shapes
+- Use enums for fixed sets of values
+- Always type function parameters and return values
+- Use generics where appropriate for reusability
+
+### File Structure
+```
+src/
+├── app/                    # Next.js app router pages
+│   ├── (auth)/            # Auth-protected routes
+│   ├── api/               # API routes
+│   └── (public)/          # Public routes
+├── components/
+│   ├── ui/                # shadcn/ui components
+│   ├── features/          # Feature-specific components
+│   └── layout/            # Layout components
+├── lib/
+│   ├── db/                # Database utilities
+│   ├── api/               # API helpers
+│   ├── utils/             # General utilities
+│   └── validations/       # Zod schemas
+├── types/                 # TypeScript type definitions
+├── hooks/                 # Custom React hooks
+└── store/                 # Zustand stores
+```
+
+### Naming Conventions
+- **Files**: kebab-case (e.g., `contact-exchange.tsx`)
+- **Components**: PascalCase (e.g., `ContactCard`)
+- **Functions**: camelCase (e.g., `handleExchange`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `MAX_CONTACTS`)
+- **Interfaces**: PascalCase with 'I' prefix optional (e.g., `Contact` or `IContact`)
+- **Types**: PascalCase (e.g., `ExchangeMethod`)
+- **Enums**: PascalCase with singular name (e.g., `ActionStatus`)
+
+### React Components
+- Use functional components with TypeScript
+- Prefer named exports for components
+- Use React.FC sparingly; explicit typing preferred
+- Keep components under 200 lines; split if larger
+- Extract business logic into custom hooks
+- Use composition over prop drilling (Context when needed)
+
+### Example Component Structure
+```typescript
+import { FC, useState, useCallback } from 'react';
+import { Contact } from '@/types/contact';
+
+interface ContactCardProps {
+  contact: Contact;
+  onExchange: (contactId: string) => Promise<void>;
+  className?: string;
+}
+
+export function ContactCard({ contact, onExchange, className }: ContactCardProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleExchange = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await onExchange(contact.id);
+    } catch (error) {
+      console.error('Exchange failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [contact.id, onExchange]);
+
+  return (
+    <div className={className}>
+      {/* Component JSX */}
+    </div>
+  );
+}
+```
+
+## API Development
+
+### Route Structure
+- Use Next.js API routes in `app/api/`
+- Group related endpoints in folders
+- Use proper HTTP methods (GET, POST, PUT, DELETE, PATCH)
+- Return consistent JSON responses
+- Include proper error handling
+
+### Response Format
+```typescript
+// Success response
+{
+  success: true,
+  data: { /* payload */ },
+  message?: string
+}
+
+// Error response
+{
+  success: false,
+  error: {
+    code: 'ERROR_CODE',
+    message: 'User-friendly message',
+    details?: { /* additional info */ }
+  }
+}
+```
+
+### Error Handling
+```typescript
+import { NextResponse } from 'next/server';
+
+export async function POST(request: Request) {
+  try {
+    // Route logic
+    return NextResponse.json({ success: true, data: result });
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: {
+          code: 'EXCHANGE_FAILED',
+          message: 'Failed to exchange contacts'
+        }
+      },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## Database
+
+### Prisma Schema Best Practices
+- Use descriptive model names (PascalCase)
+- Include createdAt and updatedAt timestamps
+- Use appropriate field types (String, Int, DateTime, etc.)
+- Define relationships explicitly
+- Add indexes for frequently queried fields
+- Use enums for fixed value sets
+
+### Query Patterns
+- Use Prisma Client for all database operations
+- Prefer transactions for multi-step operations
+- Use select to limit returned fields
+- Implement pagination for list endpoints
+- Use proper error handling with try-catch
+
+### Example
+```typescript
+import { prisma } from '@/lib/db';
+
+export async function exchangeContacts(userId: string, contactData: ContactInput) {
+  return await prisma.$transaction(async (tx) => {
+    const contact = await tx.contact.create({
+      data: {
+        userId,
+        ...contactData,
+      },
+    });
+
+    await tx.followUpAction.create({
+      data: {
+        contactId: contact.id,
+        actionType: 'EMAIL',
+        scheduledFor: new Date(Date.now() + 3600000), // 1 hour
+        status: 'SCHEDULED',
+      },
+    });
+
+    return contact;
+  });
+}
+```
+
+## State Management
+
+### When to Use What
+- **useState**: Simple local component state
+- **useReducer**: Complex local state with multiple actions
+- **Context**: Shared state across component tree (auth, theme)
+- **Zustand**: Global state, complex state logic, persistence
+
+### Zustand Store Pattern
+```typescript
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+interface ContactStore {
+  contacts: Contact[];
+  addContact: (contact: Contact) => void;
+  removeContact: (id: string) => void;
+  updateContact: (id: string, updates: Partial<Contact>) => void;
+}
+
+export const useContactStore = create<ContactStore>()(
+  persist(
+    (set) => ({
+      contacts: [],
+      addContact: (contact) => 
+        set((state) => ({ contacts: [...state.contacts, contact] })),
+      removeContact: (id) =>
+        set((state) => ({ contacts: state.contacts.filter(c => c.id !== id) })),
+      updateContact: (id, updates) =>
+        set((state) => ({
+          contacts: state.contacts.map(c => 
+            c.id === id ? { ...c, ...updates } : c
+          ),
+        })),
+    }),
+    { name: 'contact-storage' }
+  )
+);
+```
+
+## Validation
+
+### Use Zod for all validation
+```typescript
+import { z } from 'zod';
+
+export const contactSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number'),
+  linkedin: z.string().url().optional(),
+  company: z.string().max(100).optional(),
+  title: z.string().max(100).optional(),
+});
+
+export type ContactInput = z.infer<typeof contactSchema>;
+```
+
+## UI/UX Guidelines
+
+### Tailwind CSS
+- Use Tailwind utility classes exclusively
+- Follow mobile-first responsive design
+- Use shadcn/ui components as base
+- Maintain consistent spacing (4px grid)
+- Use semantic color names from theme
+
+### Animations
+- Use Framer Motion for complex animations
+- Keep animations under 300ms for UI feedback
+- Use ease-out for entering elements
+- Use ease-in for exiting elements
+- Prefer transform and opacity for performance
+
+### Accessibility
+- Use semantic HTML elements
+- Include ARIA labels where needed
+- Ensure keyboard navigation works
+- Maintain color contrast ratios (WCAG AA)
+- Test with screen readers
+- Include loading and error states
+
+## Performance
+
+### Optimization Strategies
+- Use Next.js Image component for all images
+- Implement dynamic imports for heavy components
+- Use React.memo for expensive renders
+- Debounce search and input handlers
+- Implement virtual scrolling for long lists
+- Use SWR or React Query for data fetching
+- Enable Suspense boundaries for async components
+
+### Bundle Size
+- Monitor bundle size with @next/bundle-analyzer
+- Lazy load non-critical components
+- Tree-shake unused dependencies
+- Minimize client-side JavaScript
+
+## Security
+
+### Critical Rules
+- **Never** expose API keys in client-side code
+- Validate all user inputs on server and client
+- Sanitize all contact data before storage
+- Use parameterized queries (Prisma handles this)
+- Implement rate limiting on all API routes
+- Use CSRF tokens for state-changing operations
+- Validate file uploads strictly
+- Implement proper session management
+- Use HTTPS only (enforced by nginx)
+
+### Input Sanitization
+```typescript
+import DOMPurify from 'isomorphic-dompurify';
+
+export function sanitizeInput(input: string): string {
+  return DOMPurify.sanitize(input, { ALLOWED_TAGS: [] });
+}
+```
+
+## Testing
+
+### Testing Strategy
+- Write unit tests for utilities and hooks
+- Write integration tests for API routes
+- Write E2E tests for critical flows
+- Use Jest + React Testing Library
+- Use Playwright for E2E tests
+
+### Test Structure
+```typescript
+import { render, screen, fireEvent } from '@testing-library/react';
+import { ContactCard } from './contact-card';
+
+describe('ContactCard', () => {
+  it('should display contact information', () => {
+    const contact = { name: 'John Doe', email: 'john@example.com' };
+    render(<ContactCard contact={contact} onExchange={jest.fn()} />);
+    
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('john@example.com')).toBeInTheDocument();
+  });
+});
+```
+
+## QR Code Handling
+
+### Generation
+- Use `qrcode.react` for basic QR codes
+- Use `qr-code-styling` for branded/styled QR codes
+- Include error correction level M (15%)
+- Generate at 300x300px minimum
+- Include vCard 3.0 format in QR data
+
+### Scanning
+- Use `react-qr-reader` or `html5-qrcode`
+- Handle camera permissions gracefully
+- Provide fallback for devices without camera
+- Validate scanned data before processing
+- Handle malformed QR codes gracefully
+
+## vCard Format
+
+### Standard Format
+```typescript
+export function generateVCard(contact: Contact): string {
+  return `BEGIN:VCARD
+VERSION:3.0
+FN:${contact.name}
+ORG:${contact.company || ''}
+TITLE:${contact.title || ''}
+TEL:${contact.phone}
+EMAIL:${contact.email}
+URL:${contact.linkedin || ''}
+END:VCARD`;
+}
+```
+
+## Logging & Monitoring
+
+### Logging Strategy
+- Use structured logging (JSON format)
+- Log levels: error, warn, info, debug
+- Include request IDs for tracing
+- Log all API errors with context
+- Use environment-based log levels
+
+### Example
+```typescript
+import winston from 'winston';
+
+export const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+```
+
+## Environment Variables
+
+### Required Variables
+```bash
+# See planning doc for full list
+NEXT_PUBLIC_APP_URL=https://contacts.ideanetworks.com
+DATABASE_URL=postgresql://...
+NEXTAUTH_SECRET=...
+SENDGRID_API_KEY=...
+TWILIO_AUTH_TOKEN=...
+```
+
+### Usage
+- Use `process.env.VAR_NAME` in server code
+- Use `NEXT_PUBLIC_` prefix for client-exposed vars
+- Validate required env vars at startup
+- Use `.env.local` for local development
+- Never commit `.env` files
+
+## Git Workflow
+
+### Commit Messages
+Use conventional commits format:
+- `feat:` - New feature
+- `fix:` - Bug fix
+- `docs:` - Documentation
+- `style:` - Formatting, missing semicolons
+- `refactor:` - Code restructuring
+- `test:` - Adding tests
+- `chore:` - Maintenance tasks
+
+Example: `feat: add QR code scanning functionality`
+
+### Branch Strategy
+- `main` - Production-ready code
+- `develop` - Integration branch
+- `feature/*` - Feature branches
+- `fix/*` - Bug fix branches
+
+## Docker & Deployment
+
+### Dockerfile Best Practices
+- Use multi-stage builds
+- Minimize layer count
+- Use .dockerignore
+- Don't run as root user
+- Expose port 3000 (internal)
+
+### Example Dockerfile
+```dockerfile
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+USER nextjs
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+## Code Review Checklist
+
+Before committing, ensure:
+- [ ] TypeScript compiles with no errors
+- [ ] ESLint passes with no warnings
+- [ ] Code is formatted with Prettier
+- [ ] All tests pass
+- [ ] No console.logs in production code
+- [ ] Error handling is comprehensive
+- [ ] Inputs are validated and sanitized
+- [ ] Comments explain "why" not "what"
+- [ ] No hardcoded values (use constants/env vars)
+- [ ] Responsive design tested on mobile
+- [ ] Accessibility requirements met
+
+## Common Patterns
+
+### Data Fetching with SWR
+```typescript
+import useSWR from 'swr';
+
+export function useContacts() {
+  const { data, error, mutate } = useSWR<Contact[]>('/api/contacts');
+  
+  return {
+    contacts: data,
+    isLoading: !error && !data,
+    isError: error,
+    mutate,
+  };
+}
+```
+
+### Form Handling
+```typescript
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+export function ContactForm() {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (data: ContactInput) => {
+    // Handle form submission
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Form fields */}
+    </form>
+  );
+}
+```
+
+## Key Principles
+
+1. **Type Safety First**: Leverage TypeScript's type system fully
+2. **Progressive Enhancement**: App should work without JavaScript for basic features
+3. **Mobile First**: Design for mobile, enhance for desktop
+4. **Accessibility**: Build for everyone
+5. **Performance**: Fast load times, smooth interactions
+6. **Security**: Validate everything, trust nothing
+7. **Maintainability**: Write code others can understand
+8. **User Experience**: Smooth, intuitive, delightful
+9. **Error Recovery**: Graceful failure, helpful messages
+10. **Documentation**: Code should be self-documenting, but comment complex logic
+
+## Resources
+
+- [Next.js Docs](https://nextjs.org/docs)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [Prisma Docs](https://www.prisma.io/docs)
+- [vCard RFC](https://datatracker.ietf.org/doc/html/rfc6350)
+
+---
+
+**When in doubt**: Prioritize type safety, user experience, and security. Ask for clarification rather than making assumptions.

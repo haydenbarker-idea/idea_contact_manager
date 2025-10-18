@@ -1,0 +1,28 @@
+// Contact Exchange Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Contact {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  linkedin    String?
+  company     String?
+  title       String?
+  notes       String?
+  followedUp  Boolean  @default(false)
+  submittedAt DateTime @default(now())
+
+  @@index([submittedAt])
+  @@index([email])
+  @@map("contacts")
+}
+
