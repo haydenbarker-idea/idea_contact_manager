@@ -335,6 +335,46 @@ else
     log "⚠ Public domain returned HTTP $DOMAIN_CODE"
 fi
 
+log "=== STEP 12: Testing Communication Features ==="
+
+# Get admin password from .env
+ADMIN_PASSWORD=$(grep "^ADMIN_PASSWORD=" .env | cut -d'=' -f2)
+
+if [ -n "$ADMIN_PASSWORD" ]; then
+    # Create auth header
+    AUTH_HEADER=$(echo -n ":$ADMIN_PASSWORD" | base64)
+    
+    # Test SMS
+    log "Testing SMS (Twilio)..."
+    SMS_RESULT=$(curl -s -X POST http://localhost:3000/api/test/sms \
+        -H "Authorization: Basic $AUTH_HEADER" \
+        -H "Content-Type: application/json" \
+        -d '{"phone":"+16476242735"}' 2>&1 || echo '{"success":false}')
+    
+    if echo "$SMS_RESULT" | grep -q '"success":true'; then
+        log "✓ SMS test sent to +16476242735"
+    else
+        log "⚠ SMS test failed (check Twilio configuration)"
+        log "SMS Error: $(echo $SMS_RESULT | grep -o '"error":"[^"]*"' || echo 'Unknown error')"
+    fi
+    
+    # Test Email
+    log "Testing Email (Resend)..."
+    EMAIL_RESULT=$(curl -s -X POST http://localhost:3000/api/test/email \
+        -H "Authorization: Basic $AUTH_HEADER" \
+        -H "Content-Type: application/json" \
+        -d '{"email":"hbarker@ideanetworks.com"}' 2>&1 || echo '{"success":false}')
+    
+    if echo "$EMAIL_RESULT" | grep -q '"success":true'; then
+        log "✓ Email test sent to hbarker@ideanetworks.com"
+    else
+        log "⚠ Email test failed (check Resend configuration)"
+        log "Email Error: $(echo $EMAIL_RESULT | grep -o '"error":"[^"]*"' || echo 'Unknown error')"
+    fi
+else
+    log "⚠ Admin password not found in .env - skipping communication tests"
+fi
+
 echo ""
 echo "================================================"
 echo "🎉 DEPLOYMENT COMPLETE!"
@@ -354,15 +394,17 @@ log "   • Selfie capture experience"
 log "   • Conference/event tracking"
 log "   • Fireworks celebration"
 log "   • vCards with embedded photos"
-log "   • SMS & LinkedIn integration"
+log "   • SMS & WhatsApp & LinkedIn integration"
 log "   • Enhanced admin dashboard"
+log "   • Communication features tested automatically"
 log ""
 log "📋 NEXT STEPS:"
-log "   1. Test on your phone: https://contacts.ideanetworks.com"
-log "   2. Allow camera permissions"
-log "   3. Take a test selfie"
-log "   4. Check admin dashboard for your test contact"
-log "   5. Print your QR code!"
+log "   1. Check your phone (+16476242735) for test SMS"
+log "   2. Check your email (hbarker@ideanetworks.com) for test message"
+log "   3. Test full flow: https://contacts.ideanetworks.com"
+log "   4. Allow camera permissions and take a test selfie"
+log "   5. Check admin dashboard for your test contact"
+log "   6. Print your QR code!"
 log ""
 log "🎯 AT THE CONFERENCE:"
 log "   • Hand them your phone"
