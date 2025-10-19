@@ -1,0 +1,95 @@
+[2025-10-19 17:14:38] === Checking requirements ===
+[0;32m✓ Requirements met[0m
+[2025-10-19 17:14:38] === STEP 1: Initial setup or update ===
+[2025-10-19 17:14:38] SaaS instance exists - updating...
+[2025-10-19 17:14:38] Fetching latest code...
+[0;32m✓ Code updated[0m
+[2025-10-19 17:14:38] === SaaS Deployment Started ===
+[2025-10-19 17:14:38] Timestamp: 20251019_171438
+[2025-10-19 17:14:38] Branch: feature/viral-saas
+[2025-10-19 17:14:38] Configuring git for automated log syncing...
+[0;32m✓ Git configured: hbarker@ideanetworks.com[0m
+[2025-10-19 17:14:38] === STEP 2: Installing dependencies ===
+[2025-10-19 17:14:38] Running npm install...
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 179ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Help us improve the Prisma ORM for everyone. Share your feedback in a short 2-min survey: https://pris.ly/orm/survey/release-5-22
+
+
+up to date, audited 517 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[0;32m✓ Dependencies installed[0m
+[2025-10-19 17:14:44] === STEP 3: Configuring database ===
+[0;32m✓ Database contact_exchange_saas exists[0m
+[2025-10-19 17:14:44] === STEP 4: Configuring environment ===
+[2025-10-19 17:14:44] Backed up existing .env
+[2025-10-19 17:14:44] Updating DATABASE_URL...
+[2025-10-19 17:14:44] Updating NEXT_PUBLIC_APP_URL...
+[0;32m✓ Environment configured[0m
+[2025-10-19 17:14:44] === STEP 5: Updating database schema ===
+[2025-10-19 17:14:44] Pushing schema to database (creates/updates tables)...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange_saas", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+[2025-10-19 17:14:46] Generating Prisma client...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 159ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Need your database queries to be 1000x faster? Accelerate offers you that and more: https://pris.ly/tip-2-accelerate
+
+[0;32m✓ Database schema updated[0m
+[2025-10-19 17:14:49] Verifying database schema...
+[0;32m✓ ✓ users table exists[0m
+[0;32m✓ ✓ contacts table exists[0m
+[2025-10-19 17:14:50] === STEP 6: Creating/updating systemd service ===
+[2025-10-19 17:14:50] Creating service file...
+[0;32m✓ Service file created[0m
+[2025-10-19 17:14:50] === STEP 7: Building application ===
+[2025-10-19 17:14:50] Running npm run build (this takes ~90 seconds)...
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./src/app/u/[username]/qr/page.tsx
+Module not found: Can't resolve 'qrcode.react'
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+> Build failed because of webpack errors
+[2025-10-19 17:15:03] === STEP 13: Syncing logs to GitHub ===
+[2025-10-19 17:15:03] Adding deployment logs...
