@@ -1,0 +1,160 @@
+[2025-10-19 13:41:51] === STEP 1: Stopping service ===
+[2025-10-19 13:41:51] ✓ Service stopped
+[2025-10-19 13:41:51] === STEP 2: Pulling latest code ===
+HEAD is now at 74f6195 feat: add test endpoints for Resend and Twilio validation - Add /api/test/email endpoint to test Resend configuration - Add /api/test/sms endpoint to test Twilio configuration - GET endpoints show configuration status (env vars set or not) - POST endpoints send actual test messages - Requires admin authentication - Detailed error messages and logging - Helps debug email/SMS issues
+[2025-10-19 13:41:51] ✓ Code updated to latest version
+[2025-10-19 13:41:51] === STEP 3: Updating environment variables ===
+[2025-10-19 13:41:51] ✓ Backed up existing .env
+[2025-10-19 13:41:51] Bio already configured
+[2025-10-19 13:41:51] ✓ Environment configured
+[2025-10-19 13:41:51] === STEP 4: Installing dependencies ===
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 165ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to react to database changes in your app as they happen? Discover how with Pulse: https://pris.ly/tip-1-pulse
+
+
+up to date, audited 515 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[2025-10-19 13:41:57] ✓ Dependencies installed
+[2025-10-19 13:41:57] === STEP 5: Creating missing UI components ===
+[2025-10-19 13:41:57] Dialog component already exists
+[2025-10-19 13:41:57] === STEP 6: Running database migration ===
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 175ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
+
+[2025-10-19 13:42:03] ✓ Database updated with photo and conference fields
+[2025-10-19 13:42:03] === STEP 7: Creating uploads directory ===
+[2025-10-19 13:42:03] ✓ Uploads directory ready
+[2025-10-19 13:42:03] === STEP 8: Building application ===
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+Resend API key not configured. Email features will be disabled.
+Twilio credentials not configured. SMS features will be disabled.
+   Generating static pages (0/8) ...
+   Generating static pages (2/8) 
+   Generating static pages (4/8) 
+   Generating static pages (6/8) 
+ ✓ Generating static pages (8/8)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ƒ /                                    142 B          87.3 kB
+├ ○ /_not-found                          142 B          87.3 kB
+├ ○ /admin                               31.6 kB         137 kB
+├ ƒ /api/communications/email            0 B                0 B
+├ ƒ /api/communications/sms              0 B                0 B
+├ ƒ /api/contacts/[id]                   0 B                0 B
+├ ƒ /api/contacts/[id]/communications    0 B                0 B
+├ ƒ /api/contacts/[id]/status            0 B                0 B
+├ ƒ /api/contacts/[id]/vcard             0 B                0 B
+├ ƒ /api/contacts/list                   0 B                0 B
+├ ƒ /api/contacts/submit                 0 B                0 B
+├ ƒ /api/debug                           0 B                0 B
+├ ƒ /api/templates                       0 B                0 B
+├ ƒ /api/test/email                      0 B                0 B
+├ ƒ /api/test/sms                        0 B                0 B
+├ ƒ /api/upload/photo                    0 B                0 B
+├ ƒ /api/uploads/[...path]               0 B                0 B
+├ ○ /api/vcard                           0 B                0 B
+└ ƒ /me                                  10.5 kB         112 kB
++ First Load JS shared by all            87.2 kB
+  ├ chunks/117-ca9033809cf6eaa2.js       31.6 kB
+  ├ chunks/fd9d1056-b88f8a4cc02eef8b.js  53.6 kB
+  └ other shared chunks (total)          1.96 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+[2025-10-19 13:43:28] ✓ Build complete
+[2025-10-19 13:43:28] === STEP 8.5: Setting up standalone static files ===
+[2025-10-19 13:43:28] Copying public folder to standalone...
+[2025-10-19 13:43:28] Copying .next/static to standalone...
+[2025-10-19 13:43:28] Setting up uploads symlink...
+[2025-10-19 13:43:28] ✓ Uploads symlinked for real-time access
+[2025-10-19 13:43:28] ✓ Standalone static files ready
+[2025-10-19 13:43:28] === STEP 9: Starting service ===
+[2025-10-19 13:43:33] === STEP 10: Checking service status ===
+[2025-10-19 13:43:33] ✓ Service is running
+[2025-10-19 13:43:33] === STEP 11: Testing application ===
+[2025-10-19 13:43:36] ✓ Local server responding (HTTP 307)
+[2025-10-19 13:43:37] ✓ Public domain responding (HTTP 307)
+[2025-10-19 13:43:37] 
+[2025-10-19 13:43:37] ✨ Your Selfie Experience is LIVE! ✨
+[2025-10-19 13:43:37] 
+[2025-10-19 13:43:37] 📱 PUBLIC URL:
+[2025-10-19 13:43:37]    https://contacts.ideanetworks.com
+[2025-10-19 13:43:37] 
+[2025-10-19 13:43:37] 🔧 ADMIN DASHBOARD:
+[2025-10-19 13:43:37]    https://contacts.ideanetworks.com/admin
+[2025-10-19 13:43:37] 
+[2025-10-19 13:43:37] ✅ WHAT'S DEPLOYED:
+[2025-10-19 13:43:37]    • Landing page with your photo & bio
+[2025-10-19 13:43:37]    • Selfie capture experience
+[2025-10-19 13:43:37]    • Conference/event tracking
+[2025-10-19 13:43:37]    • Fireworks celebration
+[2025-10-19 13:43:37]    • vCards with embedded photos
+[2025-10-19 13:43:37]    • SMS & LinkedIn integration
+[2025-10-19 13:43:37]    • Enhanced admin dashboard
+[2025-10-19 13:43:37] 
+[2025-10-19 13:43:37] 📋 NEXT STEPS:
+[2025-10-19 13:43:37]    1. Test on your phone: https://contacts.ideanetworks.com
+[2025-10-19 13:43:37]    2. Allow camera permissions
+[2025-10-19 13:43:37]    3. Take a test selfie
+[2025-10-19 13:43:37]    4. Check admin dashboard for your test contact
+[2025-10-19 13:43:37]    5. Print your QR code!
+[2025-10-19 13:43:37] 
+[2025-10-19 13:43:37] 🎯 AT THE CONFERENCE:
+[2025-10-19 13:43:37]    • Hand them your phone
+[2025-10-19 13:43:37]    • Click 'Connect with Hayden'
+[2025-10-19 13:43:37]    • Take selfie together (memorable moment!)
+[2025-10-19 13:43:37]    • They fill quick form
+[2025-10-19 13:43:37]    • Fireworks celebration 🎆
+[2025-10-19 13:43:37]    • They download your vCard with photo
+[2025-10-19 13:43:37] 
+[2025-10-19 13:43:37] Full deployment log: /var/www/contact-exchange/deployment-logs/20251019-134151-selfie-deployment.log
+[2025-10-19 13:43:37] Logs will be synced to GitHub automatically
+[2025-10-19 13:43:37] === Syncing logs to GitHub ===
