@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { hash } from 'bcryptjs'
 import { sendSMS } from '@/lib/twilio'
+import { createSession } from '@/lib/auth'
 import type { ApiResponse } from '@/types'
 
 export async function POST(request: NextRequest) {
@@ -107,6 +108,9 @@ export async function POST(request: NextRequest) {
       slug: user.slug,
       timestamp: new Date().toISOString(),
     })
+
+    // Create session to automatically log them in
+    await createSession(user.id)
 
     // Send SMS with their QR code page link (not profile)
     if (phone) {

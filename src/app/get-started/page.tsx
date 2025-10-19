@@ -431,6 +431,15 @@ export default function GetStartedPage() {
                 </ul>
               </div>
 
+              <div className="text-center pt-4 border-t">
+                <p className="text-sm text-muted-foreground">
+                  Already have an account?{' '}
+                  <a href="/login" className="text-blue-600 hover:underline font-semibold">
+                    Login here
+                  </a>
+                </p>
+              </div>
+
               <div className="flex gap-2">
                 <Button
                   onClick={() => setStep(2)}
