@@ -14,6 +14,7 @@
 DEPLOYMENT_STATUS="IN_PROGRESS"
 FAILED_STEP=""
 SAAS_DIR="/var/www/contact-exchange-saas"
+SAAS_DOMAIN="saas.contacts.ideanetworks.com"
 PROD_DIR="/var/www/contact-exchange"
 DB_NAME="contact_exchange_saas"
 SERVICE_NAME="contact-exchange-saas"
@@ -25,18 +26,17 @@ LOG_DIR="$SAAS_DIR/deployment-logs"
 LOG_FILE="$LOG_DIR/saas-deploy-${TIMESTAMP}.log"
 APP_DIR="$SAAS_DIR"
 
-# Colors
+# Colors (no blue - hard to read)
 GREEN='\033[0;32m'
-BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-# Logging function
+# Logging function (no color - easier to read)
 log() {
     local message="[$(date +'%Y-%m-%d %H:%M:%S')] $1"
-    echo -e "${BLUE}${message}${NC}"
-    echo "$message" >> "$LOG_FILE" 2>/dev/null || true
+    echo "$message" | tee -a "$LOG_FILE"
 }
 
 # Configure git for log syncing
@@ -50,20 +50,17 @@ configure_git() {
 
 success() {
     local message="✓ $1"
-    echo -e "${GREEN}${message}${NC}"
-    echo "$message" >> "$LOG_FILE" 2>/dev/null || true
+    echo -e "${GREEN}${message}${NC}" | tee -a "$LOG_FILE"
 }
 
 warning() {
     local message="⚠ $1"
-    echo -e "${YELLOW}${message}${NC}"
-    echo "$message" >> "$LOG_FILE" 2>/dev/null || true
+    echo -e "${YELLOW}${message}${NC}" | tee -a "$LOG_FILE"
 }
 
 error() {
     local message="✗ $1"
-    echo -e "${RED}${message}${NC}"
-    echo "$message" >> "$LOG_FILE" 2>/dev/null || true
+    echo -e "${RED}${message}${NC}" | tee -a "$LOG_FILE"
 }
 
 # Initialize logging
@@ -197,7 +194,7 @@ install_dependencies() {
     
     cd "$SAAS_DIR"
     log "Running npm install..."
-    npm install >> "$LOG_FILE" 2>&1
+    npm install 2>&1 | tee -a "$LOG_FILE"
     
     success "Dependencies installed"
 }
@@ -258,10 +255,10 @@ run_migrations() {
     cd "$SAAS_DIR"
     
     log "Pushing schema to database (creates/updates tables)..."
-    npx prisma db push --skip-generate >> "$LOG_FILE" 2>&1
+    npx prisma db push --skip-generate 2>&1 | tee -a "$LOG_FILE"
     
     log "Generating Prisma client..."
-    npx prisma generate >> "$LOG_FILE" 2>&1
+    npx prisma generate 2>&1 | tee -a "$LOG_FILE"
     
     success "Database schema updated"
     
@@ -324,9 +321,8 @@ build_application() {
     cd "$SAAS_DIR"
     
     log "Running npm run build (this takes ~90 seconds)..."
-    log "Build output logged to: $LOG_FILE"
     
-    npm run build >> "$LOG_FILE" 2>&1
+    npm run build 2>&1 | tee -a "$LOG_FILE"
     
     if [ -f ".next/standalone/server.js" ]; then
         success "Build completed successfully"
@@ -381,14 +377,11 @@ configure_nginx_ssl() {
     FAILED_STEP="STEP 9: Configuring Nginx and SSL"
     log "=== STEP 9: Configuring Nginx and SSL ==="
     
-    # Domain for SaaS instance
-    SAAS_DOMAIN="saas.contacts.ideanetworks.com"
-    
     # Check if nginx is installed
     if ! command -v nginx &> /dev/null; then
         log "Installing Nginx..."
-        apt-get update >> "$LOG_FILE" 2>&1
-        apt-get install -y nginx >> "$LOG_FILE" 2>&1
+        apt-get update 2>&1 | tee -a "$LOG_FILE"
+        apt-get install -y nginx 2>&1 | tee -a "$LOG_FILE"
         success "Nginx installed"
     else
         success "Nginx already installed"
@@ -397,7 +390,7 @@ configure_nginx_ssl() {
     # Check if certbot is installed
     if ! command -v certbot &> /dev/null; then
         log "Installing Certbot..."
-        apt-get install -y certbot python3-certbot-nginx >> "$LOG_FILE" 2>&1
+        apt-get install -y certbot python3-certbot-nginx 2>&1 | tee -a "$LOG_FILE"
         success "Certbot installed"
     else
         success "Certbot already installed"
@@ -428,7 +421,7 @@ EOF
     ln -sf /etc/nginx/sites-available/contact-exchange-saas /etc/nginx/sites-enabled/
     
     # Test nginx config
-    if nginx -t >> "$LOG_FILE" 2>&1; then
+    if nginx -t 2>&1 | tee -a "$LOG_FILE"; then
         success "Nginx configuration valid"
     else
         error "Nginx configuration invalid"
@@ -436,7 +429,7 @@ EOF
     fi
     
     # Reload nginx
-    systemctl reload nginx >> "$LOG_FILE" 2>&1
+    systemctl reload nginx 2>&1 | tee -a "$LOG_FILE"
     success "Nginx reloaded"
     
     # Obtain SSL certificate
@@ -446,12 +439,12 @@ EOF
     # Get email from production .env if available
     SSL_EMAIL=$(grep "^NEXT_PUBLIC_DEFAULT_USER_EMAIL=" "$PROD_DIR/.env" 2>/dev/null | cut -d'=' -f2 | tr -d '"' || echo "hbarker@ideanetworks.com")
     
-    if certbot --nginx -d "$SAAS_DOMAIN" --non-interactive --agree-tos -m "$SSL_EMAIL" --redirect >> "$LOG_FILE" 2>&1; then
+    if certbot --nginx -d "$SAAS_DOMAIN" --non-interactive --agree-tos -m "$SSL_EMAIL" --redirect 2>&1 | tee -a "$LOG_FILE"; then
         success "SSL certificate obtained and configured"
     else
         warning "SSL certificate request failed (may already exist)"
         log "Checking existing certificate..."
-        if certbot certificates 2>/dev/null | grep -q "$SAAS_DOMAIN"; then
+        if certbot certificates 2>&1 | tee -a "$LOG_FILE" | grep -q "$SAAS_DOMAIN"; then
             success "SSL certificate already exists"
         else
             error "SSL setup failed - check DNS and try again"
@@ -463,8 +456,8 @@ EOF
         success "SSL auto-renewal already enabled"
     else
         log "Enabling SSL auto-renewal..."
-        systemctl enable certbot.timer >> "$LOG_FILE" 2>&1
-        systemctl start certbot.timer >> "$LOG_FILE" 2>&1
+        systemctl enable certbot.timer 2>&1 | tee -a "$LOG_FILE"
+        systemctl start certbot.timer 2>&1 | tee -a "$LOG_FILE"
         success "SSL auto-renewal enabled"
     fi
 }
@@ -474,7 +467,7 @@ start_service() {
     log "=== STEP 10: Starting service ==="
     
     systemctl daemon-reload
-    systemctl enable "$SERVICE_NAME" >> "$LOG_FILE" 2>&1
+    systemctl enable "$SERVICE_NAME" 2>&1 | tee -a "$LOG_FILE"
     systemctl start "$SERVICE_NAME"
     
     # Wait for service to start
@@ -525,9 +518,55 @@ verify_deployment() {
     success "Verification complete"
 }
 
+test_communications() {
+    FAILED_STEP="STEP 12: Testing Communication Features"
+    log "=== STEP 12: Testing Communication Features ==="
+
+    # Get admin password from .env
+    ADMIN_PASSWORD=$(grep "^ADMIN_PASSWORD=" "$SAAS_DIR/.env" | cut -d'=' -f2)
+
+    if [ -n "$ADMIN_PASSWORD" ]; then
+        # Create auth header
+        AUTH_HEADER=$(echo -n ":$ADMIN_PASSWORD" | base64)
+        
+        # Wait for app to be fully ready
+        sleep 5
+
+        # Test SMS
+        log "Testing SMS (Twilio)..."
+        SMS_RESULT=$(curl -s -X POST https://$SAAS_DOMAIN/api/test/sms \
+            -H "Authorization: Basic $AUTH_HEADER" \
+            -H "Content-Type: application/json" \
+            -d '{"phone":"+16476242735"}' 2>&1 || echo '{"success":false}')
+
+        if echo "$SMS_RESULT" | grep -q '"success":true'; then
+            success "✓ SMS test sent to +16476242735"
+        else
+            warning "⚠ SMS test failed (check Twilio configuration)"
+            log "SMS Error: $(echo $SMS_RESULT | grep -o '"error":"[^"]*"' || echo 'Unknown error')"
+        fi
+
+        # Test Email
+        log "Testing Email (Resend)..."
+        EMAIL_RESULT=$(curl -s -X POST https://$SAAS_DOMAIN/api/test/email \
+            -H "Authorization: Basic $AUTH_HEADER" \
+            -H "Content-Type: application/json" \
+            -d '{"email":"hbarker@ideanetworks.com"}' 2>&1 || echo '{"success":false}')
+
+        if echo "$EMAIL_RESULT" | grep -q '"success":true'; then
+            success "✓ Email test sent to hbarker@ideanetworks.com"
+        else
+            warning "⚠ Email test failed (check Resend configuration)"
+            log "Email Error: $(echo $EMAIL_RESULT | grep -o '"error":"[^"]*"' || echo 'Unknown error')"
+        fi
+    else
+        warning "⚠ Admin password not found in .env - skipping communication tests"
+    fi
+}
+
 sync_logs() {
-    FAILED_STEP="STEP 12: Syncing logs to GitHub"
-    log "=== STEP 12: Syncing logs to GitHub ==="
+    FAILED_STEP="STEP 13: Syncing logs to GitHub"
+    log "=== STEP 13: Syncing logs to GitHub ==="
     
     cd "$SAAS_DIR"
     
@@ -671,6 +710,7 @@ main() {
     configure_nginx_ssl
     start_service
     verify_deployment
+    test_communications
     sync_logs
     
     # Mark deployment as successful
