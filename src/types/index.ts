@@ -48,6 +48,7 @@ export interface Communication {
 export interface ApiResponse<T = any> {
   success: boolean
   data?: T
+  available?: boolean  // For slug availability checks
   error?: {
     code: string
     message: string
