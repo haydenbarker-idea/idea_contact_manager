@@ -4,6 +4,7 @@ import { contactSubmissionSchema } from '@/lib/validations'
 import { sendSMS } from '@/lib/twilio'
 import { sendEmail } from '@/lib/resend-client'
 import { generateWelcomeEmail } from '@/lib/email-templates'
+import { notifyAdminNewContact } from '@/lib/admin-notifications'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import type { ApiResponse } from '@/types'
@@ -55,6 +56,30 @@ export async function POST(request: NextRequest) {
       photoUrl: contact.photoUrl,
       conference: contact.conference,
       timestamp: new Date().toISOString(),
+    })
+
+    // Get owner info for admin notification
+    let ownerInfo: { name?: string; slug?: string } = {}
+    if (userId) {
+      const owner = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { name: true, slug: true },
+      })
+      if (owner) {
+        ownerInfo = { name: owner.name, slug: owner.slug }
+      }
+    }
+
+    // Notify admin of new contact (async, don't wait)
+    notifyAdminNewContact({
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone,
+      company: contact.company,
+      ownerName: ownerInfo.name,
+      ownerSlug: ownerInfo.slug,
+    }).catch(err => {
+      console.error('[CONTACT SUBMIT] Admin notification error:', err)
     })
 
     // Send SMS to contact with your information (non-blocking)

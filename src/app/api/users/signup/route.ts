@@ -5,6 +5,7 @@ import { sendSMS } from '@/lib/twilio'
 import { sendEmail } from '@/lib/resend-client'
 import { generateNewUserWelcomeEmail } from '@/lib/email-templates-user'
 import { createSession } from '@/lib/auth'
+import { notifyAdminNewUser } from '@/lib/admin-notifications'
 import QRCode from 'qrcode'
 import type { ApiResponse } from '@/types'
 
@@ -110,6 +111,17 @@ export async function POST(request: NextRequest) {
       name: user.name,
       slug: user.slug,
       timestamp: new Date().toISOString(),
+    })
+
+    // Notify admin of new signup (async, don't wait)
+    notifyAdminNewUser({
+      name: user.name,
+      email: user.email,
+      slug: user.slug,
+      phone: phone || null,
+      company: company || null,
+    }).catch(err => {
+      console.error('[USER SIGNUP] Admin notification error:', err)
     })
 
     // Create session to automatically log them in
