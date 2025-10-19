@@ -38,18 +38,33 @@ export function generateVCard(data: VCardData): string {
   // Embed photo if provided
   if (data.photoPath) {
     try {
-      // Handle both regular and standalone deployment
-      let fullPath = join(process.cwd(), 'public', data.photoPath)
+      // Convert API URL to filesystem path if needed
+      let photoPath = data.photoPath
+      if (photoPath.startsWith('/api/uploads/')) {
+        // Convert /api/uploads/contacts/file.jpg -> /uploads/contacts/file.jpg
+        photoPath = photoPath.replace('/api/uploads/', '/uploads/')
+      }
       
-      // Try standalone path first (production)
-      const standalonePath = join(process.cwd(), '.next', 'standalone', 'public', data.photoPath)
+      // Handle both regular and standalone deployment
       const { existsSync } = require('fs')
       
-      if (existsSync(standalonePath)) {
-        fullPath = standalonePath
-      } else if (!existsSync(fullPath)) {
-        // Photo doesn't exist in either location
-        throw new Error(`Photo not found: ${data.photoPath}`)
+      // Try multiple possible locations
+      const possiblePaths = [
+        join(process.cwd(), 'public', photoPath),
+        join(process.cwd(), '.next', 'standalone', 'public', photoPath),
+        join('/var/www/contact-exchange', 'public', photoPath),
+      ]
+      
+      let fullPath: string | null = null
+      for (const path of possiblePaths) {
+        if (existsSync(path)) {
+          fullPath = path
+          break
+        }
+      }
+      
+      if (!fullPath) {
+        throw new Error(`Photo not found: ${photoPath}`)
       }
       
       const photoData = readFileSync(fullPath)

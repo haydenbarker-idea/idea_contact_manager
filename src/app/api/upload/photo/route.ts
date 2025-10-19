@@ -44,8 +44,17 @@ export async function POST(request: NextRequest) {
     // Save file
     await writeFile(filepath, buffer)
 
-    // Return public URL
-    const publicUrl = `/uploads/contacts/${filename}`
+    // Return URL via our API route (bypasses static file serving issues)
+    const publicUrl = `/api/uploads/contacts/${filename}`
+
+    // Log for debugging
+    console.log('[PHOTO UPLOAD] Success:', {
+      filename,
+      publicUrl,
+      savedTo: filepath,
+      fileSize: buffer.length,
+      timestamp: new Date().toISOString(),
+    })
 
     return NextResponse.json<ApiResponse>({
       success: true,

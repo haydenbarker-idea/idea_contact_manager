@@ -39,6 +39,15 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    // Log for debugging
+    console.log('[CONTACT SUBMIT] Success:', {
+      contactId: contact.id,
+      name: contact.name,
+      photoUrl: contact.photoUrl,
+      conference: contact.conference,
+      timestamp: new Date().toISOString(),
+    })
+
     return NextResponse.json<ApiResponse>({
       success: true,
       data: { contactId: contact.id },
