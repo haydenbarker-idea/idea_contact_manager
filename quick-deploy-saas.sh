@@ -151,39 +151,61 @@ log "=== STEP 7: Testing Communication Features ==="
 
 # Load environment variables for testing
 if [ -f "$SAAS_DIR/.env" ]; then
-    export $(grep -v '^#' "$SAAS_DIR/.env" | grep -E '^(NEXT_PUBLIC_DEFAULT_USER_|TWILIO_|RESEND_)' | xargs)
+    # Load test numbers and admin password
+    TEST_PHONE=$(grep "^NEXT_PUBLIC_DEFAULT_USER_PHONE=" "$SAAS_DIR/.env" | cut -d'=' -f2 | tr -d '"' | tr -d "'" || echo "+16476242735")
+    TEST_EMAIL=$(grep "^NEXT_PUBLIC_DEFAULT_USER_EMAIL=" "$SAAS_DIR/.env" | cut -d'=' -f2 | tr -d '"' | tr -d "'" || echo "hbarker@ideanetworks.com")
+    ADMIN_PASSWORD=$(grep "^ADMIN_PASSWORD=" "$SAAS_DIR/.env" | cut -d'=' -f2 | tr -d '"' | tr -d "'" || echo "")
 fi
 
-TEST_PHONE="${NEXT_PUBLIC_DEFAULT_USER_PHONE:-+16476242735}"
-TEST_EMAIL="${NEXT_PUBLIC_DEFAULT_USER_EMAIL:-hbarker@ideanetworks.com}"
-
-# Wait for app to be ready
-sleep 2
-
-# Test SMS
-log "Testing SMS (Twilio)..."
-SMS_RESULT=$(curl -s -X POST https://saas.contacts.ideanetworks.com/api/test/sms \
-    -H "Content-Type: application/json" \
-    -d "{\"phone\":\"$TEST_PHONE\"}" || echo '{"success":false}')
-
-if echo "$SMS_RESULT" | grep -q '"success":true'; then
-    success "✓ SMS test sent to $TEST_PHONE"
+if [ -z "$ADMIN_PASSWORD" ]; then
+    warning "ADMIN_PASSWORD not found in .env - skipping communication tests"
 else
-    warning "SMS test failed or not configured"
-    log "Response: $SMS_RESULT"
-fi
+    # Create Basic Auth header
+    AUTH_HEADER=$(echo -n ":$ADMIN_PASSWORD" | base64)
+    
+    # Wait for app to be ready
+    log "Waiting for app to be ready..."
+    sleep 3
 
-# Test Email
-log "Testing Email (Resend)..."
-EMAIL_RESULT=$(curl -s -X POST https://saas.contacts.ideanetworks.com/api/test/email \
-    -H "Content-Type: application/json" \
-    -d "{\"email\":\"$TEST_EMAIL\"}" || echo '{"success":false}')
+    # Test SMS
+    log "Testing SMS (Twilio) to $TEST_PHONE..."
+    SMS_RESULT=$(curl -s -X POST https://saas.contacts.ideanetworks.com/api/test/sms \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Basic $AUTH_HEADER" \
+        -d "{\"phone\":\"$TEST_PHONE\"}" 2>&1 || echo '{"success":false,"error":"Request failed"}')
 
-if echo "$EMAIL_RESULT" | grep -q '"success":true'; then
-    success "✓ Email test sent to $TEST_EMAIL"
-else
-    warning "Email test failed or not configured"
-    log "Response: $EMAIL_RESULT"
+    log "SMS Response: $SMS_RESULT"
+    
+    if echo "$SMS_RESULT" | grep -q '"success":true'; then
+        # Extract message from response
+        SMS_MESSAGE=$(echo "$SMS_RESULT" | grep -o '"message":"[^"]*"' | cut -d'"' -f4)
+        success "✓ SMS: $SMS_MESSAGE"
+    elif echo "$SMS_RESULT" | grep -q '"configured":false'; then
+        warning "⚠ SMS: Twilio not configured (set TWILIO_* env vars)"
+    else
+        SMS_ERROR=$(echo "$SMS_RESULT" | grep -o '"error":"[^"]*"' | cut -d'"' -f4 || echo "Unknown error")
+        warning "✗ SMS Failed: $SMS_ERROR"
+    fi
+
+    # Test Email
+    log "Testing Email (Resend) to $TEST_EMAIL..."
+    EMAIL_RESULT=$(curl -s -X POST https://saas.contacts.ideanetworks.com/api/test/email \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Basic $AUTH_HEADER" \
+        -d "{\"email\":\"$TEST_EMAIL\"}" 2>&1 || echo '{"success":false,"error":"Request failed"}')
+
+    log "Email Response: $EMAIL_RESULT"
+    
+    if echo "$EMAIL_RESULT" | grep -q '"success":true'; then
+        # Extract message from response
+        EMAIL_MESSAGE=$(echo "$EMAIL_RESULT" | grep -o '"message":"[^"]*"' | cut -d'"' -f4)
+        success "✓ Email: $EMAIL_MESSAGE"
+    elif echo "$EMAIL_RESULT" | grep -q '"configured":false'; then
+        warning "⚠ Email: Resend not configured (set RESEND_API_KEY)"
+    else
+        EMAIL_ERROR=$(echo "$EMAIL_RESULT" | grep -o '"error":"[^"]*"' | cut -d'"' -f4 || echo "Unknown error")
+        warning "✗ Email Failed: $EMAIL_ERROR"
+    fi
 fi
 
 # Step 8: Verify deployment
