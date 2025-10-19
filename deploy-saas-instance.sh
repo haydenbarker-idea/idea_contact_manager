@@ -577,34 +577,37 @@ test_communications() {
 }
 
 sync_logs() {
-    FAILED_STEP="STEP 13: Syncing logs to GitHub"
+    # Disable exit-on-error for log syncing - this should never fail the deployment
+    set +e
+    set +o pipefail
+    
     log "=== STEP 13: Syncing logs to GitHub ==="
     
     cd "$SAAS_DIR"
     
     # Ensure git is configured (in case this runs after error before configure_git was called)
-    git config user.email "hbarker@ideanetworks.com" 2>&1 | tee -a "$LOG_FILE"
-    git config user.name "Hayden Barker" 2>&1 | tee -a "$LOG_FILE"
+    git config user.email "hbarker@ideanetworks.com" >> "$LOG_FILE" 2>&1
+    git config user.name "Hayden Barker" >> "$LOG_FILE" 2>&1
     
     # Add deployment logs
     log "Adding deployment logs..."
-    git add deployment-logs/*.log 2>&1 | tee -a "$LOG_FILE" || true
+    git add deployment-logs/*.log >> "$LOG_FILE" 2>&1 || true
     
     # Commit logs if there are changes
     if ! git diff --cached --exit-code > /dev/null 2>&1; then
         log "Committing logs..."
-        if git commit -m "logs: saas deployment $TIMESTAMP - $(systemctl is-active $SERVICE_NAME 2>/dev/null || echo 'unknown')" 2>&1 | tee -a "$LOG_FILE"; then
+        if git commit -m "logs: saas deployment $TIMESTAMP - $(systemctl is-active $SERVICE_NAME 2>/dev/null || echo 'unknown')" >> "$LOG_FILE" 2>&1; then
             success "Logs committed locally"
             
             # Push to GitHub
             log "Pushing to GitHub..."
-            if git push origin "$BRANCH" 2>&1 | tee -a "$LOG_FILE"; then
+            if git push origin "$BRANCH" >> "$LOG_FILE" 2>&1; then
                 success "✓ Logs synced to GitHub successfully"
                 log "View at: https://github.com/haydenbarker-idea/idea_contact_manager/tree/$BRANCH/deployment-logs"
             else
-                warning "✗ Could not push to GitHub"
-                log "Logs are committed locally but not pushed to GitHub"
-                log "You may need to configure git credentials or use SSH keys"
+                warning "✗ Could not push to GitHub (check credentials)"
+                log "Logs are committed locally but not pushed"
+                log "Run: git push origin $BRANCH (from server)"
             fi
         else
             warning "Could not commit logs (may already be committed)"
@@ -612,6 +615,13 @@ sync_logs() {
     else
         log "No new logs to commit"
     fi
+    
+    # Re-enable exit-on-error for rest of script
+    set -e
+    set -o pipefail
+    
+    # Always return success - log syncing failure should not fail deployment
+    return 0
 }
 
 print_summary() {
