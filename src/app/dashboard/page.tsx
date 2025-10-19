@@ -21,6 +21,7 @@ import {
   Loader2,
   FileDown,
   Sparkles,
+  Settings,
 } from 'lucide-react'
 
 interface Contact {
@@ -188,10 +189,16 @@ export default function DashboardPage() {
               <h1 className="text-2xl font-bold">My Dashboard</h1>
               <p className="text-sm text-muted-foreground">Welcome back, {user.name}!</p>
             </div>
-            <Button onClick={handleLogout} variant="outline" size="sm">
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => router.push('/settings')} variant="outline" size="sm">
+                <Settings className="h-4 w-4 mr-2" />
+                Settings
+              </Button>
+              <Button onClick={handleLogout} variant="outline" size="sm">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </div>
