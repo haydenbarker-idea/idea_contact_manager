@@ -190,13 +190,13 @@ export default function DashboardPage() {
               <p className="text-sm text-muted-foreground">Welcome back, {user.name}!</p>
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => router.push('/settings')} variant="outline" size="sm">
-                <Settings className="h-4 w-4 mr-2" />
-                Settings
+              <Button onClick={() => router.push('/settings')} variant="outline" size="sm" className="flex items-center">
+                <Settings className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Settings</span>
               </Button>
-              <Button onClick={handleLogout} variant="outline" size="sm">
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
+              <Button onClick={handleLogout} variant="outline" size="sm" className="flex items-center">
+                <LogOut className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Logout</span>
               </Button>
             </div>
           </div>
