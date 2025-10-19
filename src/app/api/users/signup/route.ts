@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { hash } from 'bcryptjs'
+import { sendSMS } from '@/lib/twilio'
 import type { ApiResponse } from '@/types'
 
 export async function POST(request: NextRequest) {
@@ -107,11 +108,28 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     })
 
+    // Send SMS with their profile link
+    if (phone) {
+      const profileUrl = `${process.env.NEXT_PUBLIC_APP_URL}/u/${user.slug}`
+      const message = `🎉 Welcome ${user.name.split(' ')[0]}! Your contact exchange page is live:\n\n${profileUrl}\n\nTap to add it to your home screen and start collecting contacts!\n\n- Contact Exchange Pro`
+      
+      sendSMS({ to: phone, message }).then(result => {
+        if (result.success) {
+          console.log('[USER SIGNUP] SMS sent to:', phone)
+        } else {
+          console.error('[USER SIGNUP] SMS failed:', result.error)
+        }
+      }).catch(err => {
+        console.error('[USER SIGNUP] SMS error:', err)
+      })
+    }
+
     return NextResponse.json<ApiResponse>({
       success: true,
       data: {
         userId: user.id,
         slug: user.slug,
+        profileUrl: `/u/${user.slug}`,
       },
       message: 'Account created successfully!',
     })

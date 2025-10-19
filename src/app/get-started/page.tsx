@@ -130,15 +130,31 @@ export default function GetStartedPage() {
         // Clear recent contact from localStorage
         localStorage.removeItem('recentContact')
         
-        // Redirect to their new page!
-        window.location.href = `/u/${formData.slug}?welcome=true`
+        // Show success message
+        toast({
+          title: '🎉 Account Created!',
+          description: 'Redirecting to your new page...',
+        })
+        
+        // Wait a moment then redirect
+        setTimeout(() => {
+          window.location.href = `/u/${formData.slug}?welcome=true`
+        }, 1000)
       } else {
-        alert(data.error?.message || 'Failed to create account')
+        toast({
+          title: 'Error Creating Account',
+          description: data.error?.message || 'Failed to create account',
+          variant: 'destructive',
+        })
+        setLoading(false)
       }
     } catch (error) {
       console.error('Signup error:', error)
-      alert('An error occurred. Please try again.')
-    } finally {
+      toast({
+        title: 'Error',
+        description: 'An error occurred. Please try again.',
+        variant: 'destructive',
+      })
       setLoading(false)
     }
   }
