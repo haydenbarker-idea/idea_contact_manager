@@ -38,6 +38,15 @@ log() {
     echo "$message" >> "$LOG_FILE" 2>/dev/null || true
 }
 
+# Configure git for log syncing
+configure_git() {
+    cd "$SAAS_DIR"
+    if ! git config user.email > /dev/null 2>&1; then
+        git config user.email "hbarker@ideanetworks.com"
+        git config user.name "Hayden Barker"
+    fi
+}
+
 success() {
     local message="✓ $1"
     echo -e "${GREEN}${message}${NC}"
@@ -71,14 +80,24 @@ sync_logs_to_github() {
     if [ -d "$SAAS_DIR" ]; then
         cd "$SAAS_DIR"
         if [ -d "$LOG_DIR" ]; then
-            git add deployment-logs/*.log 2>/dev/null || true
-            git commit -m "logs: saas deployment $TIMESTAMP" 2>/dev/null || true
-            git push origin "$BRANCH" 2>/dev/null || true
+            # Configure git
+            configure_git
+            
+            # Add logs
+            git add deployment-logs/*.log 2>&1 >> "$LOG_FILE" || true
+            
+            # Commit if there are changes
+            if ! git diff --cached --exit-code > /dev/null 2>&1; then
+                git commit -m "logs: saas deployment $TIMESTAMP" 2>&1 >> "$LOG_FILE" || true
+                # Try to push, but don't fail if it doesn't work
+                git push origin "$BRANCH" 2>&1 >> "$LOG_FILE" || log "⚠ Could not push logs to GitHub (check credentials)"
+            fi
         fi
     fi
 }
 
-trap 'sync_logs_to_github' EXIT
+# Don't use trap during deployment - it interrupts the build
+# We'll call sync_logs manually at the end
 
 print_header() {
     echo ""
@@ -208,33 +227,35 @@ configure_environment() {
 }
 
 run_migrations() {
-    log "=== STEP 5: Running database migrations ==="
+    log "=== STEP 5: Updating database schema ==="
     
     cd "$SAAS_DIR"
+    
+    log "Pushing schema to database (creates/updates tables)..."
+    npx prisma db push --skip-generate >> "$LOG_FILE" 2>&1
     
     log "Generating Prisma client..."
     npx prisma generate >> "$LOG_FILE" 2>&1
     
-    log "Running migrations..."
-    npx prisma migrate deploy >> "$LOG_FILE" 2>&1
-    
-    success "Migrations completed"
+    success "Database schema updated"
     
     # Verify critical tables
     log "Verifying database schema..."
-    USERS_COUNT=$(sudo -u postgres psql -d "$DB_NAME" -t -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_name='users';" 2>/dev/null | xargs)
-    CONTACTS_COUNT=$(sudo -u postgres psql -d "$DB_NAME" -t -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_name='contacts';" 2>/dev/null | xargs)
+    USERS_COUNT=$(sudo -u postgres psql -d "$DB_NAME" -t -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_name='users';" 2>/dev/null | xargs || echo "0")
+    CONTACTS_COUNT=$(sudo -u postgres psql -d "$DB_NAME" -t -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_name='contacts';" 2>/dev/null | xargs || echo "0")
     
     if [ "$USERS_COUNT" = "1" ]; then
         success "✓ users table exists"
     else
-        warning "⚠ users table not found"
+        error "✗ users table not found"
+        log "This is a critical error - database schema not created"
     fi
     
     if [ "$CONTACTS_COUNT" = "1" ]; then
         success "✓ contacts table exists"
     else
-        warning "⚠ contacts table not found"
+        error "✗ contacts table not found"
+        log "This is a critical error - database schema not created"
     fi
 }
 
@@ -386,20 +407,30 @@ sync_logs() {
     
     cd "$SAAS_DIR"
     
+    # Configure git
+    configure_git
+    
     # Add deployment logs
-    git add deployment-logs/*.log 2>/dev/null || true
+    git add deployment-logs/*.log 2>&1 >> "$LOG_FILE" || true
     
-    # Commit logs
-    if git commit -m "logs: saas deployment $TIMESTAMP - $(systemctl is-active $SERVICE_NAME)" 2>/dev/null; then
-        log "Logs committed"
-    fi
-    
-    # Push to GitHub
-    if git push origin "$BRANCH" 2>/dev/null; then
-        success "Logs synced to GitHub"
-        log "View logs at: https://github.com/haydenbarker-idea/idea_contact_manager/tree/$BRANCH/deployment-logs"
+    # Commit logs if there are changes
+    if ! git diff --cached --exit-code > /dev/null 2>&1; then
+        if git commit -m "logs: saas deployment $TIMESTAMP - $(systemctl is-active $SERVICE_NAME 2>/dev/null || echo 'unknown')" 2>&1 >> "$LOG_FILE"; then
+            log "Logs committed"
+            
+            # Push to GitHub (non-blocking)
+            if git push origin "$BRANCH" 2>&1 >> "$LOG_FILE"; then
+                success "Logs synced to GitHub"
+                log "View logs at: https://github.com/haydenbarker-idea/idea_contact_manager/tree/$BRANCH/deployment-logs"
+            else
+                warning "Could not push to GitHub (check git credentials)"
+                log "Logs are committed locally but not pushed"
+            fi
+        else
+            warning "Could not commit logs"
+        fi
     else
-        warning "Failed to push logs to GitHub (non-critical)"
+        log "No new logs to commit"
     fi
 }
 
