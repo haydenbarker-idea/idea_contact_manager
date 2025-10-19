@@ -13,6 +13,17 @@ interface WelcomeEmailParams {
   vcardUrl: string
 }
 
+interface NewUserWelcomeParams {
+  userName: string
+  userFirstName: string
+  userEmail: string
+  slug: string
+  qrPageUrl: string
+  profileUrl: string
+  dashboardUrl: string
+  loginUrl: string
+}
+
 export function generateWelcomeEmail(params: WelcomeEmailParams): string {
   return `
 <!DOCTYPE html>

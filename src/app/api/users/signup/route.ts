@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { hash } from 'bcryptjs'
 import { sendSMS } from '@/lib/twilio'
+import { sendEmail } from '@/lib/resend-client'
+import { generateNewUserWelcomeEmail } from '@/lib/email-templates-user'
 import { createSession } from '@/lib/auth'
+import QRCode from 'qrcode'
 import type { ApiResponse } from '@/types'
 
 export async function POST(request: NextRequest) {
@@ -112,10 +115,64 @@ export async function POST(request: NextRequest) {
     // Create session to automatically log them in
     await createSession(user.id)
 
+    // Prepare URLs
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://saas.contacts.ideanetworks.com'
+    const qrPageUrl = `${baseUrl}/u/${user.slug}/qr`
+    const profileUrl = `${baseUrl}/u/${user.slug}`
+    const dashboardUrl = `${baseUrl}/dashboard`
+    const loginUrl = `${baseUrl}/login`
+
+    // Send welcome email with QR code attachment
+    const userFirstName = user.name.split(' ')[0]
+    const emailHtml = generateNewUserWelcomeEmail({
+      userName: user.name,
+      userFirstName,
+      userEmail: user.email,
+      slug: user.slug,
+      qrPageUrl,
+      profileUrl,
+      dashboardUrl,
+      loginUrl,
+    })
+
+    // Generate QR code as image buffer
+    try {
+      const qrCodeBuffer = await QRCode.toBuffer(profileUrl, {
+        width: 800,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF',
+        },
+        errorCorrectionLevel: 'H',
+      })
+
+      sendEmail({
+        to: user.email,
+        subject: `🎉 Welcome to Contact Exchange Pro, ${userFirstName}!`,
+        html: emailHtml,
+        attachments: [
+          {
+            filename: `${user.slug}-qr-code.png`,
+            content: qrCodeBuffer,
+          },
+        ],
+      }).then(result => {
+        if (result.success) {
+          console.log('[USER SIGNUP] Welcome email sent to:', user.email)
+        } else {
+          console.error('[USER SIGNUP] Email failed:', result.error)
+        }
+      }).catch(err => {
+        console.error('[USER SIGNUP] Email error:', err)
+      })
+    } catch (qrError) {
+      console.error('[USER SIGNUP] QR code generation error:', qrError)
+    }
+
     // Send SMS with their QR code page link (not profile)
     if (phone) {
-      const qrPageUrl = `${process.env.NEXT_PUBLIC_APP_URL}/u/${user.slug}/qr`
-      const message = `🎉 Welcome ${user.name.split(' ')[0]}! Your contact exchange QR code is ready:\n\n${qrPageUrl}\n\nAdd this to your home screen! At conferences, open it and people can scan your QR code.\n\n- Contact Exchange Pro`
+      const message = `🎉 Welcome ${userFirstName}! Your contact exchange QR code is ready:\n\n${qrPageUrl}\n\nAdd this to your home screen! At conferences, open it and people can scan your QR code.\n\n- Contact Exchange Pro`
       
       sendSMS({ to: phone, message }).then(result => {
         if (result.success) {
