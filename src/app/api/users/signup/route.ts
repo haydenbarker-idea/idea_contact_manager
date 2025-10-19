@@ -108,10 +108,10 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     })
 
-    // Send SMS with their profile link
+    // Send SMS with their QR code page link (not profile)
     if (phone) {
-      const profileUrl = `${process.env.NEXT_PUBLIC_APP_URL}/u/${user.slug}`
-      const message = `🎉 Welcome ${user.name.split(' ')[0]}! Your contact exchange page is live:\n\n${profileUrl}\n\nTap to add it to your home screen and start collecting contacts!\n\n- Contact Exchange Pro`
+      const qrPageUrl = `${process.env.NEXT_PUBLIC_APP_URL}/u/${user.slug}/qr`
+      const message = `🎉 Welcome ${user.name.split(' ')[0]}! Your contact exchange QR code is ready:\n\n${qrPageUrl}\n\nAdd this to your home screen! At conferences, open it and people can scan your QR code.\n\n- Contact Exchange Pro`
       
       sendSMS({ to: phone, message }).then(result => {
         if (result.success) {

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { toast } from '@/components/ui/use-toast'
 import { Check, Loader2, Upload } from 'lucide-react'
 
 export default function GetStartedPage() {
@@ -136,9 +137,9 @@ export default function GetStartedPage() {
           description: 'Redirecting to your new page...',
         })
         
-        // Wait a moment then redirect
+        // Wait a moment then redirect to QR code page (not profile)
         setTimeout(() => {
-          window.location.href = `/u/${formData.slug}?welcome=true`
+          window.location.href = `/u/${formData.slug}/qr?welcome=true`
         }, 1000)
       } else {
         toast({
