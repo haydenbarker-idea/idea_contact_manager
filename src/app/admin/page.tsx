@@ -97,7 +97,7 @@ export default function AdminPage() {
         },
       })
 
-      const data = await response.json()
+        const data = await response.json()
       if (data.success) {
         toast({
           title: 'User Deleted',
@@ -140,11 +140,11 @@ export default function AdminPage() {
       if (data.success) {
         setContacts(data.data.contacts)
       } else {
-        toast({
-          title: 'Error',
+      toast({
+        title: 'Error',
           description: 'Failed to load contacts',
-          variant: 'destructive',
-        })
+        variant: 'destructive',
+      })
       }
     } catch (error) {
       console.error('Failed to load contacts:', error)
@@ -207,8 +207,8 @@ export default function AdminPage() {
           <Button onClick={() => loadUsers()} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
-          </Button>
-        </div>
+            </Button>
+          </div>
 
         {/* Stats */}
         <div className="grid gap-4 md:grid-cols-3">
@@ -220,9 +220,9 @@ export default function AdminPage() {
                   <p className="text-3xl font-bold">{users.length}</p>
                 </div>
                 <Users className="h-8 w-8 text-blue-500" />
-              </div>
-            </CardContent>
-          </Card>
+        </div>
+              </CardContent>
+            </Card>
 
           <Card>
             <CardContent className="pt-6">
@@ -230,27 +230,27 @@ export default function AdminPage() {
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Total Contacts</p>
                   <p className="text-3xl font-bold">{totalContacts}</p>
-                </div>
+        </div>
                 <BarChart3 className="h-8 w-8 text-green-500" />
-              </div>
-            </CardContent>
-          </Card>
+        </div>
+              </CardContent>
+            </Card>
 
           <Card>
-            <CardContent className="pt-6">
+                  <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Avg Contacts/User</p>
                   <p className="text-3xl font-bold">
                     {users.length > 0 ? (totalContacts / users.length).toFixed(1) : '0'}
                   </p>
-                </div>
+                          </div>
                 <BarChart3 className="h-8 w-8 text-purple-500" />
-              </div>
+                        </div>
             </CardContent>
           </Card>
-        </div>
-
+                        </div>
+                        
         {/* Users List */}
         <Card>
           <CardHeader>
@@ -280,7 +280,7 @@ export default function AdminPage() {
                         {user.active ? 'Active' : 'Inactive'}
                       </Badge>
                       <Badge variant="outline">{user.contactCount} contacts</Badge>
-                    </div>
+                        </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Mail className="h-3 w-3" />
@@ -292,10 +292,10 @@ export default function AdminPage() {
                           {user.phone}
                         </span>
                       )}
-                      <span className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
                         {new Date(user.createdAt).toLocaleDateString()}
-                      </span>
+                          </span>
                     </div>
                     <div className="text-xs text-muted-foreground">
                       Profile: /u/{user.slug}
@@ -304,35 +304,35 @@ export default function AdminPage() {
                       <div className="text-sm">
                         {user.title} at {user.company}
                       </div>
-                    )}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                            <Button
                       onClick={() => handleViewContacts(user)}
-                      variant="outline"
-                      size="sm"
+                              variant="outline"
+                            size="sm"
                     >
                       <Eye className="h-4 w-4 mr-1" />
                       View Contacts
-                    </Button>
-                    <Button
+                          </Button>
+                          <Button
                       onClick={() => handleDeleteUser(user.id, user.name)}
                       variant="destructive"
-                      size="sm"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                            size="sm"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                 </div>
               ))}
               {filteredUsers.length === 0 && (
                 <div className="text-center py-12 text-muted-foreground">
                   No users found
-                </div>
+                      </div>
               )}
-            </div>
-          </CardContent>
-        </Card>
+                    </div>
+                  </CardContent>
+                </Card>
 
         {/* Contacts View */}
         {selectedUser && (
@@ -358,7 +358,7 @@ export default function AdminPage() {
                       <div className="flex items-center gap-2">
                         <h4 className="font-semibold">{contact.name}</h4>
                         <Badge variant="outline">{contact.status}</Badge>
-                      </div>
+        </div>
                       <div className="text-sm text-muted-foreground space-y-1">
                         <div>{contact.email}</div>
                         {contact.phone && <div>{contact.phone}</div>}
@@ -367,21 +367,21 @@ export default function AdminPage() {
                         )}
                         <div className="text-xs">
                           Submitted: {new Date(contact.submittedAt).toLocaleString()}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+              </div>
+            </div>
                 ))}
                 {contacts.length === 0 && (
                   <div className="text-center py-8 text-muted-foreground">
                     No contacts yet
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+                          </div>
+                          )}
+                      </div>
+                    </CardContent>
+                  </Card>
+              )}
+            </div>
       </div>
-    </div>
   )
 }
