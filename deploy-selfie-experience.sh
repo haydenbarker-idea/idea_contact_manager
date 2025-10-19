@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Deploy Selfie Experience - Complete Setup
+# Deploy Selfie Experience - Complete Setup with Auto-Healing
 # Run this on the server: bash deploy-selfie-experience.sh
 
 set -e
@@ -9,12 +9,10 @@ APP_DIR="/var/www/contact-exchange"
 TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
 LOG_DIR="$APP_DIR/deployment-logs"
 LOG_FILE="$LOG_DIR/${TIMESTAMP}-selfie-deployment.log"
+STATUS="IN_PROGRESS"
 
-echo "================================================"
-echo "🎉 Selfie Experience Deployment"
-echo "$(date)"
-echo "Log: $LOG_FILE"
-echo "================================================"
+# Ensure we're in the app directory
+cd "$APP_DIR" || exit 1
 
 # Ensure log directory exists
 mkdir -p "$LOG_DIR"
@@ -23,6 +21,41 @@ mkdir -p "$LOG_DIR"
 log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
 }
+
+# Function to sync logs to GitHub even on failure
+sync_logs() {
+    log "=== Syncing logs to GitHub ==="
+    cd "$APP_DIR" || exit 1
+    
+    # Configure git if needed
+    if ! git config user.email > /dev/null 2>&1; then
+        log "Setting git config"
+        git config user.email "hbarker@ideanetworks.com"
+        git config user.name "Hayden Barker"
+    fi
+    
+    # Add logs
+    git add deployment-logs/ 2>&1 | tee -a "$LOG_FILE" || true
+    
+    # Commit if changes
+    if ! git diff --cached --exit-code > /dev/null 2>&1; then
+        git commit -m "logs: selfie deployment $TIMESTAMP [$STATUS]" 2>&1 | tee -a "$LOG_FILE" || true
+        git push origin main 2>&1 | tee -a "$LOG_FILE" || log "⚠ Could not push logs (non-critical)"
+        log "✓ Logs synced to GitHub"
+    else
+        log "No log changes to commit"
+    fi
+}
+
+# Trap to sync logs even on failure
+trap 'STATUS="FAILED"; sync_logs; exit 1' ERR
+trap 'sync_logs' EXIT
+
+echo "================================================"
+echo "🎉 Selfie Experience Deployment"
+echo "$(date)"
+echo "Log: $LOG_FILE"
+echo "================================================"
 
 log "=== STEP 1: Stopping service ==="
 systemctl stop contact-exchange 2>&1 | tee -a "$LOG_FILE" || true
@@ -85,17 +118,150 @@ log "=== STEP 4: Installing dependencies ==="
 npm install 2>&1 | tee -a "$LOG_FILE"
 log "✓ Dependencies installed"
 
-log "=== STEP 5: Running database migration ==="
+log "=== STEP 5: Creating missing UI components ==="
+# Check if Dialog component exists, create if missing
+if [ ! -f "src/components/ui/dialog.tsx" ]; then
+    log "Creating Dialog component..."
+    cat > src/components/ui/dialog.tsx << 'EOF'
+"use client"
+
+import * as React from "react"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { X } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+
+const Dialog = DialogPrimitive.Root
+
+const DialogTrigger = DialogPrimitive.Trigger
+
+const DialogPortal = DialogPrimitive.Portal
+
+const DialogClose = DialogPrimitive.Close
+
+const DialogOverlay = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Overlay
+    ref={ref}
+    className={cn(
+      "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      className
+    )}
+    {...props}
+  />
+))
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
+
+const DialogContent = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn(
+        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+        className
+      )}
+      {...props}
+    >
+      {children}
+      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+        <X className="h-4 w-4" />
+        <span className="sr-only">Close</span>
+      </DialogPrimitive.Close>
+    </DialogPrimitive.Content>
+  </DialogPortal>
+))
+DialogContent.displayName = DialogPrimitive.Content.displayName
+
+const DialogHeader = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      "flex flex-col space-y-1.5 text-center sm:text-left",
+      className
+    )}
+    {...props}
+  />
+)
+DialogHeader.displayName = "DialogHeader"
+
+const DialogFooter = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+      className
+    )}
+    {...props}
+  />
+)
+DialogFooter.displayName = "DialogFooter"
+
+const DialogTitle = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Title>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Title
+    ref={ref}
+    className={cn(
+      "text-lg font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+))
+DialogTitle.displayName = DialogPrimitive.Title.displayName
+
+const DialogDescription = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Description
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+DialogDescription.displayName = DialogPrimitive.Description.displayName
+
+export {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+}
+EOF
+    log "✓ Created Dialog component"
+else
+    log "Dialog component already exists"
+fi
+
+log "=== STEP 6: Running database migration ==="
 npx prisma db push --skip-generate 2>&1 | tee -a "$LOG_FILE"
 npx prisma generate 2>&1 | tee -a "$LOG_FILE"
 log "✓ Database updated with photo and conference fields"
 
-log "=== STEP 6: Creating uploads directory ==="
+log "=== STEP 7: Creating uploads directory ==="
 mkdir -p public/uploads/contacts 2>&1 | tee -a "$LOG_FILE"
 chmod 755 public/uploads/contacts 2>&1 | tee -a "$LOG_FILE"
 log "✓ Uploads directory ready"
 
-log "=== STEP 7: Building application ==="
+log "=== STEP 8: Building application ==="
 npm run build 2>&1 | tee -a "$LOG_FILE"
 
 # Check if prerender-manifest.json exists, create if missing
@@ -104,23 +270,32 @@ if [ ! -f ".next/prerender-manifest.json" ]; then
     echo '{"version":4,"routes":{},"dynamicRoutes":{},"preview":{"previewModeId":"","previewModeSigningKey":"","previewModeEncryptionKey":""}}' > .next/prerender-manifest.json
 fi
 
+# Verify build was successful
+if [ ! -f ".next/BUILD_ID" ]; then
+    log "✗ Build failed - BUILD_ID not found"
+    STATUS="BUILD_FAILED"
+    exit 1
+fi
+
 log "✓ Build complete"
 
-log "=== STEP 8: Starting service ==="
+log "=== STEP 9: Starting service ==="
 systemctl start contact-exchange 2>&1 | tee -a "$LOG_FILE"
 sleep 5
 
-log "=== STEP 9: Checking service status ==="
+log "=== STEP 10: Checking service status ==="
 if systemctl is-active --quiet contact-exchange; then
     log "✓ Service is running"
+    STATUS="SUCCESS"
 else
     log "✗ Service failed to start"
+    STATUS="SERVICE_FAILED"
     log "Recent logs:"
     journalctl -u contact-exchange -n 30 --no-pager 2>&1 | tee -a "$LOG_FILE"
     exit 1
 fi
 
-log "=== STEP 10: Testing application ==="
+log "=== STEP 11: Testing application ==="
 sleep 3
 
 # Test localhost
@@ -129,6 +304,7 @@ if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "307" ]; then
     log "✓ Local server responding (HTTP $HTTP_CODE)"
 else
     log "⚠ Local server returned HTTP $HTTP_CODE"
+    STATUS="TEST_WARNING"
 fi
 
 # Test public domain
@@ -137,27 +313,6 @@ if [ "$DOMAIN_CODE" = "200" ] || [ "$DOMAIN_CODE" = "307" ]; then
     log "✓ Public domain responding (HTTP $DOMAIN_CODE)"
 else
     log "⚠ Public domain returned HTTP $DOMAIN_CODE"
-fi
-
-log "=== STEP 11: Syncing logs to GitHub ==="
-cd "$APP_DIR" || exit 1
-
-# Configure git if needed
-if ! git config user.email; then
-    log "Setting git config"
-    git config user.email "hbarker@ideanetworks.com"
-    git config user.name "Hayden Barker"
-fi
-
-# Add logs
-git add deployment-logs/ 2>&1 | tee -a "$LOG_FILE" || true
-
-# Commit if changes
-if ! git diff --cached --exit-code > /dev/null 2>&1; then
-    git commit -m "logs: selfie experience deployment $TIMESTAMP [SUCCESS]" 2>&1 | tee -a "$LOG_FILE" || true
-    git push origin main 2>&1 | tee -a "$LOG_FILE" || log "⚠ Could not push logs (non-critical)"
-else
-    log "No log changes to commit"
 fi
 
 echo ""
@@ -198,7 +353,7 @@ log "   • Fireworks celebration 🎆"
 log "   • They download your vCard with photo"
 log ""
 log "Full deployment log: $LOG_FILE"
+log "Logs will be synced to GitHub automatically"
 echo "================================================"
 echo "GO MAKE MEMORABLE CONNECTIONS! 🚀"
 echo "================================================"
-
