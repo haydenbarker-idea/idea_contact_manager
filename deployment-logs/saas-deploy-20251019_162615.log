@@ -1,0 +1,146 @@
+[2025-10-19 16:26:15] === Checking requirements ===
+[0;32m✓ Requirements met[0m
+[2025-10-19 16:26:15] === STEP 1: Initial setup or update ===
+[2025-10-19 16:26:15] SaaS instance exists - updating...
+[2025-10-19 16:26:15] Fetching latest code...
+[0;32m✓ Code updated[0m
+[2025-10-19 16:26:15] === SaaS Deployment Started ===
+[2025-10-19 16:26:15] Timestamp: 20251019_162615
+[2025-10-19 16:26:15] Branch: feature/viral-saas
+[2025-10-19 16:26:15] Configuring git for automated log syncing...
+[0;32m✓ Git configured: hbarker@ideanetworks.com[0m
+[2025-10-19 16:26:15] === STEP 2: Installing dependencies ===
+[2025-10-19 16:26:15] Running npm install...
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 163ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
+
+
+up to date, audited 517 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[0;32m✓ Dependencies installed[0m
+[2025-10-19 16:26:21] === STEP 3: Configuring database ===
+[0;32m✓ Database contact_exchange_saas exists[0m
+[2025-10-19 16:26:21] === STEP 4: Configuring environment ===
+[2025-10-19 16:26:21] Backed up existing .env
+[2025-10-19 16:26:21] Updating DATABASE_URL...
+[2025-10-19 16:26:21] Updating NEXT_PUBLIC_APP_URL...
+[0;32m✓ Environment configured[0m
+[2025-10-19 16:26:21] === STEP 5: Updating database schema ===
+[2025-10-19 16:26:22] Pushing schema to database (creates/updates tables)...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange_saas", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+[2025-10-19 16:26:23] Generating Prisma client...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 171ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to react to database changes in your app as they happen? Discover how with Pulse: https://pris.ly/tip-1-pulse
+
+[0;32m✓ Database schema updated[0m
+[2025-10-19 16:26:27] Verifying database schema...
+[0;32m✓ ✓ users table exists[0m
+[0;32m✓ ✓ contacts table exists[0m
+[2025-10-19 16:26:27] === STEP 6: Creating/updating systemd service ===
+[2025-10-19 16:26:27] Creating service file...
+[0;32m✓ Service file created[0m
+[2025-10-19 16:26:27] === STEP 7: Building application ===
+[2025-10-19 16:26:27] Running npm run build (this takes ~90 seconds)...
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/11) ...
+   Generating static pages (2/11) 
+Check slug error: B [Error]: Dynamic server usage: Route /api/users/check-slug couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21777)
+    at Object.get (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29137)
+    at c (/var/www/contact-exchange-saas/.next/server/app/api/users/check-slug/route.js:1:555)
+    at /var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
+    at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/users/check-slug couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (5/11) 
+   Generating static pages (8/11) 
+ ✓ Generating static pages (11/11)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ƒ /                                    142 B          87.3 kB
+├ ○ /_not-found                          142 B          87.3 kB
+├ ○ /admin                               31.9 kB         137 kB
+├ ƒ /api/communications/email            0 B                0 B
+├ ƒ /api/communications/sms              0 B                0 B
+├ ƒ /api/contacts/[id]                   0 B                0 B
+├ ƒ /api/contacts/[id]/communications    0 B                0 B
+├ ƒ /api/contacts/[id]/status            0 B                0 B
+├ ƒ /api/contacts/[id]/vcard             0 B                0 B
+├ ƒ /api/contacts/list                   0 B                0 B
+├ ƒ /api/contacts/submit                 0 B                0 B
+├ ƒ /api/debug                           0 B                0 B
+├ ƒ /api/templates                       0 B                0 B
+├ ƒ /api/test/email                      0 B                0 B
+├ ƒ /api/test/sms                        0 B                0 B
+├ ƒ /api/upload/photo                    0 B                0 B
+├ ƒ /api/uploads/[...path]               0 B                0 B
+├ ƒ /api/users/check-slug                0 B                0 B
+├ ƒ /api/users/signup                    0 B                0 B
+├ ○ /api/vcard                           0 B                0 B
+├ ○ /get-started                         4.36 kB         105 kB
+├ ƒ /me                                  145 B           112 kB
+└ ƒ /u/[username]                        145 B           112 kB
++ First Load JS shared by all            87.2 kB
+  ├ chunks/117-ca9033809cf6eaa2.js       31.6 kB
+  ├ chunks/fd9d1056-b88f8a4cc02eef8b.js  53.6 kB
+  └ other shared chunks (total)          1.96 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+[0;32m✓ Build completed successfully[0m
+[2025-10-19 16:27:43] === STEP 8: Setting up static files ===
+[2025-10-19 16:27:43] === STEP 13: Syncing logs to GitHub ===
+[2025-10-19 16:27:43] Adding deployment logs...
