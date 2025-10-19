@@ -1,0 +1,278 @@
+[2025-10-19 18:21:52] === Checking requirements ===
+[0;32m✓ Requirements met[0m
+[2025-10-19 18:21:52] === STEP 1: Initial setup or update ===
+[2025-10-19 18:21:52] SaaS instance exists - updating...
+[2025-10-19 18:21:52] Stopping service...
+[0;32m✓ Service stopped[0m
+[2025-10-19 18:21:52] Fetching latest code...
+[0;32m✓ Code updated[0m
+[2025-10-19 18:21:52] === SaaS Deployment Started ===
+[2025-10-19 18:21:52] Timestamp: 20251019_182152
+[2025-10-19 18:21:52] Branch: feature/viral-saas
+[2025-10-19 18:21:52] Configuring git for automated log syncing...
+[0;32m✓ Git configured: hbarker@ideanetworks.com[0m
+[2025-10-19 18:21:52] === STEP 2: Installing dependencies ===
+[2025-10-19 18:21:52] Running npm install...
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 188ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Help us improve the Prisma ORM for everyone. Share your feedback in a short 2-min survey: https://pris.ly/orm/survey/release-5-22
+
+
+up to date, audited 517 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[0;32m✓ Dependencies installed[0m
+[2025-10-19 18:21:58] === STEP 3: Configuring database ===
+[0;32m✓ Database contact_exchange_saas exists[0m
+[2025-10-19 18:21:59] === STEP 4: Configuring environment ===
+[2025-10-19 18:21:59] Backed up existing .env
+[2025-10-19 18:21:59] Updating DATABASE_URL...
+[2025-10-19 18:21:59] Updating NEXT_PUBLIC_APP_URL...
+[0;32m✓ Environment configured[0m
+[2025-10-19 18:21:59] === STEP 5: Updating database schema ===
+[2025-10-19 18:21:59] Pushing schema to database (creates/updates tables)...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange_saas", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+[2025-10-19 18:22:01] Generating Prisma client...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 198ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
+
+[0;32m✓ Database schema updated[0m
+[2025-10-19 18:22:04] Verifying database schema...
+[0;32m✓ ✓ users table exists[0m
+[0;32m✓ ✓ contacts table exists[0m
+[2025-10-19 18:22:04] === STEP 6: Creating/updating systemd service ===
+[2025-10-19 18:22:04] Creating service file...
+[0;32m✓ Service file created[0m
+[2025-10-19 18:22:04] === STEP 7: Building application ===
+[2025-10-19 18:22:04] Running npm run build (this takes ~90 seconds)...
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/18) ...
+   Generating static pages (4/18) 
+Session error: n [Error]: Dynamic server usage: Route /api/auth/session couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/var/www/contact-exchange-saas/.next/server/chunks/787.js:1:37154)
+    at Object.d (/var/www/contact-exchange-saas/.next/server/chunks/681.js:1:1692)
+    at u (/var/www/contact-exchange-saas/.next/server/app/api/auth/login/route.js:1:2338)
+    at c (/var/www/contact-exchange-saas/.next/server/app/api/auth/session/route.js:1:874)
+    at /var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
+    at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/auth/session couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (8/18) 
+Session error: n [Error]: Dynamic server usage: Route /api/me/contacts couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/var/www/contact-exchange-saas/.next/server/chunks/787.js:1:37154)
+    at Object.d (/var/www/contact-exchange-saas/.next/server/chunks/681.js:1:1692)
+    at u (/var/www/contact-exchange-saas/.next/server/app/api/auth/login/route.js:1:2338)
+    at l (/var/www/contact-exchange-saas/.next/server/app/api/me/contacts/route.js:1:885)
+    at /var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
+    at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/me/contacts couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Check slug error: B [Error]: Dynamic server usage: Route /api/users/check-slug couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21777)
+    at Object.get (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29137)
+    at c (/var/www/contact-exchange-saas/.next/server/app/api/users/check-slug/route.js:1:555)
+    at /var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
+    at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/users/check-slug couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (13/18) 
+ ✓ Generating static pages (18/18)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    5.85 kB         108 kB
+├ ○ /_not-found                          138 B          87.3 kB
+├ ○ /admin                               5.05 kB         100 kB
+├ ƒ /api/admin/users                     0 B                0 B
+├ ƒ /api/admin/users/[id]/contacts       0 B                0 B
+├ ƒ /api/auth/login                      0 B                0 B
+├ ƒ /api/auth/logout                     0 B                0 B
+├ ƒ /api/auth/session                    0 B                0 B
+├ ƒ /api/communications/email            0 B                0 B
+├ ƒ /api/communications/sms              0 B                0 B
+├ ƒ /api/contacts/[id]                   0 B                0 B
+├ ƒ /api/contacts/[id]/communications    0 B                0 B
+├ ƒ /api/contacts/[id]/status            0 B                0 B
+├ ƒ /api/contacts/[id]/vcard             0 B                0 B
+├ ƒ /api/contacts/list                   0 B                0 B
+├ ƒ /api/contacts/submit                 0 B                0 B
+├ ƒ /api/debug                           0 B                0 B
+├ ƒ /api/me/contacts                     0 B                0 B
+├ ƒ /api/templates                       0 B                0 B
+├ ƒ /api/test/email                      0 B                0 B
+├ ƒ /api/test/sms                        0 B                0 B
+├ ƒ /api/upload/photo                    0 B                0 B
+├ ƒ /api/uploads/[...path]               0 B                0 B
+├ ƒ /api/users/check-slug                0 B                0 B
+├ ƒ /api/users/signup                    0 B                0 B
+├ ○ /api/vcard                           0 B                0 B
+├ ○ /dashboard                           5.64 kB         106 kB
+├ ○ /get-started                         5.4 kB          106 kB
+├ ○ /login                               3.91 kB         106 kB
+├ ƒ /me                                  145 B           112 kB
+├ ƒ /u/[username]                        144 B           112 kB
+└ ƒ /u/[username]/qr                     12.2 kB         107 kB
++ First Load JS shared by all            87.2 kB
+  ├ chunks/117-0ccfc4ea0196d079.js       31.6 kB
+  ├ chunks/fd9d1056-b88f8a4cc02eef8b.js  53.6 kB
+  └ other shared chunks (total)          1.95 kB
+
+
+ƒ Middleware                             26.6 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+[0;32m✓ Build completed successfully[0m
+[2025-10-19 18:23:29] === STEP 8: Setting up static files ===
+[2025-10-19 18:23:29] Copying documents from production...
+[2025-10-19 18:23:29] Copying images from production...
+[2025-10-19 18:23:29] Copying Next.js static assets to standalone build...
+[0;32m✓ Next.js static assets copied[0m
+[0;32m✓ Static files configured[0m
+[2025-10-19 18:23:29] === STEP 9: Configuring Nginx and SSL ===
+[0;32m✓ Nginx already installed[0m
+[0;32m✓ Certbot already installed[0m
+[2025-10-19 18:23:29] Creating Nginx configuration for saas.contacts.ideanetworks.com...
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+[0;32m✓ Nginx configuration valid[0m
+[0;32m✓ Nginx reloaded[0m
+[2025-10-19 18:23:29] Obtaining SSL certificate from Let's Encrypt...
+[2025-10-19 18:23:29] This may take 30-60 seconds...
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Certificate not yet due for renewal
+Deploying certificate
+Successfully deployed certificate for saas.contacts.ideanetworks.com to /etc/nginx/sites-enabled/contact-exchange-saas
+Congratulations! You have successfully enabled HTTPS on https://saas.contacts.ideanetworks.com
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+If you like Certbot, please consider supporting our work by:
+ * Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+ * Donating to EFF:                    https://eff.org/donate-le
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+[0;32m✓ SSL certificate obtained and configured[0m
+[0;32m✓ SSL auto-renewal already enabled[0m
+[2025-10-19 18:23:33] === STEP 10: Starting service ===
+[0;32m✓ Service started successfully[0m
+[2025-10-19 18:23:37] === STEP 11: Verifying deployment ===
+[1;33m⚠ Port 3001 not listening[0m
+[2025-10-19 18:23:39] Testing local connection...
+[0;32m✓ Local connection successful (HTTP 200)[0m
+[2025-10-19 18:23:39] Checking database...
+[2025-10-19 18:23:39] Database stats:
+[2025-10-19 18:23:39]   • Users: 7
+[2025-10-19 18:23:39]   • Contacts: 9
+[0;32m✓ Verification complete[0m
+[2025-10-19 18:23:39] === STEP 12: Testing Communication Features ===
+[2025-10-19 18:23:44] Testing SMS (Twilio)...
+[0;32m✓ ✓ SMS test sent to +16476242735[0m
+[2025-10-19 18:23:45] Testing Email (Resend)...
+[0;32m✓ ✓ Email test sent to hbarker@ideanetworks.com[0m
+[2025-10-19 18:23:45] === All steps completed successfully ===
+
+
+==================================================
+  🎉 SaaS Deployment Complete!
+  Status: ✅ SUCCESS
+==================================================
+
+📍 Configuration:
+   Directory: /var/www/contact-exchange-saas
+   Database: contact_exchange_saas
+   Service: contact-exchange-saas
+   Port: 3001
+   Branch: feature/viral-saas
+   Log File: /var/www/contact-exchange-saas/deployment-logs/saas-deploy-20251019_182152.log
+   Timestamp: 20251019_182152
+
+🌍 Application:
+   URL: https://saas.contacts.ideanetworks.com
+   SSL: Configured and auto-renewing
+   Service Status: active
+
+📊 Quick Commands:
+   sudo systemctl status contact-exchange-saas
+   journalctl -u contact-exchange-saas -f
+   sudo systemctl restart contact-exchange-saas
+
+🔍 Database Check:
+   psql -d contact_exchange_saas -c 'SELECT COUNT(*) FROM users;'
+   psql -d contact_exchange_saas -c 'SELECT COUNT(*) FROM contacts;'
+
+📝 Logs synced to GitHub:
+   Repository: https://github.com/haydenbarker-idea/idea_contact_manager
+   Branch: feature/viral-saas
+   Path: deployment-logs/
+   Pull locally to review in Cursor!
+
+🚀 Test the viral loop:
+   1. Visit https://saas.contacts.ideanetworks.com
+   2. Submit contact → Click 'I Want This!'
+   3. Complete onboarding → Get your page!
+
+✅ Production (contacts.ideanetworks.com) untouched!
+==================================================
+
+[2025-10-19 18:23:46] === DEPLOYMENT SUCCESS ===
+[2025-10-19 18:23:46] Completed at: 2025-10-19 18:23:46
+[2025-10-19 18:23:46] === STEP 13: Syncing logs to GitHub ===
+[2025-10-19 18:23:46] Adding deployment logs...
