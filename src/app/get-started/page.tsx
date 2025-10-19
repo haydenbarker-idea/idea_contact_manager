@@ -316,7 +316,7 @@ export default function GetStartedPage() {
                       <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition">
                         <Upload className="h-8 w-8 mx-auto mb-2 text-gray-400" />
                         <p className="text-sm text-gray-600">
-                          Click to upload your headshot
+                          Take a photo or upload from gallery
                         </p>
                         <p className="text-xs text-gray-400">
                           JPG, PNG (Max 5MB)
