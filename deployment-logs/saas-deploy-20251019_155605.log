@@ -1,0 +1,98 @@
+[2025-10-19 15:56:05] === Checking requirements ===
+[0;32m✓ Requirements met[0m
+[2025-10-19 15:56:05] === STEP 1: Initial setup or update ===
+[2025-10-19 15:56:05] SaaS instance exists - updating...
+[2025-10-19 15:56:05] Fetching latest code...
+[0;32m✓ Code updated[0m
+[2025-10-19 15:56:05] === SaaS Deployment Started ===
+[2025-10-19 15:56:05] Timestamp: 20251019_155605
+[2025-10-19 15:56:05] Branch: feature/viral-saas
+[2025-10-19 15:56:05] === STEP 2: Installing dependencies ===
+[2025-10-19 15:56:05] Running npm install...
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 164ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+
+up to date, audited 517 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[0;32m✓ Dependencies installed[0m
+[2025-10-19 15:56:11] === STEP 3: Configuring database ===
+[0;32m✓ Database contact_exchange_saas exists[0m
+[2025-10-19 15:56:11] === STEP 4: Configuring environment ===
+[2025-10-19 15:56:11] Backed up existing .env
+[2025-10-19 15:56:11] Updating DATABASE_URL...
+[2025-10-19 15:56:11] Updating NEXT_PUBLIC_APP_URL...
+[0;32m✓ Environment configured[0m
+[2025-10-19 15:56:11] === STEP 5: Updating database schema ===
+[2025-10-19 15:56:11] Pushing schema to database (creates/updates tables)...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange_saas", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+[2025-10-19 15:56:13] Generating Prisma client...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 204ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+[0;32m✓ Database schema updated[0m
+[2025-10-19 15:56:16] Verifying database schema...
+[0;32m✓ ✓ users table exists[0m
+[0;32m✓ ✓ contacts table exists[0m
+[2025-10-19 15:56:16] === STEP 6: Creating/updating systemd service ===
+[2025-10-19 15:56:16] Creating service file...
+[0;32m✓ Service file created[0m
+[2025-10-19 15:56:16] === STEP 7: Building application ===
+[2025-10-19 15:56:16] Running npm run build (this takes ~90 seconds)...
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/app/api/users/signup/route.ts:116:7
+Type error: Object literal may only specify known properties, and 'message' does not exist in type 'ApiResponse<any>'.
+
+[0m [90m 114 |[39m         slug[33m:[39m user[33m.[39mslug[33m,[39m[0m
+[0m [90m 115 |[39m       }[33m,[39m[0m
+[0m[31m[1m>[22m[39m[90m 116 |[39m       message[33m:[39m [32m'Account created successfully!'[39m[33m,[39m[0m
+[0m [90m     |[39m       [31m[1m^[22m[39m[0m
+[0m [90m 117 |[39m     })[0m
+[0m [90m 118 |[39m   } [36mcatch[39m (error) {[0m
+[0m [90m 119 |[39m     console[33m.[39merror([32m'User signup error:'[39m[33m,[39m error)[0m
+[0;31m✗ Build failed - server.js not found[0m
+[0;31m✗ Check logs: /var/www/contact-exchange-saas/deployment-logs/saas-deploy-20251019_155605.log[0m

@@ -1,0 +1,97 @@
+[2025-10-19 15:40:11] === Checking requirements ===
+✓ Requirements met
+[2025-10-19 15:40:11] === STEP 1: Initial setup or update ===
+[2025-10-19 15:40:11] SaaS instance exists - updating...
+[2025-10-19 15:40:11] Fetching latest code...
+✓ Code updated
+[2025-10-19 15:40:11] === SaaS Deployment Started ===
+[2025-10-19 15:40:11] Timestamp: 20251019_154011
+[2025-10-19 15:40:11] Branch: feature/viral-saas
+[2025-10-19 15:40:11] === STEP 2: Installing dependencies ===
+[2025-10-19 15:40:11] Running npm install...
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 196ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to react to database changes in your app as they happen? Discover how with Pulse: https://pris.ly/tip-1-pulse
+
+
+up to date, audited 517 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+✓ Dependencies installed
+[2025-10-19 15:40:17] === STEP 3: Configuring database ===
+✓ Database contact_exchange_saas exists
+[2025-10-19 15:40:17] === STEP 4: Configuring environment ===
+[2025-10-19 15:40:17] Backed up existing .env
+[2025-10-19 15:40:17] Updating DATABASE_URL...
+[2025-10-19 15:40:17] Updating NEXT_PUBLIC_APP_URL...
+✓ Environment configured
+[2025-10-19 15:40:17] === STEP 5: Updating database schema ===
+[2025-10-19 15:40:17] Pushing schema to database (creates/updates tables)...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange_saas", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+[2025-10-19 15:40:19] Generating Prisma client...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 180ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Curious about the SQL queries Prisma ORM generates? Optimize helps you enhance your visibility: https://pris.ly/tip-2-optimize
+
+✓ Database schema updated
+[2025-10-19 15:40:23] Verifying database schema...
+✓ ✓ users table exists
+✓ ✓ contacts table exists
+[2025-10-19 15:40:23] === STEP 6: Creating/updating systemd service ===
+[2025-10-19 15:40:23] Creating service file...
+✓ Service file created
+[2025-10-19 15:40:23] === STEP 7: Building application ===
+[2025-10-19 15:40:23] Running npm run build (this takes ~90 seconds)...
+[2025-10-19 15:40:23] Build output logged to: /var/www/contact-exchange-saas/deployment-logs/saas-deploy-20251019_154011.log
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/app/api/users/check-slug/route.ts:28:11
+Type error: Object literal may only specify known properties, and 'available' does not exist in type 'ApiResponse<any>'.
+
+[0m [90m 26 |[39m         {[0m
+[0m [90m 27 |[39m           success[33m:[39m [36mfalse[39m[33m,[39m[0m
+[0m[31m[1m>[22m[39m[90m 28 |[39m           available[33m:[39m [36mfalse[39m[33m,[39m[0m
+[0m [90m    |[39m           [31m[1m^[22m[39m[0m
+[0m [90m 29 |[39m           error[33m:[39m {[0m
+[0m [90m 30 |[39m             code[33m:[39m [32m'INVALID_SLUG'[39m[33m,[39m[0m
+[0m [90m 31 |[39m             message[33m:[39m [32m'Slug must be 3-50 characters, lowercase letters, numbers, and hyphens only'[39m[33m,[39m[0m
