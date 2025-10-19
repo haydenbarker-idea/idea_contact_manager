@@ -361,10 +361,10 @@ setup_static_files() {
     chmod 755 public/documents
     chmod 755 public/images
     
-    # Remove old symlinks
-    rm -f .next/standalone/public/uploads
-    rm -f .next/standalone/public/documents
-    rm -f .next/standalone/public/images
+    # Remove old symlinks or directories
+    rm -rf .next/standalone/public/uploads
+    rm -rf .next/standalone/public/documents
+    rm -rf .next/standalone/public/images
     
     # Create symlinks
     ln -s "$SAAS_DIR/public/uploads" .next/standalone/public/uploads
