@@ -22,8 +22,31 @@ export function CelebrationScreen({ profile, contactPhoto, contactName }: Celebr
     return () => clearTimeout(timer)
   }, [])
 
-  const handleDownloadVCard = () => {
-    window.location.href = '/api/vcard'
+  const handleDownloadVCard = async () => {
+    try {
+      // Fetch the vCard content
+      const response = await fetch('/api/vcard')
+      if (!response.ok) throw new Error('Failed to download vCard')
+      
+      // Create a blob from the response
+      const blob = await response.blob()
+      
+      // Create a download link
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${profile.name.replace(/\s+/g, '_')}.vcf`
+      
+      // Trigger download
+      document.body.appendChild(link)
+      link.click()
+      
+      // Cleanup
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('vCard download error:', error)
+    }
   }
 
   const handleTextMe = () => {
@@ -82,6 +105,7 @@ export function CelebrationScreen({ profile, contactPhoto, contactName }: Celebr
                       alt={contactName}
                       fill
                       className="object-cover"
+                      unoptimized
                     />
                   </div>
                   <p className="font-medium">{contactName}</p>
