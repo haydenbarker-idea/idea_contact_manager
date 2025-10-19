@@ -1,0 +1,88 @@
+[2025-10-19 12:31:49] === STEP 1: Stopping service ===
+[2025-10-19 12:31:49] ✓ Service stopped
+[2025-10-19 12:31:49] === STEP 2: Pulling latest code ===
+HEAD is now at fbef994 fix: remove deprecated followedUp field from contact update route
+[2025-10-19 12:31:49] ✓ Code updated to latest version
+[2025-10-19 12:31:49] === STEP 3: Updating environment variables ===
+[2025-10-19 12:31:49] ✓ Backed up existing .env
+[2025-10-19 12:31:49] Bio already configured
+[2025-10-19 12:31:49] ✓ Environment configured
+[2025-10-19 12:31:49] === STEP 4: Installing dependencies ===
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 111ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+
+up to date, audited 515 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[2025-10-19 12:31:55] ✓ Dependencies installed
+[2025-10-19 12:31:55] === STEP 5: Creating missing UI components ===
+[2025-10-19 12:31:55] Dialog component already exists
+[2025-10-19 12:31:55] === STEP 6: Running database migration ===
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 154ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
+
+[2025-10-19 12:32:00] ✓ Database updated with photo and conference fields
+[2025-10-19 12:32:00] === STEP 7: Creating uploads directory ===
+[2025-10-19 12:32:00] ✓ Uploads directory ready
+[2025-10-19 12:32:00] === STEP 8: Building application ===
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/lib/resend-client.ts:43:54
+Type error: Argument of type '{ from: string; to: string; subject: string; html: string | undefined; text: string | undefined; }' is not assignable to parameter of type 'CreateEmailOptions'.
+  Type '{ from: string; to: string; subject: string; html: string | undefined; text: string | undefined; }' is not assignable to type 'Required<Pick<EmailRenderOptions$1, "react">> & Partial<Pick<EmailRenderOptions$1, "html" | "text">> & CreateEmailBaseOptions'.
+    Property 'react' is missing in type '{ from: string; to: string; subject: string; html: string | undefined; text: string | undefined; }' but required in type 'Required<Pick<EmailRenderOptions$1, "react">>'.
+
+[0m [90m 41 |[39m[0m
+[0m [90m 42 |[39m   [36mtry[39m {[0m
+[0m[31m[1m>[22m[39m[90m 43 |[39m     [36mconst[39m { data[33m,[39m error } [33m=[39m [36mawait[39m resend[33m.[39memails[33m.[39msend({[0m
+[0m [90m    |[39m                                                      [31m[1m^[22m[39m[0m
+[0m [90m 44 |[39m       [36mfrom[39m[33m:[39m fromEmail[33m,[39m[0m
+[0m [90m 45 |[39m       to[33m,[39m[0m
+[0m [90m 46 |[39m       subject[33m,[39m[0m
+[2025-10-19 12:32:40] Creating missing prerender-manifest.json
+[2025-10-19 12:32:40] ✗ Build failed - BUILD_ID not found
+[2025-10-19 12:32:40] === Syncing logs to GitHub ===
