@@ -39,13 +39,13 @@ log() {
     echo "$message" | tee -a "$LOG_FILE"
 }
 
-# Configure git for log syncing
+# Configure git for log syncing - always set, never skip
 configure_git() {
     cd "$SAAS_DIR"
-    if ! git config user.email > /dev/null 2>&1; then
-        git config user.email "hbarker@ideanetworks.com"
-        git config user.name "Hayden Barker"
-    fi
+    log "Configuring git for automated log syncing..."
+    git config user.email "hbarker@ideanetworks.com" 2>&1 | tee -a "$LOG_FILE"
+    git config user.name "Hayden Barker" 2>&1 | tee -a "$LOG_FILE"
+    success "Git configured: hbarker@ideanetworks.com"
 }
 
 success() {
@@ -186,6 +186,9 @@ initial_setup() {
     
     # Initialize logging now that directory exists
     init_logging
+    
+    # Configure git immediately after setup
+    configure_git
 }
 
 install_dependencies() {
@@ -570,27 +573,32 @@ sync_logs() {
     
     cd "$SAAS_DIR"
     
-    # Configure git
-    configure_git
+    # Ensure git is configured (in case this runs after error before configure_git was called)
+    git config user.email "hbarker@ideanetworks.com" 2>&1 | tee -a "$LOG_FILE"
+    git config user.name "Hayden Barker" 2>&1 | tee -a "$LOG_FILE"
     
     # Add deployment logs
-    git add deployment-logs/*.log 2>&1 >> "$LOG_FILE" || true
+    log "Adding deployment logs..."
+    git add deployment-logs/*.log 2>&1 | tee -a "$LOG_FILE" || true
     
     # Commit logs if there are changes
     if ! git diff --cached --exit-code > /dev/null 2>&1; then
-        if git commit -m "logs: saas deployment $TIMESTAMP - $(systemctl is-active $SERVICE_NAME 2>/dev/null || echo 'unknown')" 2>&1 >> "$LOG_FILE"; then
-            log "Logs committed"
+        log "Committing logs..."
+        if git commit -m "logs: saas deployment $TIMESTAMP - $(systemctl is-active $SERVICE_NAME 2>/dev/null || echo 'unknown')" 2>&1 | tee -a "$LOG_FILE"; then
+            success "Logs committed locally"
             
-            # Push to GitHub (non-blocking)
-            if git push origin "$BRANCH" 2>&1 >> "$LOG_FILE"; then
-                success "Logs synced to GitHub"
-                log "View logs at: https://github.com/haydenbarker-idea/idea_contact_manager/tree/$BRANCH/deployment-logs"
+            # Push to GitHub
+            log "Pushing to GitHub..."
+            if git push origin "$BRANCH" 2>&1 | tee -a "$LOG_FILE"; then
+                success "✓ Logs synced to GitHub successfully"
+                log "View at: https://github.com/haydenbarker-idea/idea_contact_manager/tree/$BRANCH/deployment-logs"
             else
-                warning "Could not push to GitHub (check git credentials)"
-                log "Logs are committed locally but not pushed"
+                warning "✗ Could not push to GitHub"
+                log "Logs are committed locally but not pushed to GitHub"
+                log "You may need to configure git credentials or use SSH keys"
             fi
         else
-            warning "Could not commit logs"
+            warning "Could not commit logs (may already be committed)"
         fi
     else
         log "No new logs to commit"
