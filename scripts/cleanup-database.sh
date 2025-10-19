@@ -13,11 +13,15 @@ echo ""
 # Change to the SaaS directory
 cd /var/www/contact-exchange-saas
 
-# Load environment variables properly (handles values with spaces)
+# Load environment variables safely (handles values with spaces and special chars)
 if [ -f .env ]; then
-    set -a
-    source .env
-    set +a
+    while IFS='=' read -r key value; do
+        # Skip empty lines and comments
+        [[ -z "$key" || "$key" =~ ^#.*$ ]] && continue
+        # Remove quotes if present and export
+        value=$(echo "$value" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")
+        export "$key=$value"
+    done < <(grep -v '^#' .env | grep -v '^$')
 fi
 
 echo "⚠️  WARNING: This will delete ALL users and contacts!"
