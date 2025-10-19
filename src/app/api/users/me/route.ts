@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { getUserFromSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 import type { ApiResponse } from '@/types'
 
 // GET - Get current user's profile
 export async function GET(request: NextRequest) {
   try {
-    const user = await getUserFromSession(request)
+    const user = await getSession()
 
     if (!user) {
       return NextResponse.json<ApiResponse>(
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
 // PATCH - Update current user's profile
 export async function PATCH(request: NextRequest) {
   try {
-    const user = await getUserFromSession(request)
+    const user = await getSession()
 
     if (!user) {
       return NextResponse.json<ApiResponse>(
