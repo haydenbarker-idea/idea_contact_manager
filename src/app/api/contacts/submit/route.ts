@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { contactSubmissionSchema } from '@/lib/validations'
+import { sendSMS } from '@/lib/twilio'
 import type { ApiResponse } from '@/types'
 
 export async function POST(request: NextRequest) {
@@ -47,6 +48,39 @@ export async function POST(request: NextRequest) {
       conference: contact.conference,
       timestamp: new Date().toISOString(),
     })
+
+    // Send SMS to contact with your information (non-blocking)
+    if (contact.phone) {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://contacts.ideanetworks.com'
+      const yourName = process.env.NEXT_PUBLIC_DEFAULT_USER_NAME || 'Hayden Barker'
+      const yourEmail = process.env.NEXT_PUBLIC_DEFAULT_USER_EMAIL || 'hbarker@ideanetworks.com'
+      const yourPhone = process.env.NEXT_PUBLIC_DEFAULT_USER_PHONE || '+16476242735'
+      const yourLinkedIn = process.env.NEXT_PUBLIC_DEFAULT_USER_LINKEDIN || 'https://linkedin.com/in/haydenbarker'
+      const vcardUrl = `${appUrl}/api/vcard`
+      
+      const message = `Hi ${contact.name}! Great meeting you at ${contact.conference || 'the event'}!\n\n` +
+        `Here's my contact info:\n` +
+        `📛 ${yourName}\n` +
+        `📧 ${yourEmail}\n` +
+        `📱 ${yourPhone}\n` +
+        `💼 ${yourLinkedIn}\n\n` +
+        `💾 Save my contact (with photo):\n${vcardUrl}\n\n` +
+        `Looking forward to staying connected!`
+      
+      // Send SMS asynchronously (don't wait for it)
+      sendSMS({
+        to: contact.phone,
+        message: message,
+      }).then(result => {
+        if (result.success) {
+          console.log('[CONTACT SUBMIT] SMS sent to:', contact.phone, 'MessageId:', result.messageId)
+        } else {
+          console.error('[CONTACT SUBMIT] SMS failed:', result.error)
+        }
+      }).catch(error => {
+        console.error('[CONTACT SUBMIT] SMS error:', error)
+      })
+    }
 
     return NextResponse.json<ApiResponse>({
       success: true,
