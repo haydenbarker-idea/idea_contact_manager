@@ -30,7 +30,8 @@ interface Contact {
   company: string | null
   title: string | null
   linkedin: string | null
-  bio: string | null
+  conference: string | null
+  notes: string | null
   photoUrl: string | null
   submittedAt: string
   status: string
@@ -363,8 +364,17 @@ export default function DashboardPage() {
                           )}
                         </div>
 
-                        {contact.bio && (
-                          <p className="text-sm text-muted-foreground mb-3">{contact.bio}</p>
+                        {(contact.conference || contact.notes) && (
+                          <div className="space-y-1 mb-3">
+                            {contact.conference && (
+                              <p className="text-sm text-muted-foreground">
+                                📍 Met at: <span className="font-medium">{contact.conference}</span>
+                              </p>
+                            )}
+                            {contact.notes && (
+                              <p className="text-sm text-muted-foreground">{contact.notes}</p>
+                            )}
+                          </div>
                         )}
 
                         <Button
