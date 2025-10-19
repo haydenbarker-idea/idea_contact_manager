@@ -1,0 +1,188 @@
+[2025-10-19 20:42:14] === Quick Deploy Started ===
+[2025-10-19 20:42:14] Timestamp: 20251019_204214
+[0;32m✓ Git configured for automated logging[0m
+[2025-10-19 20:42:14] === STEP 1: Pulling latest code ===
+[2025-10-19 20:42:14] Current branch:
+feature/viral-saas
+[2025-10-19 20:42:14] Fetching from GitHub...
+[2025-10-19 20:42:14] Pulling latest code...
+From https://github.com/haydenbarker-idea/idea_contact_manager
+ * branch            feature/viral-saas -> FETCH_HEAD
+Already up to date.
+[0;32m✓ Code updated[0m
+[2025-10-19 20:42:14] === STEP 2: Checking dependencies ===
+[2025-10-19 20:42:14] Running npm install...
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 207ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+
+up to date, audited 517 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[0;32m✓ Dependencies updated[0m
+[2025-10-19 20:42:21] === STEP 3: Regenerating Prisma client ===
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 184ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Need your database queries to be 1000x faster? Accelerate offers you that and more: https://pris.ly/tip-2-accelerate
+
+[0;32m✓ Prisma client updated[0m
+[2025-10-19 20:42:24] === STEP 4: Building application ===
+[2025-10-19 20:42:24] Running npm run build (takes ~90 seconds)...
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/20) ...
+   Generating static pages (5/20) 
+Session error: n [Error]: Dynamic server usage: Route /api/auth/session couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/var/www/contact-exchange-saas/.next/server/chunks/7787.js:1:37156)
+    at Object.d (/var/www/contact-exchange-saas/.next/server/chunks/1681.js:1:1694)
+    at u (/var/www/contact-exchange-saas/.next/server/app/api/auth/login/route.js:1:2340)
+    at c (/var/www/contact-exchange-saas/.next/server/app/api/auth/session/route.js:1:876)
+    at /var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
+    at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/auth/session couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Session error: n [Error]: Dynamic server usage: Route /api/me/contacts couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/var/www/contact-exchange-saas/.next/server/chunks/7787.js:1:37156)
+    at Object.d (/var/www/contact-exchange-saas/.next/server/chunks/1681.js:1:1694)
+    at u (/var/www/contact-exchange-saas/.next/server/app/api/auth/login/route.js:1:2340)
+    at l (/var/www/contact-exchange-saas/.next/server/app/api/me/contacts/route.js:1:887)
+    at /var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
+    at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/me/contacts couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Check slug error: B [Error]: Dynamic server usage: Route /api/users/check-slug couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21777)
+    at Object.get (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29137)
+    at c (/var/www/contact-exchange-saas/.next/server/app/api/users/check-slug/route.js:1:557)
+    at /var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
+    at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/users/check-slug couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (10/20) 
+   Generating static pages (15/20) 
+ ✓ Generating static pages (20/20)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    5.85 kB         108 kB
+├ ○ /_not-found                          138 B          87.3 kB
+├ ○ /admin                               5.05 kB         100 kB
+├ ƒ /api/admin/users                     0 B                0 B
+├ ƒ /api/admin/users/[id]/contacts       0 B                0 B
+├ ƒ /api/auth/login                      0 B                0 B
+├ ƒ /api/auth/logout                     0 B                0 B
+├ ƒ /api/auth/session                    0 B                0 B
+├ ƒ /api/communications/email            0 B                0 B
+├ ƒ /api/communications/sms              0 B                0 B
+├ ƒ /api/contacts/[id]                   0 B                0 B
+├ ƒ /api/contacts/[id]/communications    0 B                0 B
+├ ƒ /api/contacts/[id]/status            0 B                0 B
+├ ƒ /api/contacts/[id]/vcard             0 B                0 B
+├ ƒ /api/contacts/list                   0 B                0 B
+├ ƒ /api/contacts/submit                 0 B                0 B
+├ ƒ /api/debug                           0 B                0 B
+├ ƒ /api/me/contacts                     0 B                0 B
+├ ƒ /api/templates                       0 B                0 B
+├ ƒ /api/test/email                      0 B                0 B
+├ ƒ /api/test/sms                        0 B                0 B
+├ ƒ /api/upload/photo                    0 B                0 B
+├ ƒ /api/uploads/[...path]               0 B                0 B
+├ ƒ /api/users/check-slug                0 B                0 B
+├ ƒ /api/users/me                        0 B                0 B
+├ ƒ /api/users/signup                    0 B                0 B
+├ ○ /api/vcard                           0 B                0 B
+├ ○ /dashboard                           5.87 kB         106 kB
+├ ○ /get-started                         5.41 kB         106 kB
+├ ○ /login                               3.91 kB         106 kB
+├ ƒ /me                                  145 B           112 kB
+├ ○ /settings                            5.13 kB         106 kB
+├ ƒ /u/[username]                        144 B           112 kB
+└ ƒ /u/[username]/qr                     12.2 kB         107 kB
++ First Load JS shared by all            87.2 kB
+  ├ chunks/117-0ccfc4ea0196d079.js       31.6 kB
+  ├ chunks/fd9d1056-b88f8a4cc02eef8b.js  53.6 kB
+  └ other shared chunks (total)          1.95 kB
+
+
+ƒ Middleware                             26.6 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+[0;32m✓ Build completed successfully[0m
+[2025-10-19 20:43:51] === STEP 5: Copying static files ===
+[0;32m✓ Static files copied[0m
+[2025-10-19 20:43:51] === STEP 6: Restarting service ===
+[0;32m✓ Service restarted successfully[0m
+[2025-10-19 20:43:54] === STEP 7: Testing Communication Features ===
+[2025-10-19 20:43:54] Waiting for app to be ready...
+[2025-10-19 20:43:57] Testing SMS (Twilio) to +16476252735...
+[2025-10-19 20:43:59] SMS Response: {"success":true,"configured":true,"messageId":"SM1f33c4c78c8e09de3c562dfca0a4abf7","status":"queued","to":"+16476252735","from":"+12898138309","message":"Test SMS sent successfully! Check your phone."}
+[0;32m✓ ✓ SMS: Test SMS sent successfully! Check your phone.[0m
+[2025-10-19 20:43:59] Testing Email (Resend) to hbarker@ideanetworks.com...
+[2025-10-19 20:43:59] Email Response: {"success":true,"configured":true,"messageId":"6156dc03-0357-43b5-8999-5ebc57da9cb9","to":"hbarker@ideanetworks.com","from":"no-reply@ideanetworks.ca","message":"Test email sent successfully! Check your inbox."}
+[0;32m✓ ✓ Email: Test email sent successfully! Check your inbox.[0m
+[2025-10-19 20:43:59] === STEP 8: Verifying deployment ===
+[2025-10-19 20:43:59] Testing HTTPS connection...
+[0;32m✓ Site is accessible (HTTP 200)[0m
+[2025-10-19 20:44:00] Checking database...
+[2025-10-19 20:44:00] Database stats:
+[2025-10-19 20:44:00]   • Users: 5
+[2025-10-19 20:44:00]   • Contacts: 3
+[0;32m✓ Verification complete[0m
+[2025-10-19 20:44:00] === DEPLOYMENT SUCCESS ===
+[2025-10-19 20:44:00] Deployment completed at: 2025-10-19 20:44:00
+[2025-10-19 20:44:00] === Syncing logs to GitHub ===
+[2025-10-19 20:44:00] Adding deployment logs...
