@@ -29,6 +29,7 @@ export function ContactExchangeFlow({ profile }: ContactExchangeFlowProps) {
     linkedin: '',
     conference: '',
   })
+  const [contactId, setContactId] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSelfieCapture = async (blob: Blob) => {
@@ -82,6 +83,8 @@ export function ContactExchangeFlow({ profile }: ContactExchangeFlowProps) {
       })
 
       if (response.ok) {
+        const result = await response.json()
+        setContactId(result.data.contactId)
         setStep('success')
       } else {
         const data = await response.json()
@@ -104,7 +107,15 @@ export function ContactExchangeFlow({ profile }: ContactExchangeFlowProps) {
   }
 
   if (step === 'success') {
-    return <CelebrationScreen profile={profile} contactPhoto={photoUrl} contactName={formData.name} />
+    return (
+      <CelebrationScreen 
+        profile={profile} 
+        contactPhoto={photoUrl} 
+        contactName={formData.name}
+        contactId={contactId}
+        contactData={formData}
+      />
+    )
   }
 
   return (

@@ -11,9 +11,17 @@ interface CelebrationScreenProps {
   profile: UserProfile
   contactPhoto: string | null
   contactName: string
+  contactId: string | null
+  contactData: {
+    name: string
+    email: string
+    phone: string
+    linkedin: string
+    conference: string
+  }
 }
 
-export function CelebrationScreen({ profile, contactPhoto, contactName }: CelebrationScreenProps) {
+export function CelebrationScreen({ profile, contactPhoto, contactName, contactId, contactData }: CelebrationScreenProps) {
   const [showFireworks, setShowFireworks] = useState(true)
 
   useEffect(() => {
@@ -50,8 +58,31 @@ export function CelebrationScreen({ profile, contactPhoto, contactName }: Celebr
   }
 
   const handleTextMe = () => {
-    const message = encodeURIComponent(`Hi ${profile.name.split(' ')[0]}, great meeting you!`)
-    window.location.href = `sms:${profile.phone}?body=${message}`
+    // Build comprehensive message with contact details
+    const firstName = profile.name.split(' ')[0]
+    const vcardUrl = contactId 
+      ? `${window.location.origin}/api/contacts/${contactId}/vcard`
+      : ''
+    
+    let message = `Hi ${firstName}! Great meeting you at ${contactData.conference}!\n\n`
+    message += `Here's my info:\n`
+    message += `📛 ${contactData.name}\n`
+    message += `📧 ${contactData.email}\n`
+    
+    if (contactData.phone) {
+      message += `📱 ${contactData.phone}\n`
+    }
+    
+    if (contactData.linkedin) {
+      message += `💼 ${contactData.linkedin}\n`
+    }
+    
+    if (vcardUrl) {
+      message += `\n💾 Save my contact (with photo):\n${vcardUrl}`
+    }
+    
+    const encoded = encodeURIComponent(message)
+    window.location.href = `sms:${profile.phone}?body=${encoded}`
   }
 
   const handleLinkedIn = () => {

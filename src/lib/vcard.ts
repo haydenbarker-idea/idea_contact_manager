@@ -38,7 +38,20 @@ export function generateVCard(data: VCardData): string {
   // Embed photo if provided
   if (data.photoPath) {
     try {
-      const fullPath = join(process.cwd(), 'public', data.photoPath)
+      // Handle both regular and standalone deployment
+      let fullPath = join(process.cwd(), 'public', data.photoPath)
+      
+      // Try standalone path first (production)
+      const standalonePath = join(process.cwd(), '.next', 'standalone', 'public', data.photoPath)
+      const { existsSync } = require('fs')
+      
+      if (existsSync(standalonePath)) {
+        fullPath = standalonePath
+      } else if (!existsSync(fullPath)) {
+        // Photo doesn't exist in either location
+        throw new Error(`Photo not found: ${data.photoPath}`)
+      }
+      
       const photoData = readFileSync(fullPath)
       const base64Photo = photoData.toString('base64')
       
