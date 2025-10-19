@@ -43,12 +43,11 @@ export async function PATCH(
 
     const body = await request.json()
 
-    // Update contact
+    // Update contact (only notes - status handled by /status route)
     const contact = await prisma.contact.update({
       where: { id: params.id },
       data: {
         notes: body.notes,
-        followedUp: body.followedUp,
       },
     })
 
