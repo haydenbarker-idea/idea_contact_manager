@@ -282,20 +282,39 @@ export default function SettingsPage() {
                   <Camera className="h-8 w-8 text-gray-400" />
                 </div>
               )}
-              <div className="flex-1">
-                <label htmlFor="photo" className="cursor-pointer">
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-purple-400 transition">
-                    <Upload className="h-6 w-6 mx-auto mb-2 text-gray-400" />
-                    <p className="text-sm text-gray-600">
-                      Click to upload new photo
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      JPG, PNG (Max 5MB)
-                    </p>
-                  </div>
-                </label>
+              <div className="flex-1 space-y-3">
+                <p className="text-sm text-muted-foreground">Choose how to update your photo:</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <label htmlFor="photo-camera" className="cursor-pointer">
+                    <div className="border-2 border-gray-300 rounded-lg p-3 text-center hover:border-purple-400 hover:bg-purple-50 transition">
+                      <Camera className="h-5 w-5 mx-auto mb-1 text-gray-600" />
+                      <p className="text-sm font-medium text-gray-700">
+                        Take Photo
+                      </p>
+                    </div>
+                  </label>
+                  <label htmlFor="photo-upload" className="cursor-pointer">
+                    <div className="border-2 border-gray-300 rounded-lg p-3 text-center hover:border-purple-400 hover:bg-purple-50 transition">
+                      <Upload className="h-5 w-5 mx-auto mb-1 text-gray-600" />
+                      <p className="text-sm font-medium text-gray-700">
+                        Upload Photo
+                      </p>
+                    </div>
+                  </label>
+                </div>
+                <p className="text-xs text-gray-400 text-center">
+                  JPG, PNG (Max 5MB)
+                </p>
                 <input
-                  id="photo"
+                  id="photo-camera"
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handlePhotoChange}
+                  className="hidden"
+                />
+                <input
+                  id="photo-upload"
                   type="file"
                   accept="image/*"
                   onChange={handlePhotoChange}

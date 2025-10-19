@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { toast } from '@/components/ui/use-toast'
-import { Check, Loader2, Upload } from 'lucide-react'
+import { Check, Loader2, Upload, Camera } from 'lucide-react'
 
 export default function GetStartedPage() {
   const router = useRouter()
@@ -300,7 +300,7 @@ export default function GetStartedPage() {
 
               <div>
                 <Label>Profile Photo</Label>
-                <div className="mt-2 flex items-center gap-4">
+                <div className="mt-2 flex flex-col sm:flex-row items-center gap-4">
                   {photoPreview && (
                     <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-purple-200">
                       <Image
@@ -311,20 +311,39 @@ export default function GetStartedPage() {
                       />
                     </div>
                   )}
-                  <div className="flex-1">
-                    <label htmlFor="photo" className="cursor-pointer">
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition">
-                        <Upload className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-                        <p className="text-sm text-gray-600">
-                          Take a photo or upload from gallery
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          JPG, PNG (Max 5MB)
-                        </p>
-                      </div>
-                    </label>
+                  <div className="flex-1 w-full space-y-3">
+                    <p className="text-sm text-muted-foreground">Choose how to add your photo:</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <label htmlFor="photo-camera" className="cursor-pointer">
+                        <div className="border-2 border-gray-300 rounded-lg p-4 text-center hover:border-purple-400 hover:bg-purple-50 transition">
+                          <Camera className="h-6 w-6 mx-auto mb-2 text-gray-600" />
+                          <p className="text-sm font-medium text-gray-700">
+                            Take Photo
+                          </p>
+                        </div>
+                      </label>
+                      <label htmlFor="photo-upload" className="cursor-pointer">
+                        <div className="border-2 border-gray-300 rounded-lg p-4 text-center hover:border-purple-400 hover:bg-purple-50 transition">
+                          <Upload className="h-6 w-6 mx-auto mb-2 text-gray-600" />
+                          <p className="text-sm font-medium text-gray-700">
+                            Upload Photo
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+                    <p className="text-xs text-gray-400 text-center">
+                      JPG, PNG (Max 5MB)
+                    </p>
                     <input
-                      id="photo"
+                      id="photo-camera"
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      onChange={handlePhotoChange}
+                      className="hidden"
+                    />
+                    <input
+                      id="photo-upload"
                       type="file"
                       accept="image/*"
                       onChange={handlePhotoChange}
