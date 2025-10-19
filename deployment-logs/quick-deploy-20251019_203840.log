@@ -1,0 +1,110 @@
+[2025-10-19 20:38:40] === Quick Deploy Started ===
+[2025-10-19 20:38:40] Timestamp: 20251019_203840
+[0;32m✓ Git configured for automated logging[0m
+[2025-10-19 20:38:40] === STEP 1: Pulling latest code ===
+[2025-10-19 20:38:40] Current branch:
+feature/viral-saas
+[2025-10-19 20:38:40] Fetching from GitHub...
+[2025-10-19 20:38:40] Pulling latest code...
+From https://github.com/haydenbarker-idea/idea_contact_manager
+ * branch            feature/viral-saas -> FETCH_HEAD
+Already up to date.
+[0;32m✓ Code updated[0m
+[2025-10-19 20:38:41] === STEP 2: Checking dependencies ===
+[2025-10-19 20:38:41] Running npm install...
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 136ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Help us improve the Prisma ORM for everyone. Share your feedback in a short 2-min survey: https://pris.ly/orm/survey/release-5-22
+
+
+up to date, audited 517 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[0;32m✓ Dependencies updated[0m
+[2025-10-19 20:38:47] === STEP 3: Regenerating Prisma client ===
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 193ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to react to database changes in your app as they happen? Discover how with Pulse: https://pris.ly/tip-1-pulse
+
+[0;32m✓ Prisma client updated[0m
+[2025-10-19 20:38:50] === STEP 4: Building application ===
+[2025-10-19 20:38:50] Running npm run build (takes ~90 seconds)...
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings
+
+./src/app/api/users/me/route.ts
+Attempted import error: 'getUserFromSession' is not exported from '@/lib/auth' (imported as 'getUserFromSession').
+
+Import trace for requested module:
+./src/app/api/users/me/route.ts
+
+./src/app/api/users/me/route.ts
+Attempted import error: 'getUserFromSession' is not exported from '@/lib/auth' (imported as 'getUserFromSession').
+
+Import trace for requested module:
+./src/app/api/users/me/route.ts
+
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/app/api/users/me/route.ts:3:10
+Type error: Module '"@/lib/auth"' has no exported member 'getUserFromSession'.
+
+[0m [90m 1 |[39m [36mimport[39m { [33mNextRequest[39m[33m,[39m [33mNextResponse[39m } [36mfrom[39m [32m'next/server'[39m[0m
+[0m [90m 2 |[39m [36mimport[39m { prisma } [36mfrom[39m [32m'@/lib/db'[39m[0m
+[0m[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { getUserFromSession } [36mfrom[39m [32m'@/lib/auth'[39m[0m
+[0m [90m   |[39m          [31m[1m^[22m[39m[0m
+[0m [90m 4 |[39m [36mimport[39m bcrypt [36mfrom[39m [32m'bcryptjs'[39m[0m
+[0m [90m 5 |[39m [36mimport[39m type { [33mApiResponse[39m } [36mfrom[39m [32m'@/types'[39m[0m
+[0m [90m 6 |[39m[0m
+[0;32m✓ Build completed successfully[0m
+[2025-10-19 20:39:54] === STEP 5: Copying static files ===
+cp: cannot create directory '.next/standalone/.next/static': No such file or directory
+[0;32m✓ Static files copied[0m
+[2025-10-19 20:39:54] === STEP 6: Restarting service ===
+[0;31m✗ Service failed to start[0m
+[2025-10-19 20:39:57] Checking service status...
+● contact-exchange-saas.service - Contact Exchange SaaS (Development)
+     Loaded: loaded (/etc/systemd/system/contact-exchange-saas.service; enabled; vendor preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Sun 2025-10-19 20:39:54 UTC; 2s ago
+    Process: 31003 ExecStart=/usr/bin/node /var/www/contact-exchange-saas/.next/standalone/server.js (code=exited, status=1/FAILURE)
+   Main PID: 31003 (code=exited, status=1/FAILURE)
+        CPU: 43ms
+
+Oct 19 20:39:54 contact-manager systemd[1]: contact-exchange-saas.service: Main process exited, code=exited, status=1/FAILURE
+Oct 19 20:39:54 contact-manager systemd[1]: contact-exchange-saas.service: Failed with result 'exit-code'.
+[2025-10-19 20:39:57] === Syncing logs to GitHub ===
+[2025-10-19 20:39:57] Adding deployment logs...
