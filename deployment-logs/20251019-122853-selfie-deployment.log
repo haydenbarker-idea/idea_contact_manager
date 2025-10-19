@@ -1,0 +1,86 @@
+[2025-10-19 12:28:53] === STEP 1: Stopping service ===
+[2025-10-19 12:28:53] ✓ Service stopped
+[2025-10-19 12:28:53] === STEP 2: Pulling latest code ===
+HEAD is now at 5601dfd feat: add self-healing deployment script with automatic log sync and Dialog component
+[2025-10-19 12:28:53] ✓ Code updated to latest version
+[2025-10-19 12:28:53] === STEP 3: Updating environment variables ===
+[2025-10-19 12:28:53] ✓ Backed up existing .env
+[2025-10-19 12:28:53] Bio already configured
+[2025-10-19 12:28:53] ✓ Environment configured
+[2025-10-19 12:28:53] === STEP 4: Installing dependencies ===
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 181ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Easily identify and fix slow SQL queries in your app. Optimize helps you enhance your visibility: https://pris.ly/--optimize
+
+
+up to date, audited 515 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[2025-10-19 12:28:59] ✓ Dependencies installed
+[2025-10-19 12:28:59] === STEP 5: Creating missing UI components ===
+[2025-10-19 12:28:59] Dialog component already exists
+[2025-10-19 12:28:59] === STEP 6: Running database migration ===
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 179ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Need your database queries to be 1000x faster? Accelerate offers you that and more: https://pris.ly/tip-2-accelerate
+
+[2025-10-19 12:29:04] ✓ Database updated with photo and conference fields
+[2025-10-19 12:29:04] === STEP 7: Creating uploads directory ===
+[2025-10-19 12:29:04] ✓ Uploads directory ready
+[2025-10-19 12:29:04] === STEP 8: Building application ===
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/app/api/contacts/[id]/route.ts:51:9
+Type error: Object literal may only specify known properties, and 'followedUp' does not exist in type '(Without<ContactUpdateInput, ContactUncheckedUpdateInput> & ContactUncheckedUpdateInput) | (Without<...> & ContactUpdateInput)'.
+
+[0m [90m 49 |[39m       data[33m:[39m {[0m
+[0m [90m 50 |[39m         notes[33m:[39m body[33m.[39mnotes[33m,[39m[0m
+[0m[31m[1m>[22m[39m[90m 51 |[39m         followedUp[33m:[39m body[33m.[39mfollowedUp[33m,[39m[0m
+[0m [90m    |[39m         [31m[1m^[22m[39m[0m
+[0m [90m 52 |[39m       }[33m,[39m[0m
+[0m [90m 53 |[39m     })[0m
+[0m [90m 54 |[39m[0m
+[2025-10-19 12:29:41] Creating missing prerender-manifest.json
+[2025-10-19 12:29:41] ✗ Build failed - BUILD_ID not found
+[2025-10-19 12:29:41] === Syncing logs to GitHub ===
