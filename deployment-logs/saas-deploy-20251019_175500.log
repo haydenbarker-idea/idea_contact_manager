@@ -1,0 +1,102 @@
+[2025-10-19 17:55:00] === Checking requirements ===
+[0;32m✓ Requirements met[0m
+[2025-10-19 17:55:00] === STEP 1: Initial setup or update ===
+[2025-10-19 17:55:00] SaaS instance exists - updating...
+[2025-10-19 17:55:00] Stopping service...
+[0;32m✓ Service stopped[0m
+[2025-10-19 17:55:00] Fetching latest code...
+[0;32m✓ Code updated[0m
+[2025-10-19 17:55:00] === SaaS Deployment Started ===
+[2025-10-19 17:55:00] Timestamp: 20251019_175500
+[2025-10-19 17:55:00] Branch: feature/viral-saas
+[2025-10-19 17:55:00] Configuring git for automated log syncing...
+[0;32m✓ Git configured: hbarker@ideanetworks.com[0m
+[2025-10-19 17:55:00] === STEP 2: Installing dependencies ===
+[2025-10-19 17:55:00] Running npm install...
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 163ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+
+up to date, audited 517 packages in 7s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[0;32m✓ Dependencies installed[0m
+[2025-10-19 17:55:08] === STEP 3: Configuring database ===
+[0;32m✓ Database contact_exchange_saas exists[0m
+[2025-10-19 17:55:08] === STEP 4: Configuring environment ===
+[2025-10-19 17:55:08] Backed up existing .env
+[2025-10-19 17:55:08] Updating DATABASE_URL...
+[2025-10-19 17:55:08] Updating NEXT_PUBLIC_APP_URL...
+[0;32m✓ Environment configured[0m
+[2025-10-19 17:55:08] === STEP 5: Updating database schema ===
+[2025-10-19 17:55:08] Pushing schema to database (creates/updates tables)...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange_saas", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+[2025-10-19 17:55:10] Generating Prisma client...
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 167ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Help us improve the Prisma ORM for everyone. Share your feedback in a short 2-min survey: https://pris.ly/orm/survey/release-5-22
+
+[0;32m✓ Database schema updated[0m
+[2025-10-19 17:55:13] Verifying database schema...
+[0;32m✓ ✓ users table exists[0m
+[0;32m✓ ✓ contacts table exists[0m
+[2025-10-19 17:55:13] === STEP 6: Creating/updating systemd service ===
+[2025-10-19 17:55:13] Creating service file...
+[0;32m✓ Service file created[0m
+[2025-10-19 17:55:13] === STEP 7: Building application ===
+[2025-10-19 17:55:13] Running npm run build (this takes ~90 seconds)...
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/app/api/me/contacts/route.ts:40:9
+Type error: Object literal may only specify known properties, and 'bio' does not exist in type 'ContactSelect<DefaultArgs>'.
+
+[0m [90m 38 |[39m         title[33m:[39m [36mtrue[39m[33m,[39m[0m
+[0m [90m 39 |[39m         linkedin[33m:[39m [36mtrue[39m[33m,[39m[0m
+[0m[31m[1m>[22m[39m[90m 40 |[39m         bio[33m:[39m [36mtrue[39m[33m,[39m[0m
+[0m [90m    |[39m         [31m[1m^[22m[39m[0m
+[0m [90m 41 |[39m         photoUrl[33m:[39m [36mtrue[39m[33m,[39m[0m
+[0m [90m 42 |[39m         submittedAt[33m:[39m [36mtrue[39m[33m,[39m[0m
+[0m [90m 43 |[39m         status[33m:[39m [36mtrue[39m[33m,[39m[0m
+[2025-10-19 17:56:12] === STEP 13: Syncing logs to GitHub ===
+[2025-10-19 17:56:12] Adding deployment logs...
