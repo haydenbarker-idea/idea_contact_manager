@@ -32,7 +32,9 @@ import {
   Calendar,
   Eye,
   Edit,
+  MapPin,
 } from 'lucide-react'
+import Image from 'next/image'
 
 export default function AdminPage() {
   const [contacts, setContacts] = useState<Contact[]>([])
@@ -338,7 +340,7 @@ export default function AdminPage() {
 
   const handleExportCSV = () => {
     const csv = [
-      ['Name', 'Email', 'Phone', 'Company', 'Title', 'LinkedIn', 'Status', 'Priority', 'Submitted', 'Last Contact', 'Notes'],
+      ['Name', 'Email', 'Phone', 'Company', 'Title', 'LinkedIn', 'Conference', 'Status', 'Priority', 'Submitted', 'Last Contact', 'Notes', 'Photo URL'],
       ...contacts.map(c => [
         c.name,
         c.email,
@@ -346,11 +348,13 @@ export default function AdminPage() {
         c.company || '',
         c.title || '',
         c.linkedin || '',
+        c.conference || '',
         c.status,
         c.priority.toString(),
         new Date(c.submittedAt).toLocaleString(),
         c.lastContact ? new Date(c.lastContact).toLocaleString() : '',
         c.notes || '',
+        c.photoUrl || '',
       ]),
     ]
       .map(row => row.map(cell => `"${cell}"`).join(','))
@@ -519,6 +523,20 @@ export default function AdminPage() {
                 <Card key={contact.id} className="hover:shadow-lg transition-shadow">
                   <CardContent className="pt-6">
                     <div className="flex justify-between items-start">
+                      {/* Contact Photo */}
+                      {contact.photoUrl && (
+                        <div className="mr-4 flex-shrink-0">
+                          <div className="relative w-20 h-20 rounded-full overflow-hidden ring-2 ring-primary/20">
+                            <Image
+                              src={contact.photoUrl}
+                              alt={contact.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        </div>
+                      )}
+
                       <div className="flex-1 space-y-2">
                         <div className="flex items-center gap-2">
                           <h3 className="text-xl font-semibold">{contact.name}</h3>
@@ -550,6 +568,13 @@ export default function AdminPage() {
                             </a>
                           )}
                         </div>
+
+                        {contact.conference && (
+                          <p className="text-sm">
+                            <MapPin className="h-3 w-3 inline mr-1" />
+                            {contact.conference}
+                          </p>
+                        )}
 
                         {contact.notes && (
                           <p className="text-sm text-muted-foreground italic mt-2">

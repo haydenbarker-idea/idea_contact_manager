@@ -10,6 +10,7 @@ export async function GET() {
     email: process.env.NEXT_PUBLIC_DEFAULT_USER_EMAIL || '',
     phone: process.env.NEXT_PUBLIC_DEFAULT_USER_PHONE || '',
     linkedin: process.env.NEXT_PUBLIC_DEFAULT_USER_LINKEDIN || '',
+    photoPath: '/images/hayden-headshot.jpg', // Include Hayden's photo
   }
 
   const vcardContent = generateVCard(profile)

@@ -24,6 +24,8 @@ export interface Contact {
   notes?: string | null
   status: ContactStatus
   priority: number // 0 = normal, 1 = important, 2 = urgent
+  photoUrl?: string | null // URL to their selfie
+  conference?: string | null // Conference where we met
   submittedAt: Date
   lastContact?: Date | null
   updatedAt: Date

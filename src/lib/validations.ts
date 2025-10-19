@@ -7,6 +7,8 @@ export const contactSubmissionSchema = z.object({
   linkedin: z.string().url('Invalid LinkedIn URL').optional().or(z.literal('')),
   company: z.string().max(100, 'Company name too long').optional(),
   title: z.string().max(100, 'Title too long').optional(),
+  photoUrl: z.string().optional(),
+  conference: z.string().max(200, 'Conference name too long').optional(),
 })
 
 export type ContactSubmission = z.infer<typeof contactSubmissionSchema>

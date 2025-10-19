@@ -40,6 +40,10 @@ model Contact {
   status      ContactStatus      @default(NEW)
   priority    Int                @default(0) // 0 = normal, 1 = important, 2 = urgent
   
+  // Photo and context
+  photoUrl    String?            // URL to their selfie
+  conference  String?            // Conference where we met
+  
   // Tracking
   submittedAt DateTime           @default(now())
   lastContact DateTime?          // Last time we reached out

@@ -34,6 +34,8 @@ export async function POST(request: NextRequest) {
         linkedin: data.linkedin || null,
         company: data.company || null,
         title: data.title || null,
+        photoUrl: data.photoUrl || null,
+        conference: data.conference || null,
       },
     })
 
