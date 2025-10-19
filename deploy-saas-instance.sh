@@ -382,6 +382,15 @@ setup_static_files() {
         cp -r "$PROD_DIR/public/images/"* public/images/ 2>/dev/null || true
     fi
     
+    # Copy Next.js static files (CRITICAL for standalone mode)
+    log "Copying Next.js static assets to standalone build..."
+    if [ -d ".next/static" ]; then
+        cp -r .next/static .next/standalone/.next/static
+        success "Next.js static assets copied"
+    else
+        error "Warning: .next/static directory not found"
+    fi
+    
     success "Static files configured"
 }
 
