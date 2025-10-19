@@ -131,12 +131,11 @@ export function CelebrationScreen({ profile, contactPhoto, contactName, contactI
               {contactPhoto && (
                 <div className="text-center space-y-2">
                   <div className="relative w-32 h-32 rounded-full overflow-hidden ring-4 ring-primary/30 shadow-xl">
-                    <Image
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={contactPhoto}
                       alt={contactName}
-                      fill
-                      className="object-cover"
-                      unoptimized
+                      className="w-full h-full object-cover"
                     />
                   </div>
                   <p className="font-medium">{contactName}</p>

@@ -286,6 +286,14 @@ if [ -d ".next/standalone" ]; then
     cp -r public .next/standalone/ 2>&1 | tee -a "$LOG_FILE"
     log "Copying .next/static to standalone..."
     cp -r .next/static .next/standalone/.next/ 2>&1 | tee -a "$LOG_FILE"
+    
+    # Create symlink from standalone uploads to main uploads directory
+    # This ensures new uploads are accessible from both locations
+    log "Setting up uploads symlink..."
+    rm -rf .next/standalone/public/uploads 2>&1 | tee -a "$LOG_FILE" || true
+    ln -s "$APP_DIR/public/uploads" .next/standalone/public/uploads 2>&1 | tee -a "$LOG_FILE"
+    log "✓ Uploads symlinked for real-time access"
+    
     log "✓ Standalone static files ready"
 else
     log "⚠ Running in non-standalone mode"
