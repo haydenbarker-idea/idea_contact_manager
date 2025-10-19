@@ -87,17 +87,6 @@ else
     log "Bio already configured"
 fi
 
-# Update Resend from email if not set
-if ! grep -q "RESEND_FROM_EMAIL=hbarker@ideanetworks.com" .env 2>/dev/null; then
-    log "Setting Resend from email..."
-    if grep -q "RESEND_FROM_EMAIL=" .env 2>/dev/null; then
-        sed -i 's|RESEND_FROM_EMAIL=.*|RESEND_FROM_EMAIL=hbarker@ideanetworks.com|' .env
-    else
-        echo "RESEND_FROM_EMAIL=hbarker@ideanetworks.com" >> .env
-    fi
-    log "✓ Updated from email"
-fi
-
 # Ensure user info is set
 if ! grep -q "NEXT_PUBLIC_DEFAULT_USER_NAME=Hayden Barker" .env 2>/dev/null; then
     log "Setting user information..."
@@ -108,8 +97,53 @@ NEXT_PUBLIC_DEFAULT_USER_NAME=Hayden Barker
 NEXT_PUBLIC_DEFAULT_USER_TITLE=Co-Owner
 NEXT_PUBLIC_DEFAULT_USER_COMPANY=Idea Networks
 NEXT_PUBLIC_DEFAULT_USER_EMAIL=hbarker@ideanetworks.com
+NEXT_PUBLIC_DEFAULT_USER_PHONE=+16476242735
+NEXT_PUBLIC_DEFAULT_USER_LINKEDIN=https://linkedin.com/in/haydenbarker
 EOF
     log "✓ Added user info"
+fi
+
+# Ensure Twilio section exists with placeholders
+if ! grep -q "TWILIO_ACCOUNT_SID" .env 2>/dev/null; then
+    log "Adding Twilio configuration template..."
+    cat >> .env << 'EOF'
+
+# ==============================================
+# TWILIO (SMS) - PASTE YOUR CREDENTIALS BELOW
+# ==============================================
+# Get these from: https://console.twilio.com
+TWILIO_ACCOUNT_SID=PASTE_YOUR_TWILIO_ACCOUNT_SID_HERE
+TWILIO_AUTH_TOKEN=PASTE_YOUR_TWILIO_AUTH_TOKEN_HERE
+TWILIO_PHONE_NUMBER=PASTE_YOUR_TWILIO_PHONE_NUMBER_HERE
+EOF
+    log "⚠ Twilio credentials need to be added - edit .env file"
+fi
+
+# Ensure Resend section exists with placeholders
+if ! grep -q "RESEND_API_KEY" .env 2>/dev/null; then
+    log "Adding Resend configuration template..."
+    cat >> .env << 'EOF'
+
+# ==============================================
+# RESEND (EMAIL) - PASTE YOUR CREDENTIALS BELOW
+# ==============================================
+# Get your API key from: https://resend.com/api-keys
+RESEND_API_KEY=PASTE_YOUR_RESEND_API_KEY_HERE
+RESEND_FROM_EMAIL=hbarker@ideanetworks.com
+EOF
+    log "⚠ Resend API key needs to be added - edit .env file"
+fi
+
+# Check if credentials are still placeholders
+if grep -q "PASTE_YOUR_" .env 2>/dev/null; then
+    log "⚠⚠⚠ IMPORTANT ⚠⚠⚠"
+    log "API credentials contain placeholders!"
+    log "Edit /var/www/contact-exchange/.env and replace:"
+    log "  - PASTE_YOUR_TWILIO_ACCOUNT_SID_HERE"
+    log "  - PASTE_YOUR_TWILIO_AUTH_TOKEN_HERE"
+    log "  - PASTE_YOUR_TWILIO_PHONE_NUMBER_HERE"
+    log "  - PASTE_YOUR_RESEND_API_KEY_HERE"
+    log "Then run: bash deploy-selfie-experience.sh"
 fi
 
 log "✓ Environment configured"
