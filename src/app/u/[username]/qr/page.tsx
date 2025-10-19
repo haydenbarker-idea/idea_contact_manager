@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
-import { QRCodeSVG } from 'qrcode.react'
 import { Share2, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import QRCode from 'qrcode'
 
 export default function UserQRPage() {
   const params = useParams()
@@ -13,12 +13,28 @@ export default function UserQRPage() {
   const username = params.username as string
   const showWelcome = searchParams.get('welcome') === 'true'
   const [mounted, setMounted] = useState(false)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   
   useEffect(() => {
     setMounted(true)
   }, [])
 
   const profileUrl = `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/u/${username}`
+  
+  // Generate QR code
+  useEffect(() => {
+    if (mounted && canvasRef.current) {
+      QRCode.toCanvas(canvasRef.current, profileUrl, {
+        width: 280,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF',
+        },
+        errorCorrectionLevel: 'H',
+      })
+    }
+  }, [mounted, profileUrl])
   
   const handleShare = async () => {
     if (navigator.share) {
@@ -104,17 +120,10 @@ export default function UserQRPage() {
               {/* QR Code */}
               <div className="flex justify-center">
                 <div className="bg-white p-6 rounded-2xl shadow-lg">
-                  <QRCodeSVG
-                    value={profileUrl}
-                    size={280}
-                    level="H"
-                    includeMargin={true}
-                    imageSettings={{
-                      src: "/images/hayden-headshot.jpg",
-                      height: 40,
-                      width: 40,
-                      excavate: true,
-                    }}
+                  <canvas
+                    ref={canvasRef}
+                    className="mx-auto"
+                    style={{ maxWidth: '280px', height: 'auto' }}
                   />
                 </div>
               </div>
