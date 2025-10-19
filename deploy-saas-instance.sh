@@ -94,27 +94,36 @@ sync_logs_to_github() {
     fi
 }
 
-# Error handler - called when any command fails
-handle_error() {
+# Exit handler - called on ANY exit (success or failure)
+handle_exit() {
     local exit_code=$?
-    DEPLOYMENT_STATUS="FAILED"
-    error "=== DEPLOYMENT FAILED ==="
-    error "Exit code: $exit_code"
-    error "Failed at step: $FAILED_STEP"
-    error "Check log file: $LOG_FILE"
     
-    # Sync logs even on failure
-    sync_logs
+    # Only run cleanup once
+    if [ "${EXIT_HANDLER_RAN:-}" = "true" ]; then
+        return
+    fi
+    export EXIT_HANDLER_RAN=true
     
-    # Print failure summary
-    print_summary
+    # Sync logs regardless of success/failure
+    if [ -d "$SAAS_DIR" ] && [ -f "$LOG_FILE" ]; then
+        sync_logs
+    fi
     
-    exit $exit_code
+    # If this was an error exit, show failure info
+    if [ $exit_code -ne 0 ] && [ "$DEPLOYMENT_STATUS" != "SUCCESS" ]; then
+        DEPLOYMENT_STATUS="FAILED"
+        error "=== DEPLOYMENT FAILED ==="
+        error "Exit code: $exit_code"
+        error "Failed at step: $FAILED_STEP"
+        error "Check log file: $LOG_FILE"
+        print_summary
+    fi
 }
 
-# Set up error trapping
-trap 'handle_error' ERR
-set -e  # Exit on error, but trap will catch it
+# Set up exit trapping - catches ALL exits (error or normal)
+trap 'handle_exit' EXIT
+set -e  # Exit on error
+set -o pipefail  # Pipelines return exit code of first failed command
 
 print_header() {
     echo ""
@@ -719,9 +728,8 @@ main() {
     start_service
     verify_deployment
     test_communications
-    sync_logs
     
-    # Mark deployment as successful
+    # Mark deployment as successful (EXIT trap will sync logs)
     DEPLOYMENT_STATUS="SUCCESS"
     log "=== All steps completed successfully ==="
     

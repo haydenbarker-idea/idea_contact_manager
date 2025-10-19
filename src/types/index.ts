@@ -6,6 +6,7 @@ export interface UserProfile {
   phone: string
   linkedin: string
   avatar?: string
+  photoUrl?: string  // User headshot from signup
   bio?: string
 }
 
