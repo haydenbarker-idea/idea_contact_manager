@@ -13,9 +13,11 @@ echo ""
 # Change to the SaaS directory
 cd /var/www/contact-exchange-saas
 
-# Load environment variables
+# Load environment variables properly (handles values with spaces)
 if [ -f .env ]; then
-    export $(cat .env | grep -v '^#' | xargs)
+    set -a
+    source .env
+    set +a
 fi
 
 echo "⚠️  WARNING: This will delete ALL users and contacts!"
