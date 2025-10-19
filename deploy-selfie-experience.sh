@@ -279,6 +279,18 @@ fi
 
 log "✓ Build complete"
 
+log "=== STEP 8.5: Setting up standalone static files ==="
+# Copy public folder to standalone (for images and uploads)
+if [ -d ".next/standalone" ]; then
+    log "Copying public folder to standalone..."
+    cp -r public .next/standalone/ 2>&1 | tee -a "$LOG_FILE"
+    log "Copying .next/static to standalone..."
+    cp -r .next/static .next/standalone/.next/ 2>&1 | tee -a "$LOG_FILE"
+    log "✓ Standalone static files ready"
+else
+    log "⚠ Running in non-standalone mode"
+fi
+
 log "=== STEP 9: Starting service ==="
 systemctl start contact-exchange 2>&1 | tee -a "$LOG_FILE"
 sleep 5
