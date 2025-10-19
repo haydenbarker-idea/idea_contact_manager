@@ -38,7 +38,7 @@ export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([])
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [contacts, setContacts] = useState<Contact[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [password, setPassword] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
