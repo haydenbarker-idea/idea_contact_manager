@@ -40,13 +40,26 @@ export async function sendEmail({
   }
 
   try {
-    const { data, error } = await resend.emails.send({
+    // Build email payload - Resend requires either html or text, not both as undefined
+    const emailPayload: any = {
       from: fromEmail,
       to,
       subject,
-      html: html || text,
-      text,
-    })
+    }
+
+    if (html) {
+      emailPayload.html = html
+      if (text) emailPayload.text = text
+    } else if (text) {
+      emailPayload.text = text
+    } else {
+      return {
+        success: false,
+        error: 'Either html or text content is required',
+      }
+    }
+
+    const { data, error } = await resend.emails.send(emailPayload)
 
     if (error) {
       console.error('Resend email error:', error)
