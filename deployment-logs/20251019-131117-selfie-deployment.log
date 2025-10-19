@@ -1,0 +1,87 @@
+[2025-10-19 13:11:17] === STEP 1: Stopping service ===
+[2025-10-19 13:11:17] ✓ Service stopped
+[2025-10-19 13:11:17] === STEP 2: Pulling latest code ===
+HEAD is now at 829b2fe feat: serve uploaded photos via API route with comprehensive logging - Add /api/uploads/[...path] route to serve uploaded files directly - Bypasses Next.js static file serving issues in standalone mode - Add /api/debug route to check file system paths and uploads - Add detailed logging to photo upload and contact submission - Update vCard library to handle API URLs and multiple filesystem paths - Fixes selfie display issue in standalone deployment
+[2025-10-19 13:11:17] ✓ Code updated to latest version
+[2025-10-19 13:11:17] === STEP 3: Updating environment variables ===
+[2025-10-19 13:11:17] ✓ Backed up existing .env
+[2025-10-19 13:11:17] Bio already configured
+[2025-10-19 13:11:17] ✓ Environment configured
+[2025-10-19 13:11:17] === STEP 4: Installing dependencies ===
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 114ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to react to database changes in your app as they happen? Discover how with Pulse: https://pris.ly/tip-1-pulse
+
+
+up to date, audited 515 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[2025-10-19 13:11:23] ✓ Dependencies installed
+[2025-10-19 13:11:23] === STEP 5: Creating missing UI components ===
+[2025-10-19 13:11:23] Dialog component already exists
+[2025-10-19 13:11:23] === STEP 6: Running database migration ===
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 213ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
+
+[2025-10-19 13:11:28] ✓ Database updated with photo and conference fields
+[2025-10-19 13:11:28] === STEP 7: Creating uploads directory ===
+[2025-10-19 13:11:28] ✓ Uploads directory ready
+[2025-10-19 13:11:28] === STEP 8: Building application ===
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/app/api/uploads/[...path]/route.ts:61:29
+Type error: Argument of type 'Buffer<ArrayBufferLike>' is not assignable to parameter of type 'BodyInit | null | undefined'.
+  Type 'Buffer<ArrayBufferLike>' is missing the following properties from type 'URLSearchParams': size, append, delete, get, and 2 more.
+
+[0m [90m 59 |[39m[0m
+[0m [90m 60 |[39m     [90m// Return the file[39m[0m
+[0m[31m[1m>[22m[39m[90m 61 |[39m     [36mreturn[39m [36mnew[39m [33mNextResponse[39m(fileBuffer[33m,[39m {[0m
+[0m [90m    |[39m                             [31m[1m^[22m[39m[0m
+[0m [90m 62 |[39m       status[33m:[39m [35m200[39m[33m,[39m[0m
+[0m [90m 63 |[39m       headers[33m:[39m {[0m
+[0m [90m 64 |[39m         [32m'Content-Type'[39m[33m:[39m contentType[33m,[39m[0m
+[2025-10-19 13:12:13] Creating missing prerender-manifest.json
+[2025-10-19 13:12:13] ✗ Build failed - BUILD_ID not found
+[2025-10-19 13:12:13] === Syncing logs to GitHub ===
