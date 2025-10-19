@@ -57,8 +57,8 @@ export async function GET(
       contentType,
     })
 
-    // Return the file
-    return new NextResponse(fileBuffer, {
+    // Return the file (convert Buffer to Uint8Array for NextResponse)
+    return new NextResponse(new Uint8Array(fileBuffer), {
       status: 200,
       headers: {
         'Content-Type': contentType,
