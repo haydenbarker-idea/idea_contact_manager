@@ -88,8 +88,11 @@ export function ContactExchangeFlow({ profile, userId }: ContactExchangeFlowProp
         const result = await response.json()
         setContactId(result.data.contactId)
         
-        // Save contact info to localStorage for "I Want This!" flow
-        localStorage.setItem('recentContact', JSON.stringify(formData))
+        // Save contact info AND selfie to localStorage for "I Want This!" flow
+        localStorage.setItem('recentContact', JSON.stringify({
+          ...formData,
+          photoUrl, // Include the selfie they just took!
+        }))
         
         setStep('success')
       } else {

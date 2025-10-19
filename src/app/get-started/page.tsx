@@ -53,6 +53,11 @@ export default function GetStartedPage() {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '')
       setFormData(prev => ({ ...prev, slug: suggestedSlug }))
+      
+      // Load their selfie if they took one
+      if (contact.photoUrl) {
+        setPhotoPreview(contact.photoUrl)
+      }
     }
   }, [])
 
@@ -92,8 +97,10 @@ export default function GetStartedPage() {
   const handleSubmit = async () => {
     setLoading(true)
     try {
-      // Upload photo first if provided
-      let photoUrl = null
+      // Start with existing photoUrl (their selfie) or null
+      let photoUrl = photoPreview || null
+      
+      // Upload NEW photo only if they replaced it
       if (formData.photoFile) {
         const photoFormData = new FormData()
         photoFormData.append('photo', formData.photoFile)
