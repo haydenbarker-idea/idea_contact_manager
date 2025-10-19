@@ -1,17 +1,17 @@
-[2025-10-19 21:09:59] === Quick Deploy Started ===
-[2025-10-19 21:09:59] Timestamp: 20251019_210959
+[2025-10-19 21:16:19] === Quick Deploy Started ===
+[2025-10-19 21:16:19] Timestamp: 20251019_211619
 [0;32m✓ Git configured for automated logging[0m
-[2025-10-19 21:09:59] === STEP 1: Pulling latest code ===
-[2025-10-19 21:09:59] Current branch:
+[2025-10-19 21:16:19] === STEP 1: Pulling latest code ===
+[2025-10-19 21:16:19] Current branch:
 feature/viral-saas
-[2025-10-19 21:09:59] Fetching from GitHub...
-[2025-10-19 21:09:59] Pulling latest code...
+[2025-10-19 21:16:19] Fetching from GitHub...
+[2025-10-19 21:16:19] Pulling latest code...
 From https://github.com/haydenbarker-idea/idea_contact_manager
  * branch            feature/viral-saas -> FETCH_HEAD
 Already up to date.
 [0;32m✓ Code updated[0m
-[2025-10-19 21:10:00] === STEP 2: Checking dependencies ===
-[2025-10-19 21:10:00] Running npm install...
+[2025-10-19 21:16:19] === STEP 2: Checking dependencies ===
+[2025-10-19 21:16:19] Running npm install...
 
 > contact-exchange@0.1.0 postinstall
 > prisma generate
@@ -19,14 +19,14 @@ Already up to date.
 Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 
-✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 178ms
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 199ms
 
 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
 
 Tip: Curious about the SQL queries Prisma ORM generates? Optimize helps you enhance your visibility: https://pris.ly/tip-2-optimize
 
 
-up to date, audited 517 packages in 8s
+up to date, audited 517 packages in 6s
 
 171 packages are looking for funding
   run `npm fund` for details
@@ -38,19 +38,19 @@ To address all issues, run:
 
 Run `npm audit` for details.
 [0;32m✓ Dependencies updated[0m
-[2025-10-19 21:10:08] === STEP 3: Regenerating Prisma client ===
+[2025-10-19 21:16:26] === STEP 3: Regenerating Prisma client ===
 Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 
-✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 180ms
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 172ms
 
 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
 
 Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
 
 [0;32m✓ Prisma client updated[0m
-[2025-10-19 21:10:11] === STEP 4: Building application ===
-[2025-10-19 21:10:11] Running npm run build (takes ~90 seconds)...
+[2025-10-19 21:16:29] === STEP 4: Building application ===
+[2025-10-19 21:16:29] Running npm run build (takes ~90 seconds)...
 
 > contact-exchange@0.1.0 build
 > next build
@@ -144,10 +144,10 @@ Route (app)                              Size     First Load JS
 ├ ƒ /api/users/signup                    0 B                0 B
 ├ ○ /api/vcard                           0 B                0 B
 ├ ○ /dashboard                           5.89 kB         106 kB
-├ ○ /get-started                         5.41 kB         106 kB
+├ ○ /get-started                         5.58 kB         106 kB
 ├ ○ /login                               3.91 kB         106 kB
 ├ ƒ /me                                  145 B           112 kB
-├ ○ /settings                            5.13 kB         106 kB
+├ ○ /settings                            5.22 kB         106 kB
 ├ ƒ /u/[username]                        144 B           112 kB
 └ ƒ /u/[username]/qr                     12.2 kB         107 kB
 + First Load JS shared by all            87.2 kB
@@ -162,36 +162,27 @@ Route (app)                              Size     First Load JS
 ƒ  (Dynamic)  server-rendered on demand
 
 [0;32m✓ Build completed successfully[0m
-[2025-10-19 21:11:45] === STEP 5: Copying static files ===
+[2025-10-19 21:17:57] === STEP 5: Copying static files ===
 [0;32m✓ Static files copied[0m
-[2025-10-19 21:11:45] === STEP 6: Restarting service ===
+[2025-10-19 21:17:57] === STEP 6: Restarting service ===
 [0;32m✓ Service restarted successfully[0m
-[2025-10-19 21:11:48] === STEP 7: Testing Communication Features ===
-[2025-10-19 21:11:48] Waiting for app to be ready...
-[2025-10-19 21:11:51] Testing SMS (Twilio) to +16476242735...
-[2025-10-19 21:11:53] SMS Response: {"success":true,"configured":true,"messageId":"SM222faf0edfa2dfe3044ea7e3ba30d99f","status":"queued","to":"+16476242735","from":"+12898138309","message":"Test SMS sent successfully! Check your phone."}
+[2025-10-19 21:18:00] === STEP 7: Testing Communication Features ===
+[2025-10-19 21:18:00] Waiting for app to be ready...
+[2025-10-19 21:18:03] Testing SMS (Twilio) to +16476242735...
+[2025-10-19 21:18:05] SMS Response: {"success":true,"configured":true,"messageId":"SMb85c81cba65f8dfcb2f4b97b63021fae","status":"queued","to":"+16476242735","from":"+12898138309","message":"Test SMS sent successfully! Check your phone."}
 [0;32m✓ ✓ SMS: Test SMS sent successfully! Check your phone.[0m
-[2025-10-19 21:11:53] Testing Email (Resend) to hbarker@ideanetworks.com...
-[2025-10-19 21:11:53] Email Response: {"success":true,"configured":true,"messageId":"a67c73e1-b823-4170-85d9-34ce6c768b77","to":"hbarker@ideanetworks.com","from":"no-reply@ideanetworks.ca","message":"Test email sent successfully! Check your inbox."}
+[2025-10-19 21:18:05] Testing Email (Resend) to hbarker@ideanetworks.com...
+[2025-10-19 21:18:05] Email Response: {"success":true,"configured":true,"messageId":"65331ddf-178c-4d94-91ad-4526704c83c3","to":"hbarker@ideanetworks.com","from":"no-reply@ideanetworks.ca","message":"Test email sent successfully! Check your inbox."}
 [0;32m✓ ✓ Email: Test email sent successfully! Check your inbox.[0m
-[2025-10-19 21:11:53] === STEP 8: Verifying deployment ===
-[2025-10-19 21:11:53] Testing HTTPS connection...
+[2025-10-19 21:18:05] === STEP 8: Verifying deployment ===
+[2025-10-19 21:18:05] Testing HTTPS connection...
 [0;32m✓ Site is accessible (HTTP 200)[0m
-[2025-10-19 21:11:54] Checking database...
-[2025-10-19 21:11:54] Database stats:
-[2025-10-19 21:11:54]   • Users: 2
-[2025-10-19 21:11:54]   • Contacts: 1
+[2025-10-19 21:18:05] Checking database...
+[2025-10-19 21:18:06] Database stats:
+[2025-10-19 21:18:06]   • Users: 2
+[2025-10-19 21:18:06]   • Contacts: 1
 [0;32m✓ Verification complete[0m
-[2025-10-19 21:11:54] === DEPLOYMENT SUCCESS ===
-[2025-10-19 21:11:54] Deployment completed at: 2025-10-19 21:11:54
-[2025-10-19 21:11:54] === Syncing logs to GitHub ===
-[2025-10-19 21:11:54] Adding deployment logs...
-[2025-10-19 21:11:54] Committing logs...
-[feature/viral-saas abeb223] logs: quick-deploy 20251019_210959
- 2 files changed, 197 insertions(+)
- create mode 100644 deployment-logs/quick-deploy-20251019_210959.log
-[2025-10-19 21:11:54] Pushing to GitHub...
-To https://github.com/haydenbarker-idea/idea_contact_manager.git
-   7ced8dd..abeb223  feature/viral-saas -> feature/viral-saas
-[0;32m✓ Logs synced to GitHub successfully[0m
-[2025-10-19 21:11:54] View at: https://github.com/haydenbarker-idea/idea_contact_manager/tree/feature/viral-saas/deployment-logs
+[2025-10-19 21:18:06] === DEPLOYMENT SUCCESS ===
+[2025-10-19 21:18:06] Deployment completed at: 2025-10-19 21:18:06
+[2025-10-19 21:18:06] === Syncing logs to GitHub ===
+[2025-10-19 21:18:06] Adding deployment logs...
