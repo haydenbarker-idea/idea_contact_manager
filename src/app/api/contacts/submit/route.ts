@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { contactSubmissionSchema } from '@/lib/validations'
 import { sendSMS } from '@/lib/twilio'
+import { sendEmail } from '@/lib/resend-client'
+import { generateWelcomeEmail } from '@/lib/email-templates'
+import { readFile } from 'fs/promises'
+import { join } from 'path'
 import type { ApiResponse } from '@/types'
 
 export async function POST(request: NextRequest) {
@@ -80,6 +84,76 @@ export async function POST(request: NextRequest) {
       }).catch(error => {
         console.error('[CONTACT SUBMIT] SMS error:', error)
       })
+    }
+
+    // Send welcome email with company PDF (non-blocking)
+    if (contact.email) {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://contacts.ideanetworks.com'
+      const yourName = process.env.NEXT_PUBLIC_DEFAULT_USER_NAME || 'Hayden Barker'
+      const yourTitle = process.env.NEXT_PUBLIC_DEFAULT_USER_TITLE || 'Co-Owner'
+      const yourCompany = process.env.NEXT_PUBLIC_DEFAULT_USER_COMPANY || 'Idea Networks'
+      const yourEmail = process.env.NEXT_PUBLIC_DEFAULT_USER_EMAIL || 'hbarker@ideanetworks.com'
+      const yourPhone = process.env.NEXT_PUBLIC_DEFAULT_USER_PHONE || '+16476242735'
+      const yourLinkedIn = process.env.NEXT_PUBLIC_DEFAULT_USER_LINKEDIN || 'https://linkedin.com/in/haydenbarker'
+      const companyWebsite = 'https://www.ideanetworks.com'
+      const companyLinkedIn = 'https://www.linkedin.com/company/idea-networks-inc'
+      const vcardUrl = `${appUrl}/api/vcard`
+      
+      const firstName = contact.name.split(' ')[0]
+      
+      const htmlContent = generateWelcomeEmail({
+        contactName: contact.name,
+        contactFirstName: firstName,
+        conference: contact.conference || 'the event',
+        yourName,
+        yourTitle,
+        yourCompany,
+        yourEmail,
+        yourPhone,
+        yourLinkedIn,
+        companyWebsite,
+        companyLinkedIn,
+        vcardUrl,
+      })
+      
+      // Read PDF attachment
+      const pdfPath = join(process.cwd(), 'public', 'documents', 'IdeaNetworksValue.pdf')
+      
+      // Send email asynchronously
+      readFile(pdfPath)
+        .then(pdfBuffer => {
+          return sendEmail({
+            to: contact.email,
+            subject: `Great meeting you at ${contact.conference || 'the event'}, ${firstName}!`,
+            html: htmlContent,
+            attachments: [
+              {
+                filename: 'Idea_Networks_Overview.pdf',
+                content: pdfBuffer,
+              },
+            ],
+          })
+        })
+        .then(result => {
+          if (result.success) {
+            console.log('[CONTACT SUBMIT] Email sent to:', contact.email, 'MessageId:', result.messageId)
+          } else {
+            console.error('[CONTACT SUBMIT] Email failed:', result.error)
+          }
+        })
+        .catch(error => {
+          console.error('[CONTACT SUBMIT] Email error:', error)
+          // Send email without attachment if PDF fails
+          sendEmail({
+            to: contact.email,
+            subject: `Great meeting you at ${contact.conference || 'the event'}, ${firstName}!`,
+            html: htmlContent,
+          }).then(result => {
+            if (result.success) {
+              console.log('[CONTACT SUBMIT] Email sent (no PDF) to:', contact.email)
+            }
+          })
+        })
     }
 
     return NextResponse.json<ApiResponse>({

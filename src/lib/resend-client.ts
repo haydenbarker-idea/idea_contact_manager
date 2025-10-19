@@ -15,6 +15,10 @@ export interface SendEmailParams {
   subject: string
   html?: string
   text?: string
+  attachments?: Array<{
+    filename: string
+    content: Buffer | string
+  }>
 }
 
 export interface EmailResult {
@@ -31,6 +35,7 @@ export async function sendEmail({
   subject,
   html,
   text,
+  attachments,
 }: SendEmailParams): Promise<EmailResult> {
   if (!resend) {
     return {
@@ -57,6 +62,14 @@ export async function sendEmail({
         success: false,
         error: 'Either html or text content is required',
       }
+    }
+
+    // Add attachments if provided
+    if (attachments && attachments.length > 0) {
+      emailPayload.attachments = attachments.map(att => ({
+        filename: att.filename,
+        content: att.content instanceof Buffer ? att.content : Buffer.from(att.content),
+      }))
     }
 
     const { data, error } = await resend.emails.send(emailPayload)
