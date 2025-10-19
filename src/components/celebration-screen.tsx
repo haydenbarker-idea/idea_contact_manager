@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Download, MessageSquare, Linkedin, Sparkles } from 'lucide-react'
+import { Download, MessageSquare, Linkedin, Sparkles, MessageCircle } from 'lucide-react'
 import type { UserProfile } from '@/types'
 import Image from 'next/image'
 
@@ -83,6 +83,37 @@ export function CelebrationScreen({ profile, contactPhoto, contactName, contactI
     
     const encoded = encodeURIComponent(message)
     window.location.href = `sms:${profile.phone}?body=${encoded}`
+  }
+
+  const handleWhatsApp = () => {
+    // Build comprehensive message with contact details
+    const firstName = profile.name.split(' ')[0]
+    const vcardUrl = contactId 
+      ? `${window.location.origin}/api/contacts/${contactId}/vcard`
+      : ''
+    
+    let message = `Hi ${firstName}! Great meeting you at ${contactData.conference}!\n\n`
+    message += `Here's my info:\n`
+    message += `📛 ${contactData.name}\n`
+    message += `📧 ${contactData.email}\n`
+    
+    if (contactData.phone) {
+      message += `📱 ${contactData.phone}\n`
+    }
+    
+    if (contactData.linkedin) {
+      message += `💼 ${contactData.linkedin}\n`
+    }
+    
+    if (vcardUrl) {
+      message += `\n💾 Save my contact (with photo):\n${vcardUrl}`
+    }
+    
+    // WhatsApp URL format: https://wa.me/PHONENUMBER?text=MESSAGE
+    // Remove all non-numeric characters from phone number
+    const cleanPhone = profile.phone.replace(/\D/g, '')
+    const encoded = encodeURIComponent(message)
+    window.open(`https://wa.me/${cleanPhone}?text=${encoded}`, '_blank')
   }
 
   const handleLinkedIn = () => {
@@ -204,15 +235,27 @@ export function CelebrationScreen({ profile, contactPhoto, contactName, contactI
                 Save {profile.name.split(' ')[0]}'s Contact
               </Button>
 
-              <Button
-                onClick={handleTextMe}
-                variant="outline"
-                size="lg"
-                className="w-full text-lg gap-2"
-              >
-                <MessageSquare className="h-5 w-5" />
-                Text Me Now
-              </Button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Button
+                  onClick={handleTextMe}
+                  variant="outline"
+                  size="lg"
+                  className="w-full text-lg gap-2"
+                >
+                  <MessageSquare className="h-5 w-5" />
+                  Text Me
+                </Button>
+
+                <Button
+                  onClick={handleWhatsApp}
+                  variant="outline"
+                  size="lg"
+                  className="w-full text-lg gap-2 bg-green-50 hover:bg-green-100 border-green-200 text-green-700 hover:text-green-800"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  WhatsApp
+                </Button>
+              </div>
 
               {profile.linkedin && (
                 <Button
