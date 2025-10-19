@@ -137,7 +137,7 @@ export function ContactExchangeFlow({ profile, userId }: ContactExchangeFlowProp
                 {/* Profile Photo */}
                 <div className="relative w-40 h-40 rounded-full overflow-hidden ring-4 ring-primary/20 shadow-xl">
                   <Image
-                    src="/images/hayden-headshot.jpg"
+                    src={profile.photoUrl || profile.avatar || '/images/hayden-headshot.jpg'}
                     alt={profile.name}
                     fill
                     className="object-cover"

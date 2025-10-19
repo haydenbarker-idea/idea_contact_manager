@@ -195,7 +195,7 @@ export function CelebrationScreen({ profile, contactPhoto, contactName, contactI
               <div className="text-center space-y-2">
                 <div className="relative w-32 h-32 rounded-full overflow-hidden ring-4 ring-primary/30 shadow-xl">
                   <Image
-                    src="/images/hayden-headshot.jpg"
+                    src={profile.photoUrl || profile.avatar || '/images/hayden-headshot.jpg'}
                     alt={profile.name}
                     fill
                     className="object-cover"
