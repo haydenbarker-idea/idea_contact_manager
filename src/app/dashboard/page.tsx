@@ -20,6 +20,7 @@ import {
   ExternalLink,
   Loader2,
   FileDown,
+  Sparkles,
 } from 'lucide-react'
 
 interface Contact {
@@ -196,6 +197,53 @@ export default function DashboardPage() {
       </div>
 
       <div className="container max-w-6xl mx-auto px-4 py-8 space-y-6">
+        {/* Welcome Banner for New Users */}
+        {analytics.totalContacts === 0 && (
+          <Card className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="bg-white/20 p-3 rounded-full flex-shrink-0">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+                <div className="flex-1 space-y-3">
+                  <div>
+                    <h3 className="text-xl font-bold mb-1">🎉 Welcome to Your Dashboard, {user.name.split(' ')[0]}!</h3>
+                    <p className="text-white/90">
+                      Your contact exchange page is live! Here's how to start networking like a pro:
+                    </p>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-start gap-2">
+                      <span className="font-bold">1.</span>
+                      <span>Add your <strong>QR Code page</strong> to your phone's home screen (see below)</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="font-bold">2.</span>
+                      <span>At conferences, open the app and show your QR code</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="font-bold">3.</span>
+                      <span>People scan it, submit their info, and you're connected!</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="font-bold">4.</span>
+                      <span>Return here anytime to view, export, and manage your contacts</span>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => window.open(`/u/${user.slug}/qr`, '_blank')}
+                    size="lg"
+                    className="bg-white text-purple-600 hover:bg-gray-100 mt-2"
+                  >
+                    <QrCode className="h-5 w-5 mr-2" />
+                    View My QR Code Page
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Quick Actions */}
         <div className="grid md:grid-cols-2 gap-4">
           <Card>

@@ -134,12 +134,12 @@ export default function GetStartedPage() {
         // Show success message
         toast({
           title: '🎉 Account Created!',
-          description: 'Redirecting to your new page...',
+          description: 'Redirecting to your dashboard...',
         })
         
-        // Wait a moment then redirect to QR code page (not profile)
+        // Wait a moment then redirect to dashboard
         setTimeout(() => {
-          window.location.href = `/u/${formData.slug}/qr?welcome=true`
+          window.location.href = '/dashboard'
         }, 1000)
       } else {
         toast({
@@ -221,6 +221,7 @@ export default function GetStartedPage() {
                     <Label htmlFor="phone">Phone</Label>
                     <Input
                       id="phone"
+                      type="tel"
                       value={formData.phone}
                       onChange={e => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+1234567890"
