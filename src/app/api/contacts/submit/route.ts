@@ -29,6 +29,9 @@ export async function POST(request: NextRequest) {
     }
 
     const data = validationResult.data
+    
+    // Get userId from body (for multi-tenant support)
+    const userId = body.userId || null
 
     // Create contact
     const contact = await prisma.contact.create({
@@ -41,6 +44,7 @@ export async function POST(request: NextRequest) {
         title: data.title || null,
         photoUrl: data.photoUrl || null,
         conference: data.conference || null,
+        userId, // Link to user if provided
       },
     })
 

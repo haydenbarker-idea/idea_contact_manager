@@ -286,6 +286,34 @@ export function CelebrationScreen({ profile, contactPhoto, contactName, contactI
               )}
             </div>
 
+            {/* Viral CTA */}
+            <div className="relative mt-6 pt-6 border-t-2 border-dashed border-purple-200">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-white px-3">
+                <span className="text-sm font-medium text-purple-600">✨ Want This For Yourself?</span>
+              </div>
+              
+              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-6 space-y-4 border-2 border-purple-200">
+                <div className="text-center space-y-2">
+                  <h3 className="text-xl font-bold text-purple-900">
+                    Get Your Own Contact Exchange Page!
+                  </h3>
+                  <p className="text-sm text-purple-700">
+                    Collect contacts at conferences with style.<br />
+                    Setup takes 60 seconds. It's <strong>free</strong>.
+                  </p>
+                </div>
+                
+                <Button
+                  onClick={() => window.location.href = '/get-started'}
+                  size="lg"
+                  className="w-full text-lg gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg"
+                >
+                  <span className="text-2xl">🚀</span>
+                  I Want This!
+                </Button>
+              </div>
+            </div>
+
             {/* Footer Message */}
             <div className="text-center text-sm text-muted-foreground pt-4 border-t">
               <p>I'll reach out within 24 hours. Looking forward to connecting!</p>

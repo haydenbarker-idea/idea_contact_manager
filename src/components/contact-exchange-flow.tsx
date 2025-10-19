@@ -14,11 +14,12 @@ import Image from 'next/image'
 
 interface ContactExchangeFlowProps {
   profile: UserProfile
+  userId?: string  // Optional: for multi-tenant support
 }
 
 type FlowStep = 'landing' | 'selfie' | 'form' | 'success'
 
-export function ContactExchangeFlow({ profile }: ContactExchangeFlowProps) {
+export function ContactExchangeFlow({ profile, userId }: ContactExchangeFlowProps) {
   const [step, setStep] = useState<FlowStep>('landing')
   const [photoBlob, setPhotoBlob] = useState<Blob | null>(null)
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
@@ -79,12 +80,17 @@ export function ContactExchangeFlow({ profile }: ContactExchangeFlowProps) {
         body: JSON.stringify({
           ...formData,
           photoUrl,
+          userId, // Include userId if provided (multi-tenant)
         }),
       })
 
       if (response.ok) {
         const result = await response.json()
         setContactId(result.data.contactId)
+        
+        // Save contact info to localStorage for "I Want This!" flow
+        localStorage.setItem('recentContact', JSON.stringify(formData))
+        
         setStep('success')
       } else {
         const data = await response.json()

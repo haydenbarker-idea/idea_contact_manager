@@ -28,8 +28,49 @@ enum CommunicationType {
   IN_PERSON
 }
 
+// User - Each person who wants their own contact exchange page
+model User {
+  id          String    @id @default(cuid())
+  
+  // Basic Info (from their initial contact submission)
+  name        String
+  email       String    @unique
+  phone       String?
+  linkedin    String?
+  company     String?
+  title       String?
+  
+  // Profile customization
+  bio         String?
+  photoUrl    String?   // Their headshot
+  slug        String    @unique  // URL slug: /u/john-smith
+  
+  // Authentication
+  password    String    // Hashed password
+  
+  // Configuration
+  active      Boolean   @default(true)
+  
+  // Tracking
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lastLoginAt DateTime?
+  
+  // Relations
+  contacts    Contact[] // Contacts they've collected
+  
+  @@index([email])
+  @@index([slug])
+  @@map("users")
+}
+
 model Contact {
   id          String             @id @default(cuid())
+  
+  // Owner of this contact (the user who collected it)
+  userId      String?            // Nullable for backwards compatibility (Hayden's contacts)
+  user        User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   name        String
   email       String
   phone       String?
@@ -52,6 +93,7 @@ model Contact {
   // Relations
   communications Communication[]
 
+  @@index([userId])
   @@index([submittedAt])
   @@index([email])
   @@index([status])
