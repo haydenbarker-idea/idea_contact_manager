@@ -68,10 +68,13 @@ git reset --hard origin/main 2>&1 | tee -a "$LOG_FILE"
 log "✓ Code updated to latest version"
 
 log "=== STEP 3: Updating environment variables ==="
-# Backup existing .env
+# Backup existing .env (preserves your credentials)
+# NOTE: This script only ADDS missing variables, never overwrites existing ones
 if [ -f .env ]; then
     cp .env .env.backup-${TIMESTAMP}
-    log "✓ Backed up existing .env"
+    log "✓ Backed up existing .env (credentials are preserved)"
+else
+    log "Creating new .env file..."
 fi
 
 # Check if bio is already in .env
@@ -117,6 +120,8 @@ TWILIO_AUTH_TOKEN=PASTE_YOUR_TWILIO_AUTH_TOKEN_HERE
 TWILIO_PHONE_NUMBER=PASTE_YOUR_TWILIO_PHONE_NUMBER_HERE
 EOF
     log "⚠ Twilio credentials need to be added - edit .env file"
+else
+    log "✓ Twilio credentials already configured (preserved)"
 fi
 
 # Ensure Resend section exists with placeholders
@@ -132,6 +137,8 @@ RESEND_API_KEY=PASTE_YOUR_RESEND_API_KEY_HERE
 RESEND_FROM_EMAIL=hbarker@ideanetworks.com
 EOF
     log "⚠ Resend API key needs to be added - edit .env file"
+else
+    log "✓ Resend API key already configured (preserved)"
 fi
 
 # Check if credentials are still placeholders
