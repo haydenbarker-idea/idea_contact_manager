@@ -463,6 +463,220 @@ EXPOSE 3000
 CMD ["npm", "start"]
 ```
 
+## Automated Deployment & Troubleshooting Workflow
+
+### Overview
+This project uses an automated deployment loop that syncs logs to GitHub for remote troubleshooting. This enables seamless collaboration between the developer and AI assistant without requiring server access.
+
+### The Workflow Loop
+
+```
+1. Developer runs deployment on server
+   ↓
+2. Deployment script auto-syncs logs to GitHub (even on failure)
+   ↓
+3. AI pulls logs locally: git pull origin <branch>
+   ↓
+4. AI reads logs and identifies TypeScript/build errors
+   ↓
+5. AI fixes errors and pushes to GitHub
+   ↓
+6. Developer pulls and redeploys
+   ↓
+7. Repeat until deployment succeeds
+```
+
+### Deployment Scripts
+
+**Production:** `deploy-saas-instance.sh` - Full deployment with:
+- Git configuration for automated log syncing
+- EXIT trap (logs sync even on build failure)
+- Visible console output (uses `tee`, not redirect)
+- SSL certificate automation
+- Communication tests (SMS/Email)
+- GitHub log sync with visible confirmation
+
+**Key Features:**
+```bash
+# Git configured immediately after initial setup
+configure_git() {
+    git config user.email "hbarker@ideanetworks.com"
+    git config user.name "Hayden Barker"
+}
+
+# EXIT trap ensures logs sync regardless of outcome
+trap 'handle_exit' EXIT
+
+# All output visible AND logged
+npm run build 2>&1 | tee -a "$LOG_FILE"
+```
+
+### AI Assistant Protocol
+
+When user reports deployment results:
+
+1. **Pull logs immediately:**
+   ```bash
+   git pull origin feature/viral-saas
+   ```
+
+2. **Check most recent log:**
+   ```bash
+   ls -lt deployment-logs/*.log
+   # Read the newest saas-deploy-TIMESTAMP.log
+   ```
+
+3. **Identify errors automatically:**
+   - TypeScript compilation errors
+   - Missing type properties
+   - Build failures
+   - Runtime errors
+
+4. **Fix and push:**
+   - Fix identified TypeScript errors
+   - Update type definitions
+   - Commit with descriptive message
+   - Push to GitHub immediately
+
+5. **Provide single-line deploy command:**
+   ```bash
+   cd /var/www/contact-exchange-saas && git pull origin feature/viral-saas && sudo bash deploy-saas-instance.sh
+   ```
+
+### Log Analysis Patterns
+
+**Look for these common issues:**
+
+1. **TypeScript Errors:**
+   ```
+   Type error: Object literal may only specify known properties, 
+   and 'fieldName' does not exist in type 'TypeName'
+   ```
+   **Fix:** Add missing field to interface in `src/types/index.ts`
+
+2. **Build Failures:**
+   ```
+   Failed to compile.
+   ./src/app/path/file.tsx:XX:X
+   ```
+   **Fix:** Read the specific file/line, fix type error
+
+3. **Missing Dependencies:**
+   ```
+   Cannot find module 'package-name'
+   ```
+   **Fix:** Add to package.json and document
+
+4. **Database Issues:**
+   ```
+   table "table_name" does not exist
+   ```
+   **Fix:** Check schema.prisma, run migrations
+
+### Log Location & Format
+
+**Server Path:** `/var/www/contact-exchange-saas/deployment-logs/`
+**Local Path:** `deployment-logs/`
+**Naming:** `saas-deploy-YYYYMMDD_HHMMSS.log`
+
+**Log Contents:**
+- All deployment steps with timestamps
+- Full npm build output
+- Database migration results
+- Service start/stop status
+- SSL certificate generation
+- Communication test results
+- Git sync confirmation
+
+### Success Indicators
+
+Deployment succeeded when log shows:
+```
+✓ Build completed successfully
+✓ Service started successfully
+✓ Logs synced to GitHub successfully
+=== DEPLOYMENT SUCCESS ===
+```
+
+### Failure Indicators
+
+Deployment failed when log shows:
+```
+✗ Build failed - server.js not found
+✗ Service failed to start
+✗ === DEPLOYMENT FAILED ===
+Failed at step: STEP X: Description
+```
+
+### TypeScript Type Fixes
+
+**Common additions to `src/types/index.ts`:**
+
+```typescript
+export interface ApiResponse<T = any> {
+  success: boolean
+  data?: T
+  message?: string       // Success messages
+  available?: boolean    // Slug/resource availability checks
+  error?: {
+    code: string
+    message: string
+  }
+}
+
+export interface UserProfile {
+  // ... existing fields
+  photoUrl?: string      // User headshots
+  bio?: string          // User bios
+}
+```
+
+### Communication with User
+
+**When user says "I deployed" or "deployment completed":**
+1. Immediately pull logs without asking
+2. Read the latest log file
+3. If errors: Fix them and push
+4. If success: Congratulate and provide next steps
+5. Always provide the single-line deploy command
+
+**Never:**
+- Ask "can you paste the output?" (logs are in GitHub)
+- Wait for user to tell you what failed (read logs yourself)
+- Make multiple commits for related type errors (batch fixes)
+- Hide your troubleshooting process (be transparent)
+
+### Example Session
+
+```
+User: "I ran the deployment"
+
+AI: *Pulls logs, reads latest file, sees TypeScript error*
+    "I found a TypeScript error - the UserProfile type is missing 
+    the photoUrl field. Fixing now..."
+    *Fixes type, commits, pushes*
+    "Fixed! Run this to deploy:"
+    cd /var/www/contact-exchange-saas && git pull origin feature/viral-saas && sudo bash deploy-saas-instance.sh
+```
+
+### Benefits of This Workflow
+
+1. **No copy/paste needed** - Logs auto-sync to GitHub
+2. **AI sees full context** - Complete build output and errors
+3. **Fast iteration** - Fix → push → deploy loop in minutes
+4. **Persistent history** - All deployment logs saved in repo
+5. **Works remotely** - No server access needed for AI
+6. **Self-healing** - Logs sync even on catastrophic failure
+
+### Integration with Git Workflow
+
+- Logs committed with message: `logs: deployment TIMESTAMP - status`
+- Never conflicts with code changes (separate directory)
+- Ignored in .gitignore for local dev (server commits them)
+- Part of feature branch, merged to main when stable
+
+---
+
 ## Code Review Checklist
 
 Before committing, ensure:
