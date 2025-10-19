@@ -33,6 +33,7 @@ import {
   Eye,
   Edit,
   MapPin,
+  Trash2,
 } from 'lucide-react'
 import Image from 'next/image'
 
@@ -231,6 +232,44 @@ export default function AdminPage() {
       toast({
         title: 'Error',
         description: 'Failed to send email',
+        variant: 'destructive',
+      })
+    }
+  }
+
+  const handleDeleteContact = async (contactId: string, contactName: string) => {
+    if (!confirm(`Are you sure you want to delete ${contactName}? This action cannot be undone.`)) {
+      return
+    }
+
+    const savedPassword = localStorage.getItem('adminPassword')
+    if (!savedPassword) return
+
+    try {
+      const response = await fetch(`/api/contacts/${contactId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Basic ${btoa(':' + savedPassword)}`,
+        },
+      })
+
+      if (response.ok) {
+        // Remove from local state
+        setContacts(prev => prev.filter(c => c.id !== contactId))
+        setFilteredContacts(prev => prev.filter(c => c.id !== contactId))
+        
+        toast({
+          title: 'Success',
+          description: `${contactName} has been deleted`,
+        })
+      } else {
+        throw new Error('Failed to delete contact')
+      }
+    } catch (error) {
+      console.error('Delete contact error:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to delete contact',
         variant: 'destructive',
       })
     }
@@ -656,6 +695,15 @@ export default function AdminPage() {
                             onClick={() => handleLoadCommunications(contact)}
                           >
                             <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            onClick={() => handleDeleteContact(contact.id, contact.name)}
+                            title="Delete contact"
+                          >
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
 

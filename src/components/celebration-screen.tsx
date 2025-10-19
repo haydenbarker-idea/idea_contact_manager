@@ -85,35 +85,50 @@ export function CelebrationScreen({ profile, contactPhoto, contactName, contactI
     window.location.href = `sms:${profile.phone}?body=${encoded}`
   }
 
-  const handleWhatsApp = () => {
-    // Build comprehensive message with contact details
-    const firstName = profile.name.split(' ')[0]
-    const vcardUrl = contactId 
-      ? `${window.location.origin}/api/contacts/${contactId}/vcard`
-      : ''
-    
-    let message = `Hi ${firstName}! Great meeting you at ${contactData.conference}!\n\n`
-    message += `Here's my info:\n`
-    message += `📛 ${contactData.name}\n`
-    message += `📧 ${contactData.email}\n`
-    
-    if (contactData.phone) {
-      message += `📱 ${contactData.phone}\n`
+  const handleWhatsApp = async () => {
+    // First, download the vCard so they have your contact
+    try {
+      await handleDownloadVCard()
+      
+      // Wait a moment for download to initiate
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // Build comprehensive message with contact details
+      const firstName = profile.name.split(' ')[0]
+      const vcardUrl = contactId 
+        ? `${window.location.origin}/api/contacts/${contactId}/vcard`
+        : ''
+      
+      let message = `Hi ${firstName}! Great meeting you at ${contactData.conference}!\n\n`
+      message += `Here's my info:\n`
+      message += `📛 ${contactData.name}\n`
+      message += `📧 ${contactData.email}\n`
+      
+      if (contactData.phone) {
+        message += `📱 ${contactData.phone}\n`
+      }
+      
+      if (contactData.linkedin) {
+        message += `💼 ${contactData.linkedin}\n`
+      }
+      
+      if (vcardUrl) {
+        message += `\n💾 Save my contact (with photo):\n${vcardUrl}`
+      }
+      
+      // WhatsApp URL format: https://wa.me/PHONENUMBER?text=MESSAGE
+      // Use the correct phone number for Hayden
+      const cleanPhone = '16476242735' // Hayden's number
+      const encoded = encodeURIComponent(message)
+      window.open(`https://wa.me/${cleanPhone}?text=${encoded}`, '_blank')
+    } catch (error) {
+      console.error('WhatsApp flow error:', error)
+      // Still open WhatsApp even if vCard download fails
+      const cleanPhone = '16476242735'
+      const message = `Hi! Great meeting you at ${contactData.conference}!`
+      const encoded = encodeURIComponent(message)
+      window.open(`https://wa.me/${cleanPhone}?text=${encoded}`, '_blank')
     }
-    
-    if (contactData.linkedin) {
-      message += `💼 ${contactData.linkedin}\n`
-    }
-    
-    if (vcardUrl) {
-      message += `\n💾 Save my contact (with photo):\n${vcardUrl}`
-    }
-    
-    // WhatsApp URL format: https://wa.me/PHONENUMBER?text=MESSAGE
-    // Remove all non-numeric characters from phone number
-    const cleanPhone = profile.phone.replace(/\D/g, '')
-    const encoded = encodeURIComponent(message)
-    window.open(`https://wa.me/${cleanPhone}?text=${encoded}`, '_blank')
   }
 
   const handleLinkedIn = () => {
@@ -251,9 +266,10 @@ export function CelebrationScreen({ profile, contactPhoto, contactName, contactI
                   variant="outline"
                   size="lg"
                   className="w-full text-lg gap-2 bg-green-50 hover:bg-green-100 border-green-200 text-green-700 hover:text-green-800"
+                  title="Downloads my contact, then opens WhatsApp"
                 >
                   <MessageCircle className="h-5 w-5" />
-                  WhatsApp
+                  WhatsApp Me
                 </Button>
               </div>
 
