@@ -97,7 +97,7 @@ export default function GetStartedPage() {
       if (formData.photoFile) {
         const photoFormData = new FormData()
         photoFormData.append('photo', formData.photoFile)
-        const photoResponse = await fetch('/api/upload', {
+        const photoResponse = await fetch('/api/upload/photo', {
           method: 'POST',
           body: photoFormData,
         })
