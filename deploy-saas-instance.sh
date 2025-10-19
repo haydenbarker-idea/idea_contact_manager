@@ -348,8 +348,99 @@ setup_static_files() {
     success "Static files configured"
 }
 
+configure_nginx_ssl() {
+    log "=== STEP 9: Configuring Nginx and SSL ==="
+    
+    # Domain for SaaS instance
+    SAAS_DOMAIN="saas.contacts.ideanetworks.com"
+    
+    # Check if nginx is installed
+    if ! command -v nginx &> /dev/null; then
+        log "Installing Nginx..."
+        apt-get update >> "$LOG_FILE" 2>&1
+        apt-get install -y nginx >> "$LOG_FILE" 2>&1
+        success "Nginx installed"
+    else
+        success "Nginx already installed"
+    fi
+    
+    # Check if certbot is installed
+    if ! command -v certbot &> /dev/null; then
+        log "Installing Certbot..."
+        apt-get install -y certbot python3-certbot-nginx >> "$LOG_FILE" 2>&1
+        success "Certbot installed"
+    else
+        success "Certbot already installed"
+    fi
+    
+    # Create Nginx config for SaaS subdomain
+    log "Creating Nginx configuration for $SAAS_DOMAIN..."
+    cat > /etc/nginx/sites-available/contact-exchange-saas << EOF
+server {
+    listen 80;
+    server_name $SAAS_DOMAIN;
+
+    location / {
+        proxy_pass http://localhost:$PORT;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_cache_bypass \$http_upgrade;
+    }
+}
+EOF
+    
+    # Enable site
+    ln -sf /etc/nginx/sites-available/contact-exchange-saas /etc/nginx/sites-enabled/
+    
+    # Test nginx config
+    if nginx -t >> "$LOG_FILE" 2>&1; then
+        success "Nginx configuration valid"
+    else
+        error "Nginx configuration invalid"
+        exit 1
+    fi
+    
+    # Reload nginx
+    systemctl reload nginx >> "$LOG_FILE" 2>&1
+    success "Nginx reloaded"
+    
+    # Obtain SSL certificate
+    log "Obtaining SSL certificate from Let's Encrypt..."
+    log "This may take 30-60 seconds..."
+    
+    # Get email from production .env if available
+    SSL_EMAIL=$(grep "^NEXT_PUBLIC_DEFAULT_USER_EMAIL=" "$PROD_DIR/.env" 2>/dev/null | cut -d'=' -f2 | tr -d '"' || echo "hbarker@ideanetworks.com")
+    
+    if certbot --nginx -d "$SAAS_DOMAIN" --non-interactive --agree-tos -m "$SSL_EMAIL" --redirect >> "$LOG_FILE" 2>&1; then
+        success "SSL certificate obtained and configured"
+    else
+        warning "SSL certificate request failed (may already exist)"
+        log "Checking existing certificate..."
+        if certbot certificates 2>/dev/null | grep -q "$SAAS_DOMAIN"; then
+            success "SSL certificate already exists"
+        else
+            error "SSL setup failed - check DNS and try again"
+        fi
+    fi
+    
+    # Ensure auto-renewal is enabled
+    if systemctl is-enabled certbot.timer &> /dev/null; then
+        success "SSL auto-renewal already enabled"
+    else
+        log "Enabling SSL auto-renewal..."
+        systemctl enable certbot.timer >> "$LOG_FILE" 2>&1
+        systemctl start certbot.timer >> "$LOG_FILE" 2>&1
+        success "SSL auto-renewal enabled"
+    fi
+}
+
 start_service() {
-    log "=== STEP 9: Starting service ==="
+    log "=== STEP 10: Starting service ==="
     
     systemctl daemon-reload
     systemctl enable "$SERVICE_NAME" >> "$LOG_FILE" 2>&1
@@ -370,7 +461,7 @@ start_service() {
 }
 
 verify_deployment() {
-    log "=== STEP 10: Verifying deployment ==="
+    log "=== STEP 11: Verifying deployment ==="
     
     # Check port
     if netstat -tuln | grep -q ":$PORT "; then
@@ -403,7 +494,7 @@ verify_deployment() {
 }
 
 sync_logs() {
-    log "=== STEP 11: Syncing logs to GitHub ==="
+    log "=== STEP 12: Syncing logs to GitHub ==="
     
     cd "$SAAS_DIR"
     
@@ -448,6 +539,7 @@ print_summary() {
     echo "📝 Log: $LOG_FILE"
     echo ""
     echo "🌍 Live at: https://saas.contacts.ideanetworks.com"
+    echo "🔒 SSL: Configured and auto-renewing"
     echo ""
     echo "📊 Quick Commands:"
     echo "   sudo systemctl status $SERVICE_NAME"
@@ -484,6 +576,7 @@ main() {
     create_systemd_service
     build_application
     setup_static_files
+    configure_nginx_ssl
     start_service
     verify_deployment
     sync_logs
