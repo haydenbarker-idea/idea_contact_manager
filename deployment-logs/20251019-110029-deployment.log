@@ -1,0 +1,301 @@
+
+=== STEP 1: Stopping service ===
+
+=== STEP 2: Pulling latest code ===
+HEAD is now at af65f70 feat: add automated deployment logging system with GitHub sync
+
+=== STEP 3: Installing dependencies ===
+npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 177ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Help us improve the Prisma ORM for everyone. Share your feedback in a short 2-min survey: https://pris.ly/orm/survey/release-5-22
+
+
+added 452 packages, and audited 453 packages in 55s
+
+156 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+=== STEP 4: Generating Prisma client ===
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 185ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+
+=== STEP 5: Building application ===
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/8) ...
+   Generating static pages (2/8) 
+   Generating static pages (4/8) 
+TypeError: a.useState is not a function or its return value is not iterable
+    at /var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9449
+    at A (/var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9608)
+    at eh (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134657)
+    at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+    at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+    at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+    at stringify (<anonymous>)
+    at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+    at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+    at AsyncLocalStorage.run (node:async_hooks:346:14) {
+  digest: '1305736880'
+}
+TypeError: a.useState is not a function or its return value is not iterable
+    at /var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9449
+    at A (/var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9608)
+    at eh (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134657)
+    at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+    at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+    at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+    at stringify (<anonymous>)
+    at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+    at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+    at Timeout._onTimeout (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135346) {
+  digest: '476032672'
+}
+TypeError: a.useState is not a function or its return value is not iterable
+    at /var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9449
+    at A (/var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9608)
+    at eh (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134657)
+    at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+    at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+    at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+    at stringify (<anonymous>)
+    at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+    at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+    at Timeout._onTimeout (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135346) {
+  digest: '476032672'
+}
+
+Error occurred prerendering page "/_not-found". Read more: https://nextjs.org/docs/messages/prerender-error
+
+TypeError: a.useState is not a function or its return value is not iterable
+    at /var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9449
+    at A (/var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9608)
+    at eh (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134657)
+    at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+    at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+    at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+    at stringify (<anonymous>)
+    at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+    at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+    at AsyncLocalStorage.run (node:async_hooks:346:14)
+TypeError: a.useState is not a function or its return value is not iterable
+    at /var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9449
+    at A (/var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9608)
+    at eh (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134657)
+    at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+    at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+    at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+    at stringify (<anonymous>)
+    at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+    at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+    at AsyncLocalStorage.run (node:async_hooks:346:14) {
+  digest: '1305736880'
+}
+TypeError: a.useState is not a function or its return value is not iterable
+    at /var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9449
+    at A (/var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9608)
+    at eh (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134657)
+    at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+    at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+    at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+    at stringify (<anonymous>)
+    at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+    at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+    at Timeout._onTimeout (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135346) {
+  digest: '476032672'
+}
+TypeError: a.useState is not a function or its return value is not iterable
+    at /var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9449
+    at A (/var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9608)
+    at eh (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134657)
+    at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+    at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+    at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+    at stringify (<anonymous>)
+    at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+    at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+    at Timeout._onTimeout (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135346) {
+  digest: '476032672'
+}
+
+Error occurred prerendering page "/admin". Read more: https://nextjs.org/docs/messages/prerender-error
+
+TypeError: a.useState is not a function or its return value is not iterable
+    at /var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9449
+    at A (/var/www/contact-exchange/.next/server/app/_not-found/page.js:1:9608)
+    at eh (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134657)
+    at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+    at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+    at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+    at stringify (<anonymous>)
+    at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+    at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+    at AsyncLocalStorage.run (node:async_hooks:346:14)
+   Generating static pages (6/8) 
+ ✓ Generating static pages (8/8)
+
+> Export encountered errors on following paths:
+	/_not-found/page: /_not-found
+	/admin/page: /admin
+Build exit code: 0
+
+=== STEP 6: Checking build output ===
+total 448
+drwxr-xr-x 7 root root   4096 Oct 19 11:02 .
+drwxr-xr-x 8 root root   4096 Oct 19 11:01 ..
+-rw-r--r-- 1 root root   1999 Oct 19 11:01 app-build-manifest.json
+-rw-r--r-- 1 root root    266 Oct 19 11:02 app-path-routes-manifest.json
+-rw-r--r-- 1 root root     21 Oct 19 11:02 BUILD_ID
+-rw-r--r-- 1 root root    968 Oct 19 11:01 build-manifest.json
+drwxr-xr-x 4 root root   4096 Oct 19 11:02 cache
+drwxr-xr-x 3 root root   4096 Oct 19 11:02 export
+-rw-r--r-- 1 root root     85 Oct 19 11:02 export-detail.json
+-rw-r--r-- 1 root root     20 Oct 19 11:01 package.json
+-rw-r--r-- 1 root root      2 Oct 19 11:01 react-loadable-manifest.json
+-rw-r--r-- 1 root root   4574 Oct 19 11:02 required-server-files.json
+-rw-r--r-- 1 root root   1045 Oct 19 11:01 routes-manifest.json
+drwxr-xr-x 5 root root   4096 Oct 19 11:02 server
+drwxr-xr-x 6 root root   4096 Oct 19 11:01 static
+-rw-r--r-- 1 root root 386470 Oct 19 11:02 trace
+drwxr-xr-x 3 root root   4096 Oct 19 11:01 types
+✗ prerender-manifest.json MISSING - creating it
+✓ Manifest created
+
+=== STEP 7: Starting service ===
+
+=== STEP 8: Service status ===
+● contact-exchange.service - Contact Exchange App
+     Loaded: loaded (/etc/systemd/system/contact-exchange.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sun 2025-10-19 11:02:21 UTC; 5s ago
+   Main PID: 2330 (npm start)
+      Tasks: 23 (limit: 2213)
+     Memory: 57.0M
+        CPU: 819ms
+     CGroup: /system.slice/contact-exchange.service
+             ├─2330 "npm start" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             ├─2342 sh -c "next start"
+             └─2343 "next-server (v14.2.14)" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+
+Oct 19 11:02:22 contact-manager npm[2330]: > contact-exchange@0.1.0 start
+Oct 19 11:02:22 contact-manager npm[2330]: > next start
+Oct 19 11:02:22 contact-manager npm[2343]:   ▲ Next.js 14.2.14
+Oct 19 11:02:22 contact-manager npm[2343]:   - Local:        http://localhost:3000
+Oct 19 11:02:22 contact-manager npm[2343]:  ✓ Starting...
+Oct 19 11:02:22 contact-manager npm[2343]:  ⚠ Invalid next.config.js options detected:
+Oct 19 11:02:22 contact-manager npm[2343]:  ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+Oct 19 11:02:22 contact-manager npm[2343]:  ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+Oct 19 11:02:22 contact-manager npm[2343]:  ⚠ "next start" does not work with "output: standalone" configuration. Use "node .next/standalone/server.js" instead.
+Oct 19 11:02:22 contact-manager npm[2343]:  ✓ Ready in 546ms
+
+=== STEP 9: Recent service logs ===
+Oct 19 10:55:10 contact-manager npm[1925]:     at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+Oct 19 10:55:10 contact-manager npm[1925]:     at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+Oct 19 10:55:10 contact-manager npm[1925]:     at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+Oct 19 10:55:10 contact-manager npm[1925]:     at stringify (<anonymous>)
+Oct 19 10:55:10 contact-manager npm[1925]:     at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+Oct 19 10:55:10 contact-manager npm[1925]:     at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+Oct 19 10:55:10 contact-manager npm[1925]:     at Timeout._onTimeout (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135346) {
+Oct 19 10:55:10 contact-manager npm[1925]:   digest: '3226821874'
+Oct 19 10:55:10 contact-manager npm[1925]: }
+Oct 19 10:55:18 contact-manager npm[1925]: TypeError: a.useState is not a function or its return value is not iterable
+Oct 19 10:55:18 contact-manager npm[1925]:     at /var/www/contact-exchange/.next/server/app/page.js:1:11878
+Oct 19 10:55:18 contact-manager npm[1925]:     at T (/var/www/contact-exchange/.next/server/app/page.js:1:12037)
+Oct 19 10:55:18 contact-manager npm[1925]:     at eh (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134657)
+Oct 19 10:55:18 contact-manager npm[1925]:     at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+Oct 19 10:55:18 contact-manager npm[1925]:     at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+Oct 19 10:55:18 contact-manager npm[1925]:     at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+Oct 19 10:55:18 contact-manager npm[1925]:     at stringify (<anonymous>)
+Oct 19 10:55:18 contact-manager npm[1925]:     at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+Oct 19 10:55:18 contact-manager npm[1925]:     at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+Oct 19 10:55:18 contact-manager npm[1925]:     at Timeout._onTimeout (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135346) {
+Oct 19 10:55:18 contact-manager npm[1925]:   digest: '3226821874'
+Oct 19 10:55:18 contact-manager npm[1925]: }
+Oct 19 10:55:18 contact-manager npm[1925]: TypeError: a.useState is not a function or its return value is not iterable
+Oct 19 10:55:18 contact-manager npm[1925]:     at /var/www/contact-exchange/.next/server/app/page.js:1:11878
+Oct 19 10:55:18 contact-manager npm[1925]:     at T (/var/www/contact-exchange/.next/server/app/page.js:1:12037)
+Oct 19 10:55:18 contact-manager npm[1925]:     at eh (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134657)
+Oct 19 10:55:18 contact-manager npm[1925]:     at e (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137542)
+Oct 19 10:55:18 contact-manager npm[1925]:     at ek (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138016)
+Oct 19 10:55:18 contact-manager npm[1925]:     at Array.toJSON (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135626)
+Oct 19 10:55:18 contact-manager npm[1925]:     at stringify (<anonymous>)
+Oct 19 10:55:18 contact-manager npm[1925]:     at eP (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142090)
+Oct 19 10:55:18 contact-manager npm[1925]:     at eE (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142569)
+Oct 19 10:55:18 contact-manager npm[1925]:     at Timeout._onTimeout (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135346) {
+Oct 19 10:55:18 contact-manager npm[1925]:   digest: '3226821874'
+Oct 19 10:55:18 contact-manager npm[1925]: }
+Oct 19 11:00:29 contact-manager systemd[1]: Stopping Contact Exchange App...
+Oct 19 11:00:29 contact-manager systemd[1]: contact-exchange.service: Deactivated successfully.
+Oct 19 11:00:29 contact-manager systemd[1]: Stopped Contact Exchange App.
+Oct 19 11:00:29 contact-manager systemd[1]: contact-exchange.service: Consumed 1.387s CPU time.
+Oct 19 11:02:21 contact-manager systemd[1]: Started Contact Exchange App.
+Oct 19 11:02:22 contact-manager npm[2330]: > contact-exchange@0.1.0 start
+Oct 19 11:02:22 contact-manager npm[2330]: > next start
+Oct 19 11:02:22 contact-manager npm[2343]:   ▲ Next.js 14.2.14
+Oct 19 11:02:22 contact-manager npm[2343]:   - Local:        http://localhost:3000
+Oct 19 11:02:22 contact-manager npm[2343]:  ✓ Starting...
+Oct 19 11:02:22 contact-manager npm[2343]:  ⚠ Invalid next.config.js options detected:
+Oct 19 11:02:22 contact-manager npm[2343]:  ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+Oct 19 11:02:22 contact-manager npm[2343]:  ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+Oct 19 11:02:22 contact-manager npm[2343]:  ⚠ "next start" does not work with "output: standalone" configuration. Use "node .next/standalone/server.js" instead.
+Oct 19 11:02:22 contact-manager npm[2343]:  ✓ Ready in 546ms
+
+=== STEP 10: Testing connection ===
+HTTP response code: 307
+✓✓✓ SUCCESS! App is responding!
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+HTTP/1.1 307 Temporary Redirect
+Vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding
+link: </_next/static/media/e4af272ccee01ff0-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+Location: /me
+X-Powered-By: Next.js
+Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate
+Content-Type: text/html; charset=utf-8
+Date: Sun, 19 Oct 2025 11:02:30 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+
+=== STEP 11: Syncing logs to GitHub ===
