@@ -6,7 +6,12 @@ export interface UserProfile {
   phone: string
   linkedin: string
   avatar?: string
+  bio?: string
 }
+
+export type ContactStatus = 'NEW' | 'CONTACTED' | 'RESPONDED' | 'MEETING_SET' | 'CLIENT' | 'COLD'
+export type CommunicationType = 'SMS' | 'EMAIL' | 'LINKEDIN' | 'PHONE' | 'IN_PERSON'
+export type CommunicationDirection = 'OUTBOUND' | 'INBOUND'
 
 export interface Contact {
   id: string
@@ -17,8 +22,25 @@ export interface Contact {
   company?: string | null
   title?: string | null
   notes?: string | null
-  followedUp: boolean
+  status: ContactStatus
+  priority: number // 0 = normal, 1 = important, 2 = urgent
   submittedAt: Date
+  lastContact?: Date | null
+  updatedAt: Date
+  communications?: Communication[]
+}
+
+export interface Communication {
+  id: string
+  contactId: string
+  type: CommunicationType
+  direction: CommunicationDirection
+  subject?: string | null
+  message: string
+  status: string // SENT, DELIVERED, FAILED, READ
+  sentAt: Date
+  deliveredAt?: Date | null
+  metadata?: any
 }
 
 export interface ApiResponse<T = any> {
@@ -28,5 +50,13 @@ export interface ApiResponse<T = any> {
     code: string
     message: string
   }
+}
+
+export interface MessageTemplate {
+  id: string
+  name: string
+  subject?: string
+  body: string
+  type: CommunicationType
 }
 

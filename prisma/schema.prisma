@@ -9,20 +9,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Contact Status Pipeline
+enum ContactStatus {
+  NEW           // Just submitted their info
+  CONTACTED     // We've reached out
+  RESPONDED     // They replied
+  MEETING_SET   // Meeting scheduled
+  CLIENT        // Converted to client
+  COLD          // No response/not interested
+}
+
+// Communication Channel
+enum CommunicationType {
+  SMS
+  EMAIL
+  LINKEDIN
+  PHONE
+  IN_PERSON
+}
+
 model Contact {
-  id          String   @id @default(cuid())
+  id          String             @id @default(cuid())
   name        String
   email       String
   phone       String?
   linkedin    String?
   company     String?
   title       String?
-  notes       String?
-  followedUp  Boolean  @default(false)
-  submittedAt DateTime @default(now())
+  notes       String?             // General notes about the contact
+  status      ContactStatus      @default(NEW)
+  priority    Int                @default(0) // 0 = normal, 1 = important, 2 = urgent
+  
+  // Tracking
+  submittedAt DateTime           @default(now())
+  lastContact DateTime?          // Last time we reached out
+  updatedAt   DateTime           @updatedAt
+  
+  // Relations
+  communications Communication[]
 
   @@index([submittedAt])
   @@index([email])
+  @@index([status])
+  @@index([priority])
   @@map("contacts")
+}
+
+// Communication Log - track all interactions
+model Communication {
+  id          String            @id @default(cuid())
+  contactId   String
+  contact     Contact           @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  
+  type        CommunicationType
+  direction   String            // "OUTBOUND" or "INBOUND"
+  subject     String?           // For emails
+  message     String            // The actual message content
+  
+  // Delivery tracking
+  status      String            @default("SENT") // SENT, DELIVERED, FAILED, READ
+  sentAt      DateTime          @default(now())
+  deliveredAt DateTime?
+  
+  // Metadata
+  metadata    Json?             // Store provider-specific data (Twilio SID, Resend ID, etc.)
+
+  @@index([contactId])
+  @@index([sentAt])
+  @@map("communications")
 }
 
