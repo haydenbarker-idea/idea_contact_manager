@@ -51,7 +51,7 @@ export default function LandingPage() {
       <section className="container max-w-7xl mx-auto px-4 py-20 md:py-32">
         <div className="text-center space-y-8 max-w-4xl mx-auto">
           <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 px-4 py-2 text-sm">
-            🎉 Free for the First 100,000 Users!
+            🎉 Free Forever for the First 10,000 Subscribers!
           </Badge>
           
           <h1 className="text-5xl md:text-7xl font-bold leading-tight">
@@ -72,12 +72,6 @@ export default function LandingPage() {
                 <Sparkles className="h-5 w-5 mr-2" />
                 Get Started Free
                 <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
-            <Link href="/u/hayden-barker">
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-                <QrCode className="h-5 w-5 mr-2" />
-                See Live Demo
               </Button>
             </Link>
           </div>
@@ -107,8 +101,8 @@ export default function LandingPage() {
         <div className="container max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold text-blue-600">100K+</div>
-              <div className="text-muted-foreground mt-2">Free Accounts</div>
+              <div className="text-4xl font-bold text-blue-600">10K</div>
+              <div className="text-muted-foreground mt-2">Free Spots Left</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-purple-600">60 sec</div>
@@ -317,7 +311,7 @@ export default function LandingPage() {
             Ready to Network Like a Pro?
           </h2>
           <p className="text-xl md:text-2xl opacity-90">
-            Join the first 100,000 users getting <strong>lifetime free access</strong>
+            Join the first 10,000 subscribers getting <strong>lifetime free access</strong>
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
@@ -376,7 +370,6 @@ export default function LandingPage() {
               <ul className="space-y-2 text-sm">
                 <li><Link href="/get-started" className="hover:text-white">Sign Up</Link></li>
                 <li><Link href="/login" className="hover:text-white">Login</Link></li>
-                <li><Link href="/u/hayden-barker" className="hover:text-white">Demo</Link></li>
               </ul>
             </div>
 
