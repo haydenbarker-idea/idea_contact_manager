@@ -9,9 +9,10 @@
 # Usage: bash deploy-saas-instance.sh
 #################################################
 
-set -e  # Exit on any error
-
+# Don't use set -e here - we want to handle errors gracefully
 # Configuration
+DEPLOYMENT_STATUS="IN_PROGRESS"
+FAILED_STEP=""
 SAAS_DIR="/var/www/contact-exchange-saas"
 PROD_DIR="/var/www/contact-exchange"
 DB_NAME="contact_exchange_saas"
@@ -96,8 +97,27 @@ sync_logs_to_github() {
     fi
 }
 
-# Don't use trap during deployment - it interrupts the build
-# We'll call sync_logs manually at the end
+# Error handler - called when any command fails
+handle_error() {
+    local exit_code=$?
+    DEPLOYMENT_STATUS="FAILED"
+    error "=== DEPLOYMENT FAILED ==="
+    error "Exit code: $exit_code"
+    error "Failed at step: $FAILED_STEP"
+    error "Check log file: $LOG_FILE"
+    
+    # Sync logs even on failure
+    sync_logs
+    
+    # Print failure summary
+    print_summary
+    
+    exit $exit_code
+}
+
+# Set up error trapping
+trap 'handle_error' ERR
+set -e  # Exit on error, but trap will catch it
 
 print_header() {
     echo ""
@@ -109,6 +129,7 @@ print_header() {
 }
 
 check_requirements() {
+    FAILED_STEP="Checking requirements"
     log "=== Checking requirements ==="
     
     if [ "$EUID" -ne 0 ]; then 
@@ -130,6 +151,7 @@ check_requirements() {
 }
 
 initial_setup() {
+    FAILED_STEP="STEP 1: Initial setup or update"
     log "=== STEP 1: Initial setup or update ==="
     
     if [ -d "$SAAS_DIR" ]; then
@@ -170,6 +192,7 @@ initial_setup() {
 }
 
 install_dependencies() {
+    FAILED_STEP="STEP 2: Installing dependencies"
     log "=== STEP 2: Installing dependencies ==="
     
     cd "$SAAS_DIR"
@@ -180,6 +203,7 @@ install_dependencies() {
 }
 
 configure_database() {
+    FAILED_STEP="STEP 3: Configuring database"
     log "=== STEP 3: Configuring database ==="
     
     # Check if database exists
@@ -200,6 +224,7 @@ configure_database() {
 }
 
 configure_environment() {
+    FAILED_STEP="STEP 4: Configuring environment"
     log "=== STEP 4: Configuring environment ==="
     
     cd "$SAAS_DIR"
@@ -227,6 +252,7 @@ configure_environment() {
 }
 
 run_migrations() {
+    FAILED_STEP="STEP 5: Updating database schema"
     log "=== STEP 5: Updating database schema ==="
     
     cd "$SAAS_DIR"
@@ -260,6 +286,7 @@ run_migrations() {
 }
 
 create_systemd_service() {
+    FAILED_STEP="STEP 6: Creating/updating systemd service"
     log "=== STEP 6: Creating/updating systemd service ==="
     
     SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
@@ -291,6 +318,7 @@ EOF
 }
 
 build_application() {
+    FAILED_STEP="STEP 7: Building application"
     log "=== STEP 7: Building application ==="
     
     cd "$SAAS_DIR"
@@ -310,6 +338,7 @@ build_application() {
 }
 
 setup_static_files() {
+    FAILED_STEP="STEP 8: Setting up static files"
     log "=== STEP 8: Setting up static files ==="
     
     cd "$SAAS_DIR"
@@ -349,6 +378,7 @@ setup_static_files() {
 }
 
 configure_nginx_ssl() {
+    FAILED_STEP="STEP 9: Configuring Nginx and SSL"
     log "=== STEP 9: Configuring Nginx and SSL ==="
     
     # Domain for SaaS instance
@@ -440,6 +470,7 @@ EOF
 }
 
 start_service() {
+    FAILED_STEP="STEP 10: Starting service"
     log "=== STEP 10: Starting service ==="
     
     systemctl daemon-reload
@@ -461,6 +492,7 @@ start_service() {
 }
 
 verify_deployment() {
+    FAILED_STEP="STEP 11: Verifying deployment"
     log "=== STEP 11: Verifying deployment ==="
     
     # Check port
@@ -494,6 +526,7 @@ verify_deployment() {
 }
 
 sync_logs() {
+    FAILED_STEP="STEP 12: Syncing logs to GitHub"
     log "=== STEP 12: Syncing logs to GitHub ==="
     
     cd "$SAAS_DIR"
@@ -526,42 +559,101 @@ sync_logs() {
 }
 
 print_summary() {
-    echo ""
-    echo "=================================================="
-    echo "  🎉 SaaS Deployment Complete!"
-    echo "=================================================="
-    echo ""
-    echo "📍 Directory: $SAAS_DIR"
-    echo "🗄️  Database: $DB_NAME"
-    echo "🔧 Service: $SERVICE_NAME"
-    echo "🌐 Port: $PORT"
-    echo "📋 Branch: $BRANCH"
-    echo "📝 Log: $LOG_FILE"
-    echo ""
-    echo "🌍 Live at: https://saas.contacts.ideanetworks.com"
-    echo "🔒 SSL: Configured and auto-renewing"
-    echo ""
-    echo "📊 Quick Commands:"
-    echo "   sudo systemctl status $SERVICE_NAME"
-    echo "   journalctl -u $SERVICE_NAME -f"
-    echo "   sudo systemctl restart $SERVICE_NAME"
-    echo ""
-    echo "🔍 Database Check:"
-    echo "   psql -d $DB_NAME -c 'SELECT COUNT(*) FROM users;'"
-    echo "   psql -d $DB_NAME -c 'SELECT COUNT(*) FROM contacts;'"
-    echo ""
-    echo "📝 Logs synced to GitHub:"
-    echo "   https://github.com/haydenbarker-idea/idea_contact_manager"
-    echo "   Branch: $BRANCH"
-    echo "   Path: deployment-logs/"
-    echo ""
-    echo "🚀 Test the viral loop:"
-    echo "   1. Visit https://saas.contacts.ideanetworks.com"
-    echo "   2. Submit contact → Click 'I Want This!'"
-    echo "   3. Complete onboarding → Get your page!"
-    echo ""
-    echo "✅ Production (contacts.ideanetworks.com) untouched!"
-    echo "=================================================="
+    local summary_msg=""
+    
+    # Build summary message
+    summary_msg+="
+
+==================================================
+"
+    
+    if [ "$DEPLOYMENT_STATUS" = "SUCCESS" ]; then
+        summary_msg+="  🎉 SaaS Deployment Complete!
+"
+        summary_msg+="  Status: ✅ SUCCESS
+"
+    else
+        summary_msg+="  ❌ SaaS Deployment Failed
+"
+        summary_msg+="  Status: ⚠️  FAILED
+"
+        summary_msg+="  Failed Step: $FAILED_STEP
+"
+    fi
+    
+    summary_msg+="==================================================
+
+📍 Configuration:
+   Directory: $SAAS_DIR
+   Database: $DB_NAME
+   Service: $SERVICE_NAME
+   Port: $PORT
+   Branch: $BRANCH
+   Log File: $LOG_FILE
+   Timestamp: $TIMESTAMP
+
+"
+    
+    if [ "$DEPLOYMENT_STATUS" = "SUCCESS" ]; then
+        summary_msg+="🌍 Application:
+   URL: https://saas.contacts.ideanetworks.com
+   SSL: Configured and auto-renewing
+   Service Status: $(systemctl is-active $SERVICE_NAME 2>/dev/null || echo 'unknown')
+
+📊 Quick Commands:
+   sudo systemctl status $SERVICE_NAME
+   journalctl -u $SERVICE_NAME -f
+   sudo systemctl restart $SERVICE_NAME
+
+🔍 Database Check:
+   psql -d $DB_NAME -c 'SELECT COUNT(*) FROM users;'
+   psql -d $DB_NAME -c 'SELECT COUNT(*) FROM contacts;'
+
+"
+    else
+        summary_msg+="🔧 Troubleshooting:
+   1. Review log: cat $LOG_FILE
+   2. Check service: sudo systemctl status $SERVICE_NAME
+   3. Check logs: journalctl -u $SERVICE_NAME -n 100
+   4. Pull logs locally: 
+      cd ~/idea_contact_manager
+      git checkout feature/viral-saas
+      git pull origin feature/viral-saas
+      # Review: deployment-logs/
+
+"
+    fi
+    
+    summary_msg+="📝 Logs synced to GitHub:
+   Repository: https://github.com/haydenbarker-idea/idea_contact_manager
+   Branch: $BRANCH
+   Path: deployment-logs/
+   Pull locally to review in Cursor!
+
+"
+    
+    if [ "$DEPLOYMENT_STATUS" = "SUCCESS" ]; then
+        summary_msg+="🚀 Test the viral loop:
+   1. Visit https://saas.contacts.ideanetworks.com
+   2. Submit contact → Click 'I Want This!'
+   3. Complete onboarding → Get your page!
+
+✅ Production (contacts.ideanetworks.com) untouched!
+"
+    fi
+    
+    summary_msg+="==================================================
+"
+    
+    # Print to console
+    echo -e "$summary_msg"
+    
+    # Write to log file
+    echo "$summary_msg" >> "$LOG_FILE" 2>/dev/null || true
+    
+    # Add final status to log
+    log "=== DEPLOYMENT $DEPLOYMENT_STATUS ==="
+    log "Completed at: $(date +'%Y-%m-%d %H:%M:%S')"
 }
 
 # Main execution
@@ -580,6 +672,11 @@ main() {
     start_service
     verify_deployment
     sync_logs
+    
+    # Mark deployment as successful
+    DEPLOYMENT_STATUS="SUCCESS"
+    log "=== All steps completed successfully ==="
+    
     print_summary
 }
 
