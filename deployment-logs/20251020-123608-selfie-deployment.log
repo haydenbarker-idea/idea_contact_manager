@@ -1,0 +1,101 @@
+[2025-10-20 12:36:08] === STEP 1: Stopping service ===
+[2025-10-20 12:36:08] ✓ Service stopped
+[2025-10-20 12:36:08] === STEP 2: Pulling latest code ===
+From https://github.com/haydenbarker-idea/idea_contact_manager
+ * [new branch]      feature/viral-saas -> origin/feature/viral-saas
+ * [new tag]         v1.0.0             -> v1.0.0
+HEAD is now at c9bc2e0 fix: handle null values in contact form validation (LinkedIn and optional fields)
+[2025-10-20 12:36:09] ✓ Code updated to latest version
+[2025-10-20 12:36:09] === STEP 3: Updating environment variables ===
+[2025-10-20 12:36:09] ✓ Backed up existing .env (credentials are preserved)
+[2025-10-20 12:36:09] Bio already configured
+[2025-10-20 12:36:09] ✓ Twilio credentials already configured (preserved)
+[2025-10-20 12:36:09] ✓ Resend API key already configured (preserved)
+[2025-10-20 12:36:09] ✓ Environment configured
+[2025-10-20 12:36:09] === STEP 4: Installing dependencies ===
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 155ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Easily identify and fix slow SQL queries in your app. Optimize helps you enhance your visibility: https://pris.ly/--optimize
+
+
+added 2 packages, and audited 517 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[2025-10-20 12:36:15] ✓ Dependencies installed
+[2025-10-20 12:36:15] === STEP 5: Creating missing UI components ===
+[2025-10-20 12:36:15] Dialog component already exists
+[2025-10-20 12:36:15] === STEP 6: Running database migration ===
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange", schema "public" at "localhost:5432"
+
+🚀  Your database is now in sync with your Prisma schema. Done in 249ms
+
+┌─────────────────────────────────────────────────────────┐
+│  Update available 5.22.0 -> 6.17.1                      │
+│                                                         │
+│  This is a major update - please follow the guide at    │
+│  https://pris.ly/d/major-version-upgrade                │
+│                                                         │
+│  Run the following to update                            │
+│    npm i --save-dev prisma@latest                       │
+│    npm i @prisma/client@latest                          │
+└─────────────────────────────────────────────────────────┘
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 141ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+[2025-10-20 12:36:20] ✓ Database updated with photo and conference fields
+[2025-10-20 12:36:20] === STEP 7: Creating uploads directory ===
+[2025-10-20 12:36:21] ✓ Uploads directory ready
+[2025-10-20 12:36:21] === STEP 8: Building application ===
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/app/api/users/check-slug/route.ts:28:11
+Type error: Object literal may only specify known properties, and 'available' does not exist in type 'ApiResponse<any>'.
+
+[0m [90m 26 |[39m         {[0m
+[0m [90m 27 |[39m           success[33m:[39m [36mfalse[39m[33m,[39m[0m
+[0m[31m[1m>[22m[39m[90m 28 |[39m           available[33m:[39m [36mfalse[39m[33m,[39m[0m
+[0m [90m    |[39m           [31m[1m^[22m[39m[0m
+[0m [90m 29 |[39m           error[33m:[39m {[0m
+[0m [90m 30 |[39m             code[33m:[39m [32m'INVALID_SLUG'[39m[33m,[39m[0m
+[0m [90m 31 |[39m             message[33m:[39m [32m'Slug must be 3-50 characters, lowercase letters, numbers, and hyphens only'[39m[33m,[39m[0m
+[2025-10-20 12:37:21] Creating missing prerender-manifest.json
+[2025-10-20 12:37:21] ✗ Build failed - BUILD_ID not found
+[2025-10-20 12:37:21] === Syncing logs to GitHub ===
