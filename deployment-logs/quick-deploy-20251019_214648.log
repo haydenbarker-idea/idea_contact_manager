@@ -186,3 +186,12 @@ Route (app)                              Size     First Load JS
 [2025-10-19 21:48:30] Deployment completed at: 2025-10-19 21:48:30
 [2025-10-19 21:48:30] === Syncing logs to GitHub ===
 [2025-10-19 21:48:30] Adding deployment logs...
+[2025-10-19 21:48:30] Committing logs...
+[feature/viral-saas a7efeb0] logs: quick-deploy 20251019_214648
+ 2 files changed, 197 insertions(+)
+ create mode 100644 deployment-logs/quick-deploy-20251019_214648.log
+[2025-10-19 21:48:30] Pushing to GitHub...
+To https://github.com/haydenbarker-idea/idea_contact_manager.git
+   20f1da5..a7efeb0  feature/viral-saas -> feature/viral-saas
+[0;32m✓ Logs synced to GitHub successfully[0m
+[2025-10-19 21:48:31] View at: https://github.com/haydenbarker-idea/idea_contact_manager/tree/feature/viral-saas/deployment-logs
