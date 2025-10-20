@@ -1,0 +1,96 @@
+[2025-10-20 13:44:45] === Quick Deploy Started ===
+[2025-10-20 13:44:45] Timestamp: 20251020_134445
+[0;32m✓ Git configured for automated logging[0m
+[2025-10-20 13:44:45] === STEP 1: Pulling latest code ===
+[2025-10-20 13:44:45] Current branch:
+feature/viral-saas
+[2025-10-20 13:44:45] Fetching from GitHub...
+From https://github.com/haydenbarker-idea/idea_contact_manager
+   c9bc2e0..7780382  main       -> origin/main
+[2025-10-20 13:44:45] Pulling latest code...
+From https://github.com/haydenbarker-idea/idea_contact_manager
+ * branch            feature/viral-saas -> FETCH_HEAD
+Already up to date.
+[0;32m✓ Code updated[0m
+[2025-10-20 13:44:46] === STEP 2: Checking dependencies ===
+[2025-10-20 13:44:46] Running npm install...
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 159ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+
+up to date, audited 517 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[0;32m✓ Dependencies updated[0m
+[2025-10-20 13:44:52] === STEP 3: Regenerating Prisma client ===
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 177ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Curious about the SQL queries Prisma ORM generates? Optimize helps you enhance your visibility: https://pris.ly/tip-2-optimize
+
+[0;32m✓ Prisma client updated[0m
+[2025-10-20 13:44:55] === STEP 4: Building application ===
+[2025-10-20 13:44:55] Running npm run build (takes ~90 seconds)...
+
+> contact-exchange@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/components/contact-form.tsx:143:15
+Type error: Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+
+[0m [90m 141 |[39m               type[33m=[39m[32m"tel"[39m[0m
+[0m [90m 142 |[39m               placeholder[33m=[39m[32m"+1 (555) 123-4567"[39m[0m
+[0m[31m[1m>[22m[39m[90m 143 |[39m               value[33m=[39m{formData[33m.[39mphone}[0m
+[0m [90m     |[39m               [31m[1m^[22m[39m[0m
+[0m [90m 144 |[39m               onChange[33m=[39m{(e) [33m=>[39m setFormData({ [33m...[39mformData[33m,[39m phone[33m:[39m e[33m.[39mtarget[33m.[39mvalue })}[0m
+[0m [90m 145 |[39m             [33m/[39m[33m>[39m[0m
+[0m [90m 146 |[39m           [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+[0;32m✓ Build completed successfully[0m
+[2025-10-20 13:45:50] === STEP 5: Copying static files ===
+cp: cannot create directory '.next/standalone/.next/static': No such file or directory
+[0;32m✓ Static files copied[0m
+[2025-10-20 13:45:50] === STEP 6: Restarting service ===
+[0;31m✗ Service failed to start[0m
+[2025-10-20 13:45:53] Checking service status...
+● contact-exchange-saas.service - Contact Exchange SaaS (Development)
+     Loaded: loaded (/etc/systemd/system/contact-exchange-saas.service; enabled; vendor preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Mon 2025-10-20 13:45:50 UTC; 2s ago
+    Process: 47087 ExecStart=/usr/bin/node /var/www/contact-exchange-saas/.next/standalone/server.js (code=exited, status=1/FAILURE)
+   Main PID: 47087 (code=exited, status=1/FAILURE)
+        CPU: 45ms
+
+Oct 20 13:45:50 contact-manager systemd[1]: contact-exchange-saas.service: Main process exited, code=exited, status=1/FAILURE
+Oct 20 13:45:50 contact-manager systemd[1]: contact-exchange-saas.service: Failed with result 'exit-code'.
+[2025-10-20 13:45:53] === Syncing logs to GitHub ===
+[2025-10-20 13:45:53] Adding deployment logs...
