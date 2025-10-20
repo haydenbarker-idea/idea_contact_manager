@@ -140,7 +140,7 @@ export function ContactForm() {
               id="phone"
               type="tel"
               placeholder="+1 (555) 123-4567"
-              value={formData.phone}
+              value={formData.phone || ''}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             />
           </div>
@@ -151,7 +151,7 @@ export function ContactForm() {
               id="company"
               type="text"
               placeholder="Acme Inc"
-              value={formData.company}
+              value={formData.company || ''}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
             />
           </div>
@@ -162,7 +162,7 @@ export function ContactForm() {
               id="title"
               type="text"
               placeholder="Software Engineer"
-              value={formData.title}
+              value={formData.title || ''}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             />
           </div>
@@ -173,7 +173,7 @@ export function ContactForm() {
               id="linkedin"
               type="url"
               placeholder="https://linkedin.com/in/yourprofile"
-              value={formData.linkedin}
+              value={formData.linkedin || ''}
               onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
             />
           </div>
