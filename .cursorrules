@@ -677,6 +677,294 @@ AI: *Pulls logs, reads latest file, sees TypeScript error*
 
 ---
 
+## Quick Deploy & Management
+
+### Quick Deploy Script
+
+Use `quick-deploy-saas.sh` for fast iterations:
+
+```bash
+cd /var/www/contact-exchange-saas && git pull origin feature/viral-saas && sudo bash quick-deploy-saas.sh
+```
+
+**What it does:**
+1. Pulls latest code from GitHub
+2. Installs/updates dependencies
+3. Regenerates Prisma client
+4. Builds Next.js app (~90 seconds)
+5. Copies static files to standalone build
+6. Restarts systemd service
+7. Tests SMS/Email communications (with auth)
+8. Verifies HTTPS connection
+9. Shows database stats
+10. **Automatically syncs logs to GitHub**
+
+**Key Features:**
+- EXIT trap syncs logs even on failure
+- Authenticates test endpoints with ADMIN_PASSWORD
+- Extracts and displays success/error messages
+- Distinguishes "not configured" from "failed"
+- Real-time visible output + log file
+
+### Database Management
+
+**Interactive admin tool:**
+```bash
+cd /var/www/contact-exchange-saas && sudo bash db-admin.sh
+```
+
+**Menu options:**
+1. View stats (user & contact counts)
+2. Clean database (requires typing "DELETE")
+3. List all users
+4. List all contacts
+5. View recent activity
+
+**Quick commands:**
+```bash
+# Check counts (use sudo -u postgres)
+sudo -u postgres psql -d contact_exchange_saas -c 'SELECT COUNT(*) FROM users; SELECT COUNT(*) FROM contacts;'
+
+# Clean database
+sudo -u postgres psql -d contact_exchange_saas -c 'DELETE FROM contacts; DELETE FROM users;'
+```
+
+**Note:** PostgreSQL commands MUST use `sudo -u postgres` prefix (root user doesn't exist in PostgreSQL).
+
+### SSL Configuration & Troubleshooting
+
+**Common SSL issues:**
+
+1. **HTTP but not HTTPS**
+   - Symptom: Site loads but shows "Not secure"
+   - Cause: Nginx not configured to redirect HTTP → HTTPS
+   - Fix: `sudo bash fix-saas-ssl.sh`
+
+2. **Mixed content warnings**
+   - Symptom: HTTPS loads but browser warns about insecurity
+   - Cause: Resources loaded over HTTP
+   - Fix: Ensure all URLs use HTTPS or relative paths
+
+3. **Certificate exists but not used**
+   - Symptom: `certbot certificates` shows cert, but site uses HTTP
+   - Cause: Nginx config only listens on port 80
+   - Fix: Proper Nginx config with ports 80 (redirect) and 443 (SSL)
+
+**SSL fix script creates:**
+- HTTP server block (port 80) → redirects to HTTPS
+- HTTPS server block (port 443) → serves app securely
+- Security headers (HSTS, X-Frame-Options, etc.)
+- Proper proxy headers for Next.js
+
+### Communication Testing
+
+**Test endpoints require authentication:**
+- SMS: `POST /api/test/sms` (requires `Authorization: Basic` header)
+- Email: `POST /api/test/email` (requires `Authorization: Basic` header)
+
+**Quick deploy script:**
+- Reads ADMIN_PASSWORD from .env
+- Creates Base64 auth header automatically
+- Tests both SMS and Email
+- Reports success/failure/not-configured
+
+**Admin notifications:**
+- Sends SMS to admin (+16476242735) on new user signup
+- Sends SMS to admin on new contact connection
+- Shows who signed up and who connected with whom
+- Non-blocking (won't slow down users)
+
+### Mobile-Specific Fixes
+
+**Photo upload on Android:**
+- **Problem:** Single file input doesn't give camera option
+- **Solution:** Separate "Take Photo" and "Upload Photo" buttons
+- **Implementation:**
+  ```html
+  <input id="photo-camera" type="file" accept="image/*" capture="environment" />
+  <input id="photo-upload" type="file" accept="image/*" />
+  ```
+- **Used in:** `/get-started` (Step 2) and `/settings`
+
+**Responsive buttons:**
+- Show icon-only on mobile (save space)
+- Show icon + text on desktop/tablet
+- Use Tailwind breakpoints: `hidden md:inline`
+
+### Common Deployment Issues
+
+**1. TypeScript errors with missing exports**
+```
+Module '"@/lib/auth"' has no exported member 'getUserFromSession'
+```
+**Fix:** Check available exports, use correct function name (e.g., `getSession` not `getUserFromSession`)
+
+**2. Admin page loading issues**
+```
+Loading state starts as `true`, prevents login form
+```
+**Fix:** Set initial `loading` state to `false` for pages that should show immediately
+
+**3. Settings page not accessible**
+```
+Middleware doesn't protect /settings route
+```
+**Fix:** Add `/settings` to `protectedRoutes` and middleware `matcher`
+
+**4. Environment variable parsing errors**
+```
+.env: line 13: Barker: command not found
+```
+**Fix:** Use `set -a; source .env; set +a` instead of `export $(cat .env | xargs)`
+
+**5. Static files not copying**
+```
+cp: cannot create directory '.next/standalone/.next/static'
+```
+**Cause:** Build failed, .next/standalone doesn't exist
+**Fix:** Check TypeScript errors, rebuild successfully
+
+### Profile Editing Feature
+
+**Pages:**
+- `/settings` - Full profile editor (requires auth)
+- Settings button in dashboard (responsive)
+
+**Features:**
+- Edit all profile fields (name, email, phone, company, title, bio)
+- Upload new photo (camera or gallery)
+- Change password (requires current password)
+- Email uniqueness validation
+- Password strength validation (min 6 chars)
+
+**API:**
+- `GET /api/users/me` - Get current user profile
+- `PATCH /api/users/me` - Update profile
+- Uses `getSession()` from `@/lib/auth`
+
+### Middleware Protection
+
+**Protected routes:**
+```typescript
+const protectedRoutes = ['/dashboard', '/settings']
+```
+
+**Matcher:**
+```typescript
+matcher: ['/dashboard/:path*', '/settings/:path*', '/login']
+```
+
+**Redirects:**
+- Protected route + no session → `/login?redirect=<path>`
+- Login + has session → `/dashboard`
+
+### Admin Notifications
+
+**Notifications sent to:** `NEXT_PUBLIC_DEFAULT_USER_PHONE` (from .env)
+
+**New user signup:**
+```
+🎉 NEW USER SIGNUP!
+Name: John Smith
+Email: john@company.com
+Phone: +15551234567
+Company: ACME Inc
+Profile: https://saas.../u/john-smith
+```
+
+**New contact connection:**
+```
+🤝 NEW CONNECTION!
+Jane Doe connected with John Smith
+Contact Info: [details]
+Collected by: John Smith
+Profile: https://saas.../u/john-smith
+```
+
+**Implementation:**
+- `src/lib/admin-notifications.ts` - notification functions
+- Integrated into `/api/users/signup` and `/api/contacts/submit`
+- Non-blocking (uses `.catch()` for errors)
+- Only sends if Twilio configured
+
+### Deployment Checklist
+
+Before deploying to production:
+
+1. **Environment:**
+   - [ ] All .env variables set correctly
+   - [ ] ADMIN_PASSWORD configured
+   - [ ] Twilio credentials set (for SMS)
+   - [ ] Resend API key set (for email)
+   - [ ] Phone number in correct format (+16476242735)
+
+2. **Database:**
+   - [ ] Clean database (0 users, 0 contacts)
+   - [ ] Schema up to date (`npx prisma db push`)
+   - [ ] Prisma client generated
+
+3. **SSL:**
+   - [ ] Certificate obtained for domain
+   - [ ] HTTP redirects to HTTPS
+   - [ ] Security headers configured
+   - [ ] No mixed content warnings
+
+4. **Testing:**
+   - [ ] SMS test successful
+   - [ ] Email test successful
+   - [ ] Admin notifications working
+   - [ ] Photo upload works on mobile
+   - [ ] Settings page accessible
+   - [ ] Login/logout functional
+
+5. **Verification:**
+   - [ ] Visit `https://saas.contacts.ideanetworks.com`
+   - [ ] Shows secure padlock
+   - [ ] Admin page loads (`/admin`)
+   - [ ] Dashboard loads (`/dashboard`)
+   - [ ] Settings loads (`/settings`)
+
+### Troubleshooting Commands
+
+**Service management:**
+```bash
+sudo systemctl status contact-exchange-saas
+sudo systemctl restart contact-exchange-saas
+journalctl -u contact-exchange-saas -f
+```
+
+**Database queries:**
+```bash
+sudo -u postgres psql -d contact_exchange_saas
+# Inside psql:
+SELECT COUNT(*) FROM users;
+SELECT * FROM users ORDER BY created_at DESC LIMIT 5;
+\dt  # List tables
+\q   # Quit
+```
+
+**Nginx:**
+```bash
+sudo nginx -t  # Test config
+sudo systemctl reload nginx
+sudo systemctl status nginx
+```
+
+**SSL certificates:**
+```bash
+sudo certbot certificates
+sudo certbot renew --dry-run
+```
+
+**Logs:**
+```bash
+# View latest deployment log
+ls -lt deployment-logs/*.log | head -1
+tail -100 deployment-logs/<latest>.log
+```
+
+---
+
 ## Code Review Checklist
 
 Before committing, ensure:
