@@ -1,17 +1,17 @@
-[2025-10-19 21:16:19] === Quick Deploy Started ===
-[2025-10-19 21:16:19] Timestamp: 20251019_211619
+[2025-10-19 21:27:44] === Quick Deploy Started ===
+[2025-10-19 21:27:44] Timestamp: 20251019_212744
 [0;32m✓ Git configured for automated logging[0m
-[2025-10-19 21:16:19] === STEP 1: Pulling latest code ===
-[2025-10-19 21:16:19] Current branch:
+[2025-10-19 21:27:44] === STEP 1: Pulling latest code ===
+[2025-10-19 21:27:44] Current branch:
 feature/viral-saas
-[2025-10-19 21:16:19] Fetching from GitHub...
-[2025-10-19 21:16:19] Pulling latest code...
+[2025-10-19 21:27:44] Fetching from GitHub...
+[2025-10-19 21:27:44] Pulling latest code...
 From https://github.com/haydenbarker-idea/idea_contact_manager
  * branch            feature/viral-saas -> FETCH_HEAD
 Already up to date.
 [0;32m✓ Code updated[0m
-[2025-10-19 21:16:19] === STEP 2: Checking dependencies ===
-[2025-10-19 21:16:19] Running npm install...
+[2025-10-19 21:27:45] === STEP 2: Checking dependencies ===
+[2025-10-19 21:27:45] Running npm install...
 
 > contact-exchange@0.1.0 postinstall
 > prisma generate
@@ -19,11 +19,11 @@ Already up to date.
 Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 
-✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 199ms
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 208ms
 
 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
 
-Tip: Curious about the SQL queries Prisma ORM generates? Optimize helps you enhance your visibility: https://pris.ly/tip-2-optimize
+Tip: Easily identify and fix slow SQL queries in your app. Optimize helps you enhance your visibility: https://pris.ly/--optimize
 
 
 up to date, audited 517 packages in 6s
@@ -38,19 +38,19 @@ To address all issues, run:
 
 Run `npm audit` for details.
 [0;32m✓ Dependencies updated[0m
-[2025-10-19 21:16:26] === STEP 3: Regenerating Prisma client ===
+[2025-10-19 21:27:51] === STEP 3: Regenerating Prisma client ===
 Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 
-✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 172ms
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 214ms
 
 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
 
-Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
 
 [0;32m✓ Prisma client updated[0m
-[2025-10-19 21:16:29] === STEP 4: Building application ===
-[2025-10-19 21:16:29] Running npm run build (takes ~90 seconds)...
+[2025-10-19 21:27:54] === STEP 4: Building application ===
+[2025-10-19 21:27:54] Running npm run build (takes ~90 seconds)...
 
 > contact-exchange@0.1.0 build
 > next build
@@ -70,8 +70,8 @@ Tip: Want real-time updates to your database without manual polling? Discover ho
 Session error: n [Error]: Dynamic server usage: Route /api/auth/session couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
     at l (/var/www/contact-exchange-saas/.next/server/chunks/7787.js:1:37156)
     at Object.d (/var/www/contact-exchange-saas/.next/server/chunks/1681.js:1:1694)
-    at u (/var/www/contact-exchange-saas/.next/server/app/api/auth/login/route.js:1:2340)
-    at c (/var/www/contact-exchange-saas/.next/server/app/api/auth/session/route.js:1:876)
+    at u (/var/www/contact-exchange-saas/.next/server/app/api/auth/login/route.js:1:2387)
+    at c (/var/www/contact-exchange-saas/.next/server/app/api/auth/session/route.js:1:923)
     at /var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
     at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:140:36
     at NoopContextManager.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
@@ -84,8 +84,8 @@ Session error: n [Error]: Dynamic server usage: Route /api/auth/session couldn't
 Session error: n [Error]: Dynamic server usage: Route /api/me/contacts couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
     at l (/var/www/contact-exchange-saas/.next/server/chunks/7787.js:1:37156)
     at Object.d (/var/www/contact-exchange-saas/.next/server/chunks/1681.js:1:1694)
-    at u (/var/www/contact-exchange-saas/.next/server/app/api/auth/login/route.js:1:2340)
-    at l (/var/www/contact-exchange-saas/.next/server/app/api/me/contacts/route.js:1:887)
+    at u (/var/www/contact-exchange-saas/.next/server/app/api/auth/login/route.js:1:2387)
+    at l (/var/www/contact-exchange-saas/.next/server/app/api/me/contacts/route.js:1:934)
     at /var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
     at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:140:36
     at NoopContextManager.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
@@ -98,7 +98,7 @@ Session error: n [Error]: Dynamic server usage: Route /api/me/contacts couldn't 
 Check slug error: B [Error]: Dynamic server usage: Route /api/users/check-slug couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
     at V (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21777)
     at Object.get (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29137)
-    at c (/var/www/contact-exchange-saas/.next/server/app/api/users/check-slug/route.js:1:557)
+    at c (/var/www/contact-exchange-saas/.next/server/app/api/users/check-slug/route.js:1:604)
     at /var/www/contact-exchange-saas/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
     at /var/www/contact-exchange-saas/node_modules/next/dist/server/lib/trace/tracer.js:140:36
     at NoopContextManager.with (/var/www/contact-exchange-saas/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
@@ -162,36 +162,36 @@ Route (app)                              Size     First Load JS
 ƒ  (Dynamic)  server-rendered on demand
 
 [0;32m✓ Build completed successfully[0m
-[2025-10-19 21:17:57] === STEP 5: Copying static files ===
+[2025-10-19 21:29:21] === STEP 5: Copying static files ===
 [0;32m✓ Static files copied[0m
-[2025-10-19 21:17:57] === STEP 6: Restarting service ===
+[2025-10-19 21:29:21] === STEP 6: Restarting service ===
 [0;32m✓ Service restarted successfully[0m
-[2025-10-19 21:18:00] === STEP 7: Testing Communication Features ===
-[2025-10-19 21:18:00] Waiting for app to be ready...
-[2025-10-19 21:18:03] Testing SMS (Twilio) to +16476242735...
-[2025-10-19 21:18:05] SMS Response: {"success":true,"configured":true,"messageId":"SMb85c81cba65f8dfcb2f4b97b63021fae","status":"queued","to":"+16476242735","from":"+12898138309","message":"Test SMS sent successfully! Check your phone."}
+[2025-10-19 21:29:25] === STEP 7: Testing Communication Features ===
+[2025-10-19 21:29:25] Waiting for app to be ready...
+[2025-10-19 21:29:28] Testing SMS (Twilio) to +16476242735...
+[2025-10-19 21:29:29] SMS Response: {"success":true,"configured":true,"messageId":"SMfdc8d23d719885fcae8b8e02dd7579aa","status":"queued","to":"+16476242735","from":"+12898138309","message":"Test SMS sent successfully! Check your phone."}
 [0;32m✓ ✓ SMS: Test SMS sent successfully! Check your phone.[0m
-[2025-10-19 21:18:05] Testing Email (Resend) to hbarker@ideanetworks.com...
-[2025-10-19 21:18:05] Email Response: {"success":true,"configured":true,"messageId":"65331ddf-178c-4d94-91ad-4526704c83c3","to":"hbarker@ideanetworks.com","from":"no-reply@ideanetworks.ca","message":"Test email sent successfully! Check your inbox."}
+[2025-10-19 21:29:29] Testing Email (Resend) to hbarker@ideanetworks.com...
+[2025-10-19 21:29:30] Email Response: {"success":true,"configured":true,"messageId":"27a22a7a-1770-4120-959e-b8ab5dcfdb9a","to":"hbarker@ideanetworks.com","from":"no-reply@ideanetworks.ca","message":"Test email sent successfully! Check your inbox."}
 [0;32m✓ ✓ Email: Test email sent successfully! Check your inbox.[0m
-[2025-10-19 21:18:05] === STEP 8: Verifying deployment ===
-[2025-10-19 21:18:05] Testing HTTPS connection...
+[2025-10-19 21:29:30] === STEP 8: Verifying deployment ===
+[2025-10-19 21:29:30] Testing HTTPS connection...
 [0;32m✓ Site is accessible (HTTP 200)[0m
-[2025-10-19 21:18:05] Checking database...
-[2025-10-19 21:18:06] Database stats:
-[2025-10-19 21:18:06]   • Users: 2
-[2025-10-19 21:18:06]   • Contacts: 1
+[2025-10-19 21:29:30] Checking database...
+[2025-10-19 21:29:30] Database stats:
+[2025-10-19 21:29:30]   • Users: 2
+[2025-10-19 21:29:30]   • Contacts: 1
 [0;32m✓ Verification complete[0m
-[2025-10-19 21:18:06] === DEPLOYMENT SUCCESS ===
-[2025-10-19 21:18:06] Deployment completed at: 2025-10-19 21:18:06
-[2025-10-19 21:18:06] === Syncing logs to GitHub ===
-[2025-10-19 21:18:06] Adding deployment logs...
-[2025-10-19 21:18:06] Committing logs...
-[feature/viral-saas 71de104] logs: quick-deploy 20251019_211619
+[2025-10-19 21:29:30] === DEPLOYMENT SUCCESS ===
+[2025-10-19 21:29:30] Deployment completed at: 2025-10-19 21:29:30
+[2025-10-19 21:29:30] === Syncing logs to GitHub ===
+[2025-10-19 21:29:30] Adding deployment logs...
+[2025-10-19 21:29:30] Committing logs...
+[feature/viral-saas 20f1da5] logs: quick-deploy 20251019_212744
  2 files changed, 197 insertions(+)
- create mode 100644 deployment-logs/quick-deploy-20251019_211619.log
-[2025-10-19 21:18:06] Pushing to GitHub...
+ create mode 100644 deployment-logs/quick-deploy-20251019_212744.log
+[2025-10-19 21:29:30] Pushing to GitHub...
 To https://github.com/haydenbarker-idea/idea_contact_manager.git
-   d87c97e..71de104  feature/viral-saas -> feature/viral-saas
+   56dad86..20f1da5  feature/viral-saas -> feature/viral-saas
 [0;32m✓ Logs synced to GitHub successfully[0m
-[2025-10-19 21:18:06] View at: https://github.com/haydenbarker-idea/idea_contact_manager/tree/feature/viral-saas/deployment-logs
+[2025-10-19 21:29:31] View at: https://github.com/haydenbarker-idea/idea_contact_manager/tree/feature/viral-saas/deployment-logs
