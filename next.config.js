@@ -19,10 +19,6 @@ const nextConfig = {
       },
     ],
   },
-  // Disable static page generation
-  experimental: {
-    isrMemoryCacheSize: 0,
-  },
 }
 
 module.exports = nextConfig

@@ -9,6 +9,8 @@ import { readFile } from 'fs/promises'
 import { join } from 'path'
 import type { ApiResponse } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()

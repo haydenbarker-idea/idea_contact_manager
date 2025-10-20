@@ -3,6 +3,8 @@ import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import type { ApiResponse } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     // Get current session

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import type { ApiResponse } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 // Simple authentication check
 function checkAuth(request: NextRequest): boolean {
   const authHeader = request.headers.get('authorization')

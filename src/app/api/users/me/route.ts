@@ -4,6 +4,8 @@ import { getSession } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 import type { ApiResponse } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 // GET - Get current user's profile
 export async function GET(request: NextRequest) {
   try {
