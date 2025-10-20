@@ -6,6 +6,7 @@ export interface UserProfile {
   phone: string
   linkedin: string
   avatar?: string
+  photoUrl?: string  // User headshot from signup
   bio?: string
 }
 
@@ -48,6 +49,8 @@ export interface Communication {
 export interface ApiResponse<T = any> {
   success: boolean
   data?: T
+  message?: string  // Success message
+  available?: boolean  // For slug availability checks
   error?: {
     code: string
     message: string
