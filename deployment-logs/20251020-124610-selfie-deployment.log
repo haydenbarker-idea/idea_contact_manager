@@ -1,0 +1,187 @@
+[2025-10-20 12:46:10] === STEP 1: Stopping service ===
+[2025-10-20 12:46:10] ✓ Service stopped
+[2025-10-20 12:46:10] === STEP 2: Pulling latest code ===
+From https://github.com/haydenbarker-idea/idea_contact_manager
+   6dd1734..427fb5f  feature/viral-saas -> origin/feature/viral-saas
+HEAD is now at faf6ccc fix: convert null values to empty strings in contact form inputs
+[2025-10-20 12:46:10] ✓ Code updated to latest version
+[2025-10-20 12:46:10] === STEP 3: Updating environment variables ===
+[2025-10-20 12:46:10] ✓ Backed up existing .env (credentials are preserved)
+[2025-10-20 12:46:10] Bio already configured
+[2025-10-20 12:46:10] ✓ Twilio credentials already configured (preserved)
+[2025-10-20 12:46:10] ✓ Resend API key already configured (preserved)
+[2025-10-20 12:46:10] ✓ Environment configured
+[2025-10-20 12:46:10] === STEP 4: Installing dependencies ===
+
+> contact-exchange@0.1.0 postinstall
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 163ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+
+up to date, audited 517 packages in 6s
+
+171 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[2025-10-20 12:46:17] ✓ Dependencies installed
+[2025-10-20 12:46:17] === STEP 5: Creating missing UI components ===
+[2025-10-20 12:46:17] Dialog component already exists
+[2025-10-20 12:46:17] === STEP 6: Running database migration ===
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "contact_exchange", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 179ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to react to database changes in your app as they happen? Discover how with Pulse: https://pris.ly/tip-1-pulse
+
+[2025-10-20 12:46:22] ✓ Database updated with photo and conference fields
+[2025-10-20 12:46:22] === STEP 7: Creating uploads directory ===
+[2025-10-20 12:46:22] ✓ Uploads directory ready
+[2025-10-20 12:46:22] === STEP 8: Building application ===
+
+> contact-exchange@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'isrMemoryCacheSize' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+  ▲ Next.js 14.2.14
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/11) ...
+   Generating static pages (2/11) 
+Check slug error: B [Error]: Dynamic server usage: Route /api/users/check-slug couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21777)
+    at Object.get (/var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29137)
+    at c (/var/www/contact-exchange/.next/server/app/api/users/check-slug/route.js:1:555)
+    at /var/www/contact-exchange/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36963
+    at /var/www/contact-exchange/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/var/www/contact-exchange/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/var/www/contact-exchange/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/var/www/contact-exchange/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/var/www/contact-exchange/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /var/www/contact-exchange/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/users/check-slug couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (5/11) 
+   Generating static pages (8/11) 
+ ✓ Generating static pages (11/11)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ƒ /                                    142 B          87.3 kB
+├ ○ /_not-found                          142 B          87.3 kB
+├ ○ /admin                               31.8 kB         137 kB
+├ ƒ /api/communications/email            0 B                0 B
+├ ƒ /api/communications/sms              0 B                0 B
+├ ƒ /api/contacts/[id]                   0 B                0 B
+├ ƒ /api/contacts/[id]/communications    0 B                0 B
+├ ƒ /api/contacts/[id]/status            0 B                0 B
+├ ƒ /api/contacts/[id]/vcard             0 B                0 B
+├ ƒ /api/contacts/list                   0 B                0 B
+├ ƒ /api/contacts/submit                 0 B                0 B
+├ ƒ /api/debug                           0 B                0 B
+├ ƒ /api/templates                       0 B                0 B
+├ ƒ /api/test/email                      0 B                0 B
+├ ƒ /api/test/sms                        0 B                0 B
+├ ƒ /api/upload/photo                    0 B                0 B
+├ ƒ /api/uploads/[...path]               0 B                0 B
+├ ƒ /api/users/check-slug                0 B                0 B
+├ ƒ /api/users/signup                    0 B                0 B
+├ ○ /api/vcard                           0 B                0 B
+├ ○ /get-started                         4.36 kB         105 kB
+├ ƒ /me                                  146 B           112 kB
+└ ƒ /u/[username]                        146 B           112 kB
++ First Load JS shared by all            87.2 kB
+  ├ chunks/117-ca9033809cf6eaa2.js       31.6 kB
+  ├ chunks/fd9d1056-b88f8a4cc02eef8b.js  53.6 kB
+  └ other shared chunks (total)          1.96 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+[2025-10-20 12:47:41] ✓ Build complete
+[2025-10-20 12:47:41] === STEP 8.5: Setting up standalone static files ===
+[2025-10-20 12:47:41] Copying public folder to standalone...
+[2025-10-20 12:47:41] Copying .next/static to standalone...
+[2025-10-20 12:47:41] Setting up uploads symlink...
+[2025-10-20 12:47:41] ✓ Uploads symlinked for real-time access
+[2025-10-20 12:47:41] ✓ Standalone static files ready
+[2025-10-20 12:47:41] === STEP 9: Starting service ===
+[2025-10-20 12:47:46] === STEP 10: Checking service status ===
+[2025-10-20 12:47:46] ✓ Service is running
+[2025-10-20 12:47:46] === STEP 11: Testing application ===
+[2025-10-20 12:47:49] ✓ Local server responding (HTTP 307)
+[2025-10-20 12:47:50] ✓ Public domain responding (HTTP 307)
+[2025-10-20 12:47:50] === STEP 12: Testing Communication Features ===
+[2025-10-20 12:47:50] Testing SMS (Twilio)...
+[2025-10-20 12:47:51] ✓ SMS test sent to +16476242735
+[2025-10-20 12:47:51] Testing Email (Resend)...
+[2025-10-20 12:47:51] ✓ Email test sent to hbarker@ideanetworks.com
+[2025-10-20 12:47:52] 
+[2025-10-20 12:47:52] ✨ Your Selfie Experience is LIVE! ✨
+[2025-10-20 12:47:52] 
+[2025-10-20 12:47:52] 📱 PUBLIC URL:
+[2025-10-20 12:47:52]    https://contacts.ideanetworks.com
+[2025-10-20 12:47:52] 
+[2025-10-20 12:47:52] 🔧 ADMIN DASHBOARD:
+[2025-10-20 12:47:52]    https://contacts.ideanetworks.com/admin
+[2025-10-20 12:47:52] 
+[2025-10-20 12:47:52] ✅ WHAT'S DEPLOYED:
+[2025-10-20 12:47:52]    • Landing page with your photo & bio
+[2025-10-20 12:47:52]    • Selfie capture experience
+[2025-10-20 12:47:52]    • Conference/event tracking
+[2025-10-20 12:47:52]    • Fireworks celebration
+[2025-10-20 12:47:52]    • vCards with embedded photos
+[2025-10-20 12:47:52]    • SMS & WhatsApp & LinkedIn integration
+[2025-10-20 12:47:52]    • Enhanced admin dashboard
+[2025-10-20 12:47:52]    • Communication features tested automatically
+[2025-10-20 12:47:52] 
+[2025-10-20 12:47:52] 📋 NEXT STEPS:
+[2025-10-20 12:47:52]    1. Check your phone (+16476242735) for test SMS
+[2025-10-20 12:47:52]    2. Check your email (hbarker@ideanetworks.com) for test message
+[2025-10-20 12:47:52]    3. Test full flow: https://contacts.ideanetworks.com
+[2025-10-20 12:47:52]    4. Allow camera permissions and take a test selfie
+[2025-10-20 12:47:52]    5. Check admin dashboard for your test contact
+[2025-10-20 12:47:52]    6. Print your QR code!
+[2025-10-20 12:47:52] 
+[2025-10-20 12:47:52] 🎯 AT THE CONFERENCE:
+[2025-10-20 12:47:52]    • Hand them your phone
+[2025-10-20 12:47:52]    • Click 'Connect with Hayden'
+[2025-10-20 12:47:52]    • Take selfie together (memorable moment!)
+[2025-10-20 12:47:52]    • They fill quick form
+[2025-10-20 12:47:52]    • Fireworks celebration 🎆
+[2025-10-20 12:47:52]    • They download your vCard with photo
+[2025-10-20 12:47:52] 
+[2025-10-20 12:47:52] Full deployment log: /var/www/contact-exchange/deployment-logs/20251020-124610-selfie-deployment.log
+[2025-10-20 12:47:52] Logs will be synced to GitHub automatically
+[2025-10-20 12:47:52] === Syncing logs to GitHub ===
